@@ -14,9 +14,10 @@ const {
   createProductImagePath,
   uploadProductImage,
 } = require("../helpers/uploadProductImages");
+const tokenAuthorisation = require("../middleware/tokenAuth");
 const router = express.Router();
 router.post("/addVariety", addVariety);
-router.post("/getVariety", getVariety);
+router.post("/getVariety", tokenAuthorisation, getVariety);
 router.post("/addUnit", addUnit);
 router.post("/getUnit", getUnit);
 router.post(
@@ -25,8 +26,8 @@ router.post(
   uploadProductImage.any(),
   addProductType
 );
-router.post("/getProductType", getProductType);
+router.post("/getProductType", tokenAuthorisation, getProductType);
 router.post("/addProductUnit", addProductUnit);
-router.post("/getProductUnit", getProductUnit);
+router.post("/getProductUnit", tokenAuthorisation, getProductUnit);
 
 module.exports = router;

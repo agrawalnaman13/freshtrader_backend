@@ -17,7 +17,6 @@ const WholesellerSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      required: true,
     },
     phone_number: {
       type: String,
@@ -25,11 +24,9 @@ const WholesellerSchema = new mongoose.Schema(
     },
     market: {
       type: String,
-      required: true,
     },
     stall_location: {
       type: String,
-      required: true,
     },
     smsc_code: {
       type: String,
@@ -43,6 +40,7 @@ const WholesellerSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      select: false,
     },
     account_name: {
       type: String,
@@ -92,6 +90,7 @@ WholesellerSchema.methods.changedPasswordAfter = (JWTTimestamp) => {
 };
 
 WholesellerSchema.pre("save", async function (next) {
+  console.log(this.isModified("password"));
   if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 7);
   this.confirmPassword = undefined;

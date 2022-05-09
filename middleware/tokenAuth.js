@@ -9,7 +9,7 @@ function tokenAuthorisation(req, res, next) {
       .json(error("Access Denied. No token provided.", res.statusCode));
   try {
     const decoded = jwt.verify(token, "ultra-security");
-    // req.user = decoded;
+    req.seller = decoded;
     next();
   } catch (ex) {
     return res
