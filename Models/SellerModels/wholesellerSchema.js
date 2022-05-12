@@ -28,7 +28,7 @@ const WholesellerSchema = new mongoose.Schema(
     stall_location: {
       type: String,
     },
-    smsc_code: {
+    smcs_code: {
       type: String,
       required: true,
     },

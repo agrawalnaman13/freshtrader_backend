@@ -1,6 +1,7 @@
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const validator = require("validator");
 const { success, error } = require("../../service_response/adminApiResponse");
+const SellerPOSLayout = require("../../Models/SellerModels/posLayoutSchema");
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   console.log(req.body);
@@ -18,6 +19,33 @@ exports.login = async (req, res, next) => {
     }
     if (!(await ourSeller.correctPassword(password, ourSeller.password))) {
       return res.status(200).json(error("Invalid Password", res.statusCode));
+    }
+    const layout = await SellerPOSLayout.findOne({
+      seller: ourSeller._id,
+    });
+    if (!layout) {
+      const category = [
+        {
+          category: "Fruits",
+          alias: "Fruits",
+        },
+        {
+          category: "Vegetables",
+          alias: "Vegetables",
+        },
+        {
+          category: "Herbs",
+          alias: "Herbs",
+        },
+        {
+          category: "Others",
+          alias: "Others",
+        },
+      ];
+      await SellerPOSLayout.create({
+        category: category,
+        seller: ourSeller._id,
+      });
     }
     const token = await ourSeller.generateAuthToken();
     res
@@ -46,7 +74,7 @@ exports.updateProfile = async (req, res, next) => {
     phone_number,
     market,
     stall_location,
-    smsc_code,
+    smcs_code,
   } = req.body;
   console.log(req.body);
   try {
@@ -60,7 +88,7 @@ exports.updateProfile = async (req, res, next) => {
         phone_number: phone_number,
         market: market,
         stall_location: stall_location,
-        smsc_code: smsc_code,
+        smcs_code: smcs_code,
       }
     );
     res

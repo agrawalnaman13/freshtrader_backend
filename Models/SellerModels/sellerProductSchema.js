@@ -30,10 +30,12 @@ const SellerProductSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    suppliers: {
-      type: Array,
-      default: [],
-    },
+    suppliers: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "sellerSupplier",
+      },
+    ],
     price: {
       type: Array,
       default: [],
