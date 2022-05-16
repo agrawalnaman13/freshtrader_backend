@@ -9,6 +9,16 @@ const {
   getSellerData,
 } = require("../Controllers/SellerController/authController");
 const {
+  getBusinesses,
+  addNewBusiness,
+} = require("../Controllers/SellerController/inputBusinessSaleController");
+const {
+  getInventory,
+} = require("../Controllers/SellerController/inventoryController");
+const {
+  getOrders,
+} = require("../Controllers/SellerController/orderController");
+const {
   getPallets,
   addPalletsReceived,
   addPalletsTaken,
@@ -35,6 +45,15 @@ const {
   searchSellerProduct,
 } = require("../Controllers/SellerController/productController");
 const {
+  createConsignment,
+  addProductInConsignment,
+  removeProductFromConsignment,
+  changeConsignmentStatus,
+  getConsignments,
+  deleteConsignment,
+  getConsignmentDetail,
+} = require("../Controllers/SellerController/purchaseController");
+const {
   addSalesman,
   getSalesman,
   deleteSalesman,
@@ -50,6 +69,7 @@ const {
   getSuppliers,
   deleteSupplier,
   searchSuppliers,
+  getSuppliersProduct,
 } = require("../Controllers/SellerController/supplierIndexController");
 const {
   createSellerImagePath,
@@ -93,6 +113,7 @@ router.post("/addSupplier", tokenAuthorisation, addSupplier);
 router.post("/updateSupplier", tokenAuthorisation, updateSupplier);
 router.get("/getSuppliers", tokenAuthorisation, getSuppliers);
 router.post("/searchSuppliers", tokenAuthorisation, searchSuppliers);
+router.post("/getSuppliersProduct", tokenAuthorisation, getSuppliersProduct);
 router.get("/deleteSupplier/:id", tokenAuthorisation, deleteSupplier);
 router.post("/getPallets", tokenAuthorisation, getPallets);
 router.post("/addPalletsReceived", tokenAuthorisation, addPalletsReceived);
@@ -102,4 +123,31 @@ router.get("/getPalletsCount", tokenAuthorisation, getPalletsCount);
 router.post("/returnPallets", tokenAuthorisation, returnPallets);
 router.get("/getPartnerBuyers", tokenAuthorisation, getPartnerBuyers);
 router.get("/changePartnerBuyer/:id", tokenAuthorisation, changePartnerBuyer);
+router.post("/createConsignment", tokenAuthorisation, createConsignment);
+router.post(
+  "/addProductInConsignment",
+  tokenAuthorisation,
+  addProductInConsignment
+);
+router.post(
+  "/removeProductFromConsignment",
+  tokenAuthorisation,
+  removeProductFromConsignment
+);
+router.post(
+  "/changeConsignmentStatus",
+  tokenAuthorisation,
+  changeConsignmentStatus
+);
+router.post("/getConsignments", tokenAuthorisation, getConsignments);
+router.get("/deleteConsignment/:id", tokenAuthorisation, deleteConsignment);
+router.get(
+  "/getConsignmentDetail/:id",
+  tokenAuthorisation,
+  getConsignmentDetail
+);
+router.post("/getInventory", tokenAuthorisation, getInventory);
+router.post("/getBusinesses", tokenAuthorisation, getBusinesses);
+router.post("/addNewBusiness", tokenAuthorisation, addNewBusiness);
+router.post("/getOrders", tokenAuthorisation, getOrders);
 module.exports = router;

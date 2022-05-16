@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { success, error } = require("../../service_response/adminApiResponse");
 const validator = require("validator");
 const SellerSupplier = require("../../Models/SellerModels/sellerSuppliersSchema");
+const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 exports.addSupplier = async (req, res, next) => {
   try {
     const {
@@ -229,6 +230,33 @@ exports.searchSuppliers = async (req, res, next) => {
       .status(200)
       .json(
         success("Supplier fetched successfully", { suppliers }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getSuppliersProduct = async (req, res, next) => {
+  try {
+    const { supplierId } = req.body;
+    if (!supplierId) {
+      return res
+        .status(200)
+        .json(error("Please provide supplier Id", res.statusCode));
+    }
+    const supplier = await SellerSupplier.findById(supplierId);
+    if (!supplier) {
+      return res.status(200).json(error("Invalid supplier Id", res.statusCode));
+    }
+    const products = await SellerProduct.find({
+      seller: req.seller._id,
+      suppliers: { $elemMatch: { $eq: supplierId } },
+    });
+    res
+      .status(200)
+      .json(
+        success("Products fetched successfully", { products }, res.statusCode)
       );
   } catch (err) {
     console.log(err);

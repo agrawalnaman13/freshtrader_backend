@@ -3,6 +3,7 @@ const compression = require("compression");
 const morgan = require("morgan");
 const adminRoutes = require("./Routes/adminRoutes");
 const sellerRoutes = require("./Routes/sellerRoutes");
+const buyerRoutes = require("./Routes/buyerRoutes");
 const app = express();
 const cors = require("cors");
 app.use(express.json());
@@ -15,6 +16,7 @@ app.set("view engine", "ejs");
 app.use(morgan("tiny"));
 app.use("/api/admin", adminRoutes);
 app.use("/api/seller", sellerRoutes);
+app.use("/api/buyer", buyerRoutes);
 app.get("/", (req, res) => {
   console.log("Hello");
   res.status(200).send("hello from the server");

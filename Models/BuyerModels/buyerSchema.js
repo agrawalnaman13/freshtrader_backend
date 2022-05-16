@@ -30,6 +30,10 @@ const BuyerSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
+    is_smcs: {
+      type: Boolean,
+      required: true,
+    },
     smcs_code: {
       type: String,
     },

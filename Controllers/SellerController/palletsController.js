@@ -23,13 +23,20 @@ exports.getPallets = async (req, res, next) => {
       },
       {
         $lookup: {
-          localField: "$pallets_received" ? "received_from" : "taken_by",
+          localField: "received_from",
           foreignField: "_id",
-          from: "$pallets_received" ? "sellersuppliers" : "buyers",
+          from: "sellersuppliers",
           as: "supplier",
         },
       },
-      { $unwind: "$supplier" },
+      {
+        $lookup: {
+          localField: "taken_by",
+          foreignField: "_id",
+          from: "buyers",
+          as: "buyer",
+        },
+      },
       {
         $addFields: {
           total_pallets: "$pallets_received"
@@ -39,17 +46,34 @@ exports.getPallets = async (req, res, next) => {
       },
       {
         $sort:
-          sortBy === 1
-            ? { "supplier.business_trading_name": 1 }
-            : sortBy === 2
-            ? { "supplier.business_trading_name": -1 }
-            : sortBy === 3
+          sortBy === 3
             ? { total_pallets: -1 }
             : sortBy === 4
             ? { total_pallets: 1 }
             : { createdAt: 1 },
       },
     ]);
+    for (const pallets of sellerPallets) {
+      if (pallets.supplier.length) pallets.supplier = pallets.supplier[0];
+      else pallets.supplier = pallets.buyer[0];
+    }
+    if (sortBy === 1) {
+      sellerPallets.sort((a, b) =>
+        a.supplier.business_trading_name > b.supplier.business_trading_name
+          ? 1
+          : b.supplier.business_trading_name > a.supplier.business_trading_name
+          ? -1
+          : 0
+      );
+    } else if (sortBy === 2) {
+      sellerPallets.sort((a, b) =>
+        a.supplier.business_trading_name < b.supplier.business_trading_name
+          ? 1
+          : b.supplier.business_trading_name < a.supplier.business_trading_name
+          ? -1
+          : 0
+      );
+    }
     res
       .status(200)
       .json(
@@ -92,7 +116,7 @@ exports.addPalletsReceived = async (req, res, next) => {
       sellerPallets = await SellerPallets.create({
         seller: req.seller._id,
         received_from: supplierId,
-        pallets_received: pallets,
+        pallets_received: +pallets,
       });
     } else {
       sellerPallets = await SellerPallets.findOneAndUpdate(
@@ -101,7 +125,7 @@ exports.addPalletsReceived = async (req, res, next) => {
           received_from: supplierId,
         },
         {
-          pallets_received: myPallets.pallets_received + pallets,
+          pallets_received: myPallets.pallets_received + +pallets,
         }
       );
     }
@@ -143,7 +167,7 @@ exports.addPalletsTaken = async (req, res, next) => {
       sellerPallets = await SellerPallets.create({
         seller: req.seller._id,
         taken_by: buyerId,
-        pallets_taken: pallets,
+        pallets_taken: +pallets,
       });
     } else {
       sellerPallets = await SellerPallets.findOneAndUpdate(
@@ -152,7 +176,7 @@ exports.addPalletsTaken = async (req, res, next) => {
           taken_by: buyerId,
         },
         {
-          pallets_taken: myPallets.pallets_taken + pallets,
+          pallets_taken: myPallets.pallets_taken + +pallets,
         }
       );
     }
@@ -199,7 +223,7 @@ exports.addPalletsOnHand = async (req, res, next) => {
     if (!isPallets) {
       sellerPallets = await SellerPallets.create({
         seller: req.seller._id,
-        pallets_on_hand: pallets,
+        pallets_on_hand: +pallets,
         pallets_taken: 0,
         pallets_received: 0,
       });
@@ -211,7 +235,7 @@ exports.addPalletsOnHand = async (req, res, next) => {
           pallets_received: 0,
         },
         {
-          pallets_on_hand: pallets,
+          pallets_on_hand: +pallets,
         }
       );
     }

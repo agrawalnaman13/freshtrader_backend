@@ -4,13 +4,8 @@ const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 
 exports.addSellerProduct = async (req, res, next) => {
   try {
-    const { seller, category, variety, type, add_gst } = req.body;
+    const { category, variety, type, add_gst } = req.body;
     console.log(req.body);
-    if (!seller) {
-      return res
-        .status(200)
-        .json(error("Seller id is required", res.statusCode));
-    }
     if (!category) {
       return res
         .status(200)
@@ -22,11 +17,13 @@ exports.addSellerProduct = async (req, res, next) => {
     if (!type) {
       return res.status(200).json(error("Type is required", res.statusCode));
     }
-    const ourSeller = await Wholeseller.findById(seller);
-    if (!ourSeller) {
-      return res.status(200).json(error("Invalid seller id", res.statusCode));
-    }
-    const product = await SellerProduct.create(req.body);
+    const product = await SellerProduct.create({
+      seller: req.seller._id,
+      category,
+      variety,
+      type,
+      add_gst,
+    });
     res
       .status(200)
       .json(success("Product Added Successfully", { product }, res.statusCode));

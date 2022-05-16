@@ -26,7 +26,7 @@ exports.changePartnerBuyer = async (req, res, next) => {
     await buyer.save();
     res
       .status(200)
-      .json(success("Buyers Deleted Successfully", { buyers }, res.statusCode));
+      .json(success("Buyer Removed Successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
