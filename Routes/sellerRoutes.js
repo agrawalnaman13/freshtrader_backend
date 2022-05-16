@@ -1,6 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const {
+  searchBuyers,
+} = require("../Controllers/BuyerController/authController");
+const {
   login,
   updateProfile,
   updateAccountInformation,
@@ -150,4 +153,5 @@ router.post("/getInventory", tokenAuthorisation, getInventory);
 router.post("/getBusinesses", tokenAuthorisation, getBusinesses);
 router.post("/addNewBusiness", tokenAuthorisation, addNewBusiness);
 router.post("/getOrders", tokenAuthorisation, getOrders);
+router.post("/searchBuyers", tokenAuthorisation, searchBuyers);
 module.exports = router;
