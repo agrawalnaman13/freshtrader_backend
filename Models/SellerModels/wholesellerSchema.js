@@ -66,6 +66,22 @@ const WholesellerSchema = new mongoose.Schema(
     include_food_saftey_logo: {
       type: Boolean,
     },
+    notify_new_order: {
+      type: Boolean,
+      default: true,
+    },
+    notify_declined_offer: {
+      type: Boolean,
+      default: true,
+    },
+    notify_confirmed_offer: {
+      type: Boolean,
+      default: true,
+    },
+    notify_cancel_order: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: {} },
   { collection: "wholeseller" }

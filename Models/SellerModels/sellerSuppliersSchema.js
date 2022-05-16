@@ -14,6 +14,10 @@ const SellerSupplierSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    supplierId: {
+      type: String,
+      required: false,
+    },
     abn: {
       type: String,
       required: true,

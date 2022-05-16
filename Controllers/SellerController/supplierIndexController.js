@@ -58,6 +58,7 @@ exports.addSupplier = async (req, res, next) => {
           .json(error("Please provide smcs code", res.statusCode));
       }
     }
+
     const supplier = await SellerSupplier.create({
       business_trading_name: business_trading_name,
       abn: abn,
@@ -69,6 +70,9 @@ exports.addSupplier = async (req, res, next) => {
       smcs_code: smcs_code,
       seller: req.seller._id,
     });
+    const supplierId = String(supplier._id).slice(18, 24);
+    supplier.supplierId = supplierId;
+    await supplier.save();
     res
       .status(200)
       .json(
@@ -253,6 +257,39 @@ exports.getSuppliersProduct = async (req, res, next) => {
       seller: req.seller._id,
       suppliers: { $elemMatch: { $eq: supplierId } },
     });
+    res
+      .status(200)
+      .json(
+        success("Products fetched successfully", { products }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getMyProducts = async (req, res, next) => {
+  try {
+    const { supplierId } = req.body;
+    if (!supplierId) {
+      return res
+        .status(200)
+        .json(error("Please provide supplier Id", res.statusCode));
+    }
+    const supplier = await SellerSupplier.findById(supplierId);
+    if (!supplier) {
+      return res.status(200).json(error("Invalid supplier Id", res.statusCode));
+    }
+    const products = await SellerProduct.find({
+      seller: req.seller._id,
+    }).lean();
+    for (const product of products) {
+      const suppliers = product.suppliers.map(({ suppliers }) =>
+        String(suppliers)
+      );
+      if (suppliers.includes(supplierId)) product.isAdded = true;
+      else product.isAdded = true;
+    }
     res
       .status(200)
       .json(

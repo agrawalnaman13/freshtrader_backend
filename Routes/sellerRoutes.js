@@ -20,6 +20,10 @@ const {
 } = require("../Controllers/SellerController/inventoryController");
 const {
   getOrders,
+  getOrderDetails,
+  changeOrderStatus,
+  sendCounterOffer,
+  changeOrderNotification,
 } = require("../Controllers/SellerController/orderController");
 const {
   getPallets,
@@ -73,6 +77,7 @@ const {
   deleteSupplier,
   searchSuppliers,
   getSuppliersProduct,
+  getMyProducts,
 } = require("../Controllers/SellerController/supplierIndexController");
 const {
   createSellerImagePath,
@@ -117,6 +122,7 @@ router.post("/updateSupplier", tokenAuthorisation, updateSupplier);
 router.get("/getSuppliers", tokenAuthorisation, getSuppliers);
 router.post("/searchSuppliers", tokenAuthorisation, searchSuppliers);
 router.post("/getSuppliersProduct", tokenAuthorisation, getSuppliersProduct);
+router.post("/getMyProducts", tokenAuthorisation, getMyProducts);
 router.get("/deleteSupplier/:id", tokenAuthorisation, deleteSupplier);
 router.post("/getPallets", tokenAuthorisation, getPallets);
 router.post("/addPalletsReceived", tokenAuthorisation, addPalletsReceived);
@@ -153,5 +159,13 @@ router.post("/getInventory", tokenAuthorisation, getInventory);
 router.post("/getBusinesses", tokenAuthorisation, getBusinesses);
 router.post("/addNewBusiness", tokenAuthorisation, addNewBusiness);
 router.post("/getOrders", tokenAuthorisation, getOrders);
+router.get("/getOrderDetails/:id", tokenAuthorisation, getOrderDetails);
+router.post("/changeOrderStatus", tokenAuthorisation, changeOrderStatus);
+router.post("/sendCounterOffer", tokenAuthorisation, sendCounterOffer);
+router.post(
+  "/changeOrderNotification",
+  tokenAuthorisation,
+  changeOrderNotification
+);
 router.post("/searchBuyers", tokenAuthorisation, searchBuyers);
 module.exports = router;

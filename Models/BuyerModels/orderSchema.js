@@ -8,6 +8,10 @@ const Product = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "unit",
   },
+  quantity: {
+    type: Number,
+    required: true,
+  },
 });
 const OrderSchema = new mongoose.Schema(
   {
@@ -21,26 +25,27 @@ const OrderSchema = new mongoose.Schema(
       required: true,
     },
     product: [Product],
-    quantity: {
-      type: Number,
-      default: true,
-    },
     pick_up_date: {
       type: Date,
-      default: false,
+      required: false,
     },
     pick_up_time: {
       type: String,
-      default: false,
+      required: false,
     },
     notes: {
       type: String,
-      default: false,
+      required: false,
     },
     payment: {
       type: String,
       enum: ["SMCS", "INVOICE", "CASH", "CARD"],
-      default: false,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["CONFIRMED", "PENDING", "CANCELED", "COUNTER"],
+      default: "PENDING",
     },
   },
   { timestamps: {} },
