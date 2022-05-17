@@ -48,12 +48,10 @@ const SellerProductSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    units: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "unit",
-      },
-    ],
+    units: {
+      type: mongoose.Types.ObjectId,
+      ref: "unit",
+    },
   },
   { timestamps: {} },
   { collection: "sellerProduct" }

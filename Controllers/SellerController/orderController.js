@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Unit = require("../../Models/AdminModels/unitSchema");
 const Order = require("../../Models/BuyerModels/orderSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
@@ -51,9 +50,8 @@ exports.getOrderDetails = async (req, res, next) => {
     const order = await Order.findById(req.params.id).populate("buyer").lean();
     for (const product of order.product) {
       product.product = await SellerProduct.findById(product.productId)
-        .populate(["variety", "type"])
-        .select(["category", "variety", "type"]);
-      product.unit = await Unit.findById(product.unit);
+        .populate(["variety", "type", "units"])
+        .select(["category", "variety", "type", "units"]);
     }
     res
       .status(200)

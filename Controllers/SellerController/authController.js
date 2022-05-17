@@ -174,10 +174,10 @@ exports.updateSellerDocuments = async (req, res, next) => {
       { _id: req.seller._id },
       {
         thermal_receipt_invoice_logo: `${req.files[0].destination.replace(
-          ".",
+          "./public",
           ""
         )}/${req.files[0].filename}`,
-        a4_invoice_logo: `${req.files[1].destination.replace(".", "")}/${
+        a4_invoice_logo: `${req.files[1].destination.replace("./public", "")}/${
           req.files[0].filename
         }`,
         include_food_saftey_logo: include_food_saftey_logo,

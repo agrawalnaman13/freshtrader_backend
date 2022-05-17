@@ -42,7 +42,9 @@ exports.getSellerProduct = async (req, res, next) => {
       variety,
       category,
       type,
-    }).populate(["variety", "type", "units", "suppliers"]);
+    })
+      .sort({ variety: 1 })
+      .populate(["variety", "type", "units", "suppliers"]);
     res
       .status(200)
       .json(
@@ -128,9 +130,30 @@ exports.addProductUnit = async (req, res, next) => {
     if (!product) {
       return res.status(200).json(error("Invalid product id", res.statusCode));
     }
-    await SellerProduct.findByIdAndUpdate(productId, {
-      units: units,
+    const isProduct = await SellerProduct.findOne({
+      category: product.category,
+      variety: product.variety,
+      type: product.type,
     });
+    if (isProduct) {
+      return res
+        .status(200)
+        .json(error("Unit is already added", res.statusCode));
+    }
+    if (product.unit) {
+      await SellerProduct.create({
+        seller: req.seller._id,
+        category: product.category,
+        variety: product.variety,
+        type: product.type,
+        add_gst: product.add_gst,
+        units: units,
+      });
+    } else {
+      await SellerProduct.findByIdAndUpdate(productId, {
+        units: units,
+      });
+    }
     return res
       .status(200)
       .json(success("Product unit added successfully", {}, res.statusCode));

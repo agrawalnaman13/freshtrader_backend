@@ -4,10 +4,6 @@ const Product = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "sellerProduct",
   },
-  unit: {
-    type: mongoose.Types.ObjectId,
-    ref: "unit",
-  },
   quantity: {
     type: Number,
     required: true,

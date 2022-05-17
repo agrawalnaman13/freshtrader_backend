@@ -71,7 +71,7 @@ exports.addProductType = async (req, res, next) => {
     const newType = await ProductType.create({
       variety: variety,
       type: type,
-      image: `${req.files[0].destination.replace(".", "")}/${
+      image: `${req.files[0].destination.replace("./public", "")}/${
         req.files[0].filename
       }`,
     });

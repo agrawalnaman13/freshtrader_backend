@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Unit = require("../../Models/AdminModels/unitSchema");
 const Order = require("../../Models/BuyerModels/orderSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");

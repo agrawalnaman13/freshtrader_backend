@@ -256,7 +256,7 @@ exports.getSuppliersProduct = async (req, res, next) => {
     const products = await SellerProduct.find({
       seller: req.seller._id,
       suppliers: { $elemMatch: { $eq: supplierId } },
-    });
+    }).populate(["variety", "type", "units"]);
     res
       .status(200)
       .json(
@@ -270,7 +270,7 @@ exports.getSuppliersProduct = async (req, res, next) => {
 
 exports.getMyProducts = async (req, res, next) => {
   try {
-    const { supplierId } = req.body;
+    const { supplierId, filterBy } = req.body;
     if (!supplierId) {
       return res
         .status(200)
@@ -282,13 +282,25 @@ exports.getMyProducts = async (req, res, next) => {
     }
     const products = await SellerProduct.find({
       seller: req.seller._id,
-    }).lean();
+      $and: [
+        filterBy === 1
+          ? { suppliers: { $elemMatch: { $eq: supplierId } } }
+          : {},
+        filterBy === 2
+          ? { suppliers: { $elemMatch: { $ne: supplierId } } }
+          : {},
+      ],
+    })
+      .sort({ variety: 1 })
+      .populate(["variety", "type"])
+      .lean();
     for (const product of products) {
-      const suppliers = product.suppliers.map(({ suppliers }) =>
-        String(suppliers)
-      );
+      const suppliers = product.suppliers.map((item) => {
+        return String(item);
+      });
+      console.log(suppliers);
       if (suppliers.includes(supplierId)) product.isAdded = true;
-      else product.isAdded = true;
+      else product.isAdded = false;
     }
     res
       .status(200)
