@@ -228,7 +228,10 @@ exports.searchSuppliers = async (req, res, next) => {
     }
     const suppliers = await SellerSupplier.find({
       seller: req.seller._id,
-      business_trading_name: { $regex: search, $options: "$i" },
+      $or: [
+        { business_trading_name: { $regex: search, $options: "$i" } },
+        { supplierId: { $regex: search, $options: "$i" } },
+      ],
     }).sort({ createdAt: 1 });
     res
       .status(200)
@@ -270,7 +273,7 @@ exports.getSuppliersProduct = async (req, res, next) => {
 
 exports.getMyProducts = async (req, res, next) => {
   try {
-    const { supplierId, filterBy } = req.body;
+    const { supplierId, filterBy, search } = req.body;
     if (!supplierId) {
       return res
         .status(200)
@@ -280,28 +283,96 @@ exports.getMyProducts = async (req, res, next) => {
     if (!supplier) {
       return res.status(200).json(error("Invalid supplier Id", res.statusCode));
     }
-    const products = await SellerProduct.find({
-      seller: req.seller._id,
-      $and: [
-        filterBy === 1
-          ? { suppliers: { $elemMatch: { $eq: supplierId } } }
-          : {},
-        filterBy === 2
-          ? { suppliers: { $elemMatch: { $ne: supplierId } } }
-          : {},
-      ],
-    })
-      .sort({ variety: 1 })
-      .populate(["variety", "type"])
-      .lean();
-    for (const product of products) {
-      const suppliers = product.suppliers.map((item) => {
-        return String(item);
-      });
-      console.log(suppliers);
-      if (suppliers.includes(supplierId)) product.isAdded = true;
-      else product.isAdded = false;
-    }
+    const products = await SellerProduct.aggregate([
+      {
+        $match: {
+          seller: mongoose.Types.ObjectId(req.seller._id),
+          $and: [
+            filterBy === 1
+              ? {
+                  suppliers: {
+                    $elemMatch: { $eq: supplierId },
+                  },
+                }
+              : {},
+            filterBy === 2
+              ? {
+                  suppliers: {
+                    $elemMatch: { $ne: supplierId },
+                  },
+                }
+              : {},
+          ],
+        },
+      },
+      {
+        $lookup: {
+          localField: "variety",
+          foreignField: "_id",
+          from: "productvarieties",
+          as: "variety",
+        },
+      },
+      { $unwind: "$variety" },
+      {
+        $lookup: {
+          localField: "type",
+          foreignField: "_id",
+          from: "producttypes",
+          as: "type",
+        },
+      },
+      { $unwind: "$type" },
+      {
+        $lookup: {
+          localField: "units",
+          foreignField: "_id",
+          from: "units",
+          as: "units",
+        },
+      },
+      { $unwind: "$units" },
+      {
+        $match: {
+          $and: [
+            search
+              ? {
+                  $or: [
+                    { "type.type": { $regex: search, $options: "$i" } },
+                    { "variety.variety": { $regex: search, $options: "$i" } },
+                  ],
+                }
+              : {},
+          ],
+        },
+      },
+      {
+        $addFields: {
+          isAdded: {
+            $filter: {
+              input: "$suppliers",
+              as: "mi",
+              cond: {
+                $in: [mongoose.Types.ObjectId(supplierId), "$suppliers"],
+              },
+            },
+          },
+        },
+      },
+      {
+        $set: {
+          isAdded: {
+            $cond: {
+              if: {
+                $gt: [{ $size: "$isAdded" }, 0],
+              },
+              then: true,
+              else: false,
+            },
+          },
+        },
+      },
+    ]);
     res
       .status(200)
       .json(

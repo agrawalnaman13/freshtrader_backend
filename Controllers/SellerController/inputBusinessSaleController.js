@@ -3,6 +3,11 @@ const Buyer = require("../../Models/BuyerModels/buyerSchema");
 const SellerPartnerBuyers = require("../../Models/SellerModels/partnerBuyersSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const validator = require("validator");
+const Purchase = require("../../Models/SellerModels/purchaseSchema");
+const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
+const Transaction = require("../../Models/SellerModels/transactionSchema");
+const SellerSalesman = require("../../Models/SellerModels/sellerSalesmanSchema");
+const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 exports.getBusinesses = async (req, res, next) => {
   try {
     const { search, smcs } = req.body;
@@ -127,6 +132,129 @@ exports.addNewBusiness = async (req, res, next) => {
       .status(200)
       .json(
         success("Business Added Successfully", { business }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getProductConsignments = async (req, res, next) => {
+  try {
+    const { productId } = req.body;
+    console.log(req.body);
+    if (!productId) {
+      return res
+        .status(200)
+        .json(error("product id is required", res.statusCode));
+    }
+    const product = await SellerProduct.findById(productId);
+    if (!product) {
+      return res.status(200).json(error("Invalid product id", res.statusCode));
+    }
+    const consignments = await Purchase.aggregate([
+      {
+        $match: {
+          seller: mongoose.Types.ObjectId(req.seller._id),
+        },
+      },
+      { $unwind: "$products" },
+      {
+        $match: {
+          "products.productId": { $eq: mongoose.Types.ObjectId(productId) },
+        },
+      },
+      {
+        $lookup: {
+          localField: "supplier",
+          foreignField: "_id",
+          from: "sellersuppliers",
+          as: "supplier",
+        },
+      },
+      { $unwind: "$supplier" },
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]);
+    res
+      .status(200)
+      .json(
+        success(
+          "Consignment fetched Successfully",
+          { consignments },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.processTransaction = async (req, res, next) => {
+  try {
+    const { buyer, type, total, product, salesman, station } = req.body;
+    console.log(req.body);
+    if (!buyer) {
+      return res.status(200).json(error("Buyer is required", res.statusCode));
+    }
+    const buyer_data = await Buyer.findById(buyer);
+    if (!buyer_data) {
+      return res.status(200).json(error("Invalid buyer id", res.statusCode));
+    }
+    if (!salesman) {
+      return res
+        .status(200)
+        .json(error("Salesman is required", res.statusCode));
+    }
+    const salesman_data = await SellerSalesman.findById(salesman);
+    if (!salesman_data) {
+      return res.status(200).json(error("Invalid salesman id", res.statusCode));
+    }
+    if (!station) {
+      return res.status(200).json(error("Station is required", res.statusCode));
+    }
+    const station_data = await SellerStation.findById(station);
+    if (!station_data) {
+      return res.status(200).json(error("Invalid station id", res.statusCode));
+    }
+    if (!type) {
+      return res
+        .status(200)
+        .json(error("Transaction type is required", res.statusCode));
+    }
+    if (!["CASH", "CARD", "INVOICE", "DRAFT"].includes(type)) {
+      return res
+        .status(200)
+        .json(error("Invalid transaction type", res.statusCode));
+    }
+    if (!total) {
+      return res.status(200).json(error("Total is required", res.statusCode));
+    }
+    if (!product.length) {
+      return res.status(200).json(error("Product is required", res.statusCode));
+    }
+    const transaction = await Transaction.create({
+      seller: req.seller._id,
+      buyer,
+      type,
+      total,
+      product,
+      salesman,
+      station,
+    });
+    const ref = String(transaction._id).slice(18, 24);
+    transaction.ref = ref;
+    await transaction.save();
+    res
+      .status(200)
+      .json(
+        success(
+          "Transaction processed Successfully",
+          { transaction },
+          res.statusCode
+        )
       );
   } catch (err) {
     console.log(err);

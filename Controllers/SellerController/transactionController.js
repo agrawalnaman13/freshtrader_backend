@@ -1,0 +1,153 @@
+const mongoose = require("mongoose");
+const { success, error } = require("../../service_response/adminApiResponse");
+const Transaction = require("../../Models/SellerModels/transactionSchema");
+const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
+const Purchase = require("../../Models/SellerModels/purchaseSchema");
+
+exports.getTransactions = async (req, res, next) => {
+  try {
+    const { date, sortBy, filterBy } = req.body;
+    console.log(req.body);
+    const transactions = await Transaction.aggregate([
+      {
+        $project: {
+          seller: 1,
+          buyer: 1,
+          product: 1,
+          ref: 1,
+          type: 1,
+          total: 1,
+          salesman: 1,
+          station: 1,
+          is_emailed: 1,
+          status: 1,
+          createdAt: 1,
+          year: {
+            $year: "$createdAt",
+          },
+          month: {
+            $month: "$createdAt",
+          },
+          day: {
+            $dayOfMonth: "$createdAt",
+          },
+        },
+      },
+      {
+        $match: {
+          seller: mongoose.Types.ObjectId(req.seller._id),
+        },
+      },
+      {
+        $lookup: {
+          localField: "buyer",
+          foreignField: "_id",
+          from: "buyers",
+          as: "buyer",
+        },
+      },
+      { $unwind: "$buyer" },
+      {
+        $match: {
+          $and: [
+            date
+              ? {
+                  $and: [
+                    { year: new Date(date).getFullYear() },
+                    { month: new Date(date).getMonth() + 1 },
+                    { day: new Date(date).getDate() },
+                  ],
+                }
+              : {},
+            filterBy === 1 ? { type: "CASH" } : {},
+            filterBy === 2
+              ? { $and: [{ "buyer.is_smcs": true }, { type: "INVOICE" }] }
+              : {},
+            filterBy === 3
+              ? { $and: [{ "buyer.is_smcs": false }, { type: "INVOICE" }] }
+              : {},
+            filterBy === 5 ? { status: "PAID" } : {},
+            filterBy === 6 ? { status: "UNPAID" } : {},
+          ],
+        },
+      },
+      {
+        $sort:
+          sortBy === 1
+            ? { createdAt: -1 }
+            : sortBy === 2
+            ? { createdAt: 1 }
+            : sortBy === 3
+            ? { salesman: 1 }
+            : sortBy === 4
+            ? { type: 1 }
+            : sortBy === 5
+            ? { "buyer.business_trading_name": 1 }
+            : sortBy === 6
+            ? { "buyer.business_trading_name": -1 }
+            : sortBy === 7
+            ? { total: -1 }
+            : sortBy === 8
+            ? { total: 1 }
+            : { createdAt: -1 },
+      },
+    ]);
+    for (const transaction of transactions) {
+      for (const product of transaction.product) {
+        product.productId = await SellerProduct.findById(product.productId)
+          .populate(["variety", "type", "units"])
+          .select(["variety", "type", "units"]);
+        product.consignment = await Purchase.findById(product.consignment)
+          .populate("supplier")
+          .select(["supplier", "consign"]);
+      }
+    }
+    res
+      .status(200)
+      .json(
+        success(
+          "Transactions fetched Successfully",
+          { transactions },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updateTransactions = async (req, res, next) => {
+  try {
+    const { transactionId, product } = req.body;
+    console.log(req.body);
+    if (!transactionId) {
+      return res
+        .status(200)
+        .json(error("transaction id is required", res.statusCode));
+    }
+    const transaction = await Transaction.findById(transactionId);
+    if (!transaction) {
+      return res
+        .status(200)
+        .json(error("Invalid transaction id", res.statusCode));
+    }
+    if (!product.length) {
+      return res.status(200).json(error("Product is required", res.statusCode));
+    }
+    transaction.product = product;
+    await transaction.save();
+    res
+      .status(200)
+      .json(
+        success(
+          "Transactions updated Successfully",
+          { transaction },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};

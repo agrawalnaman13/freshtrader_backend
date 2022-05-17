@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { success, error } = require("../../service_response/adminApiResponse");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
+const ProductVariety = require("../../Models/AdminModels/productVarietySchema");
+const ProductType = require("../../Models/AdminModels/productTypeSchema");
 
 exports.addSellerProduct = async (req, res, next) => {
   try {
@@ -134,6 +136,7 @@ exports.addProductUnit = async (req, res, next) => {
       category: product.category,
       variety: product.variety,
       type: product.type,
+      units: units,
     });
     if (isProduct) {
       return res
@@ -246,6 +249,89 @@ exports.searchSellerProduct = async (req, res, next) => {
       .status(200)
       .json(
         success("Product fetched successfully", { products }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getProductDetail = async (req, res, next) => {
+  try {
+    if (!req.params.id) {
+      return res
+        .status(200)
+        .json(error("Product id is required", res.statusCode));
+    }
+    const product = await SellerProduct.findById(req.params.id).populate([
+      "variety",
+      "type",
+      "units",
+    ]);
+    if (!product) {
+      return res.status(200).json(error("Invalid product id", res.statusCode));
+    }
+    res
+      .status(200)
+      .json(
+        success("Product fetched Successfully", { product }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getMyVarietyList = async (req, res, next) => {
+  try {
+    const { category } = req.body;
+    if (!category) {
+      return res
+        .status(200)
+        .json(error("Category is required", res.statusCode));
+    }
+    if (!["Fruits", "Herbs", "Vegetables", "Others"].includes(category)) {
+      return res.status(200).json(error("Invalid Category", res.statusCode));
+    }
+    const varieties = await SellerProduct.find({
+      category: category,
+    }).distinct("variety");
+    let varietyList = [];
+    for (const variety of varieties) {
+      varietyList.push(await ProductVariety.findById(variety));
+    }
+    res
+      .status(200)
+      .json(
+        success("Product fetched Successfully", { varietyList }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getMyProductList = async (req, res, next) => {
+  try {
+    const { variety } = req.body;
+    if (!variety) {
+      return res.status(200).json(error("Variety is required", res.statusCode));
+    }
+    const product = await ProductVariety.findById(variety);
+    if (!product) {
+      return res
+        .status(200)
+        .json(error("Invalid product variety", res.statusCode));
+    }
+    const typeList = await SellerProduct.find({
+      variety: variety,
+    })
+      .select("type")
+      .populate("type");
+    res
+      .status(200)
+      .json(
+        success("Product fetched Successfully", { typeList }, res.statusCode)
       );
   } catch (err) {
     console.log(err);
