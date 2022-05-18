@@ -8,6 +8,10 @@ const Product = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  consignment: {
+    type: mongoose.Types.ObjectId,
+    ref: "purchase",
+  },
 });
 const OrderSchema = new mongoose.Schema(
   {

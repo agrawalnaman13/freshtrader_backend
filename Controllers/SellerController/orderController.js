@@ -97,6 +97,56 @@ exports.changeOrderStatus = async (req, res, next) => {
 
 exports.sendCounterOffer = async (req, res, next) => {
   try {
+    const { orderId, product, pick_up_time, pick_up_date, payment } = req.body;
+    console.log(req.body);
+    if (!orderId) {
+      return res
+        .status(200)
+        .json(error("Please provide order id", res.statusCode));
+    }
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(200).json(error("Invalid order id", res.statusCode));
+    }
+    if (!product.length) {
+      return res
+        .status(200)
+        .json(error("Please provide product", res.statusCode));
+    }
+    if (!pick_up_date) {
+      return res
+        .status(200)
+        .json(error("Please provide pick up date", res.statusCode));
+    }
+    if (!pick_up_time) {
+      return res
+        .status(200)
+        .json(error("Please provide pick up time", res.statusCode));
+    }
+    if (!payment) {
+      return res
+        .status(200)
+        .json(error("Please provide payment type", res.statusCode));
+    }
+    order.product = product;
+    order.pick_up_date = pick_up_date;
+    order.pick_up_time = pick_up_time;
+    order.payment = payment;
+    order.status = "COUNTER";
+    await order.save();
+    res
+      .status(200)
+      .json(
+        success("Order status changed successfully", { order }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.processOrder = async (req, res, next) => {
+  try {
     const { orderId, product } = req.body;
     console.log(req.body);
     if (!orderId) {
@@ -114,13 +164,10 @@ exports.sendCounterOffer = async (req, res, next) => {
         .json(error("Please provide product", res.statusCode));
     }
     order.product = product;
-    order.status = "COUNTER";
     await order.save();
     res
       .status(200)
-      .json(
-        success("Order status changed successfully", { order }, res.statusCode)
-      );
+      .json(success("Order updated successfully", { order }, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
