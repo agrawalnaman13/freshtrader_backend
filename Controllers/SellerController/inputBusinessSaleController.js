@@ -17,6 +17,7 @@ exports.getBusinesses = async (req, res, next) => {
         .status(200)
         .json(error("Please provide search key", res.statusCode));
     }
+    const regexp = new RegExp("^" + search);
     const buyers = await SellerPartnerBuyers.aggregate([
       {
         $match: {
@@ -35,7 +36,7 @@ exports.getBusinesses = async (req, res, next) => {
       {
         $match: {
           $and: [
-            { "buyer.business_trading_name": /^n/i },
+            { "buyer.business_trading_name": regexp },
             smcs === true ? { "buyer.is_smcs": true } : {},
             smcs === false ? { "buyer.is_smcs": false } : {},
           ],
@@ -243,6 +244,8 @@ exports.processTransaction = async (req, res, next) => {
       product,
       salesman,
       station,
+      status: type === "CARD" || type === "CASH" ? "PAID" : "UNPAID",
+      payment_received: type === "CARD" || type === "CASH" ? total : 0,
     });
     const ref = String(transaction._id).slice(18, 24);
     transaction.ref = ref;

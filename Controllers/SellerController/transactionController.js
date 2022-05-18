@@ -3,7 +3,7 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const Transaction = require("../../Models/SellerModels/transactionSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
-
+const moment = require("moment");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { date, sortBy, filterBy } = req.body;
@@ -48,6 +48,15 @@ exports.getTransactions = async (req, res, next) => {
       },
       { $unwind: "$buyer" },
       {
+        $lookup: {
+          localField: "salesman",
+          foreignField: "_id",
+          from: "sellersalesmen",
+          as: "salesman",
+        },
+      },
+      { $unwind: "$salesman" },
+      {
         $match: {
           $and: [
             date
@@ -66,8 +75,10 @@ exports.getTransactions = async (req, res, next) => {
             filterBy === 3
               ? { $and: [{ "buyer.is_smcs": false }, { type: "INVOICE" }] }
               : {},
+            filterBy === 4 ? { type: "CREDIT NOTE" } : {},
             filterBy === 5 ? { status: "PAID" } : {},
             filterBy === 6 ? { status: "UNPAID" } : {},
+            filterBy === 7 ? { status: "OVERDUE" } : {},
           ],
         },
       },
@@ -78,7 +89,7 @@ exports.getTransactions = async (req, res, next) => {
             : sortBy === 2
             ? { createdAt: 1 }
             : sortBy === 3
-            ? { salesman: 1 }
+            ? { "salesman.full_name": 1 }
             : sortBy === 4
             ? { type: 1 }
             : sortBy === 5
@@ -124,7 +135,7 @@ exports.updateTransactions = async (req, res, next) => {
     if (!transactionId) {
       return res
         .status(200)
-        .json(error("transaction id is required", res.statusCode));
+        .json(error("Transaction id is required", res.statusCode));
     }
     const transaction = await Transaction.findById(transactionId);
     if (!transaction) {
@@ -142,6 +153,151 @@ exports.updateTransactions = async (req, res, next) => {
       .json(
         success(
           "Transactions updated Successfully",
+          { transaction },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getTransactionDetail = async (req, res, next) => {
+  try {
+    const transaction = await Transaction.findById(req.params.id)
+      .populate(["seller", "buyer"])
+      .lean();
+    for (const product of transaction.product) {
+      product.productId = await SellerProduct.findById(product.productId)
+        .populate(["variety", "type", "units"])
+        .select(["variety", "type", "units"]);
+    }
+    if (
+      transaction.type === "INVOICE" ||
+      transaction.type === "DRAFT INVOICE"
+    ) {
+      transaction.due_date = moment(transaction.createdAt, "DD-MM-YYYY").add(
+        transaction.seller.sales_invoice_due_date,
+        "days"
+      );
+    }
+    res
+      .status(200)
+      .json(
+        success(
+          "Transaction detail fetched Successfully",
+          { transaction },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changeTransactionStatus = async (req, res, next) => {
+  try {
+    const { transactionId, status } = req.body;
+    console.log(req.body);
+    if (!transactionId) {
+      return res
+        .status(200)
+        .json(error("Transaction id is required", res.statusCode));
+    }
+    const transaction = await Transaction.findById(transactionId);
+    if (!transaction) {
+      return res
+        .status(200)
+        .json(error("Invalid transaction id", res.statusCode));
+    }
+    if (!status) {
+      return res.status(200).json(error("Status is required", res.statusCode));
+    }
+    if (!["PAID", "UNPAID", "OVERDUE"].includes(status)) {
+      return res.status(200).json(error("Invalid status", res.statusCode));
+    }
+    transaction.status = status;
+    if (status === "PAID") {
+      transaction.payment_received = transaction.total;
+    }
+    await transaction.save();
+    res
+      .status(200)
+      .json(
+        success(
+          "Transaction status changed Successfully",
+          { transaction },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changeAllTransactionStatus = async (req, res, next) => {
+  try {
+    const { transactionIds, status } = req.body;
+    console.log(req.body);
+    if (!transactionIds.length) {
+      return res
+        .status(200)
+        .json(error("Transaction id is required", res.statusCode));
+    }
+    if (!status) {
+      return res.status(200).json(error("Status is required", res.statusCode));
+    }
+    if (!["PAID", "UNPAID", "OVERDUE"].includes(status)) {
+      return res.status(200).json(error("Invalid status", res.statusCode));
+    }
+    for (const transactionId of transactionIds) {
+      const transaction = await Transaction.findById(transactionId);
+      await Transaction.findByIdAndUpdate(transactionId, {
+        status: status,
+        payment_received:
+          status === "PAID" ? transaction.total : transaction.payment_received,
+      });
+    }
+    res
+      .status(200)
+      .json(
+        success("Transaction status changed Successfully", {}, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.deleteTransaction = async (req, res, next) => {
+  try {
+    const { transactionId, type } = req.body;
+    console.log(req.body);
+    if (!transactionId) {
+      return res
+        .status(200)
+        .json(error("Transaction id is required", res.statusCode));
+    }
+    const transaction = await Transaction.findById(transactionId);
+    if (!transaction) {
+      return res
+        .status(200)
+        .json(error("Invalid transaction id", res.statusCode));
+    }
+    if (!type) {
+      return res
+        .status(200)
+        .json(error("Delete type is required", res.statusCode));
+    }
+    await Transaction.findByIdAndDelete(transactionId);
+    res
+      .status(200)
+      .json(
+        success(
+          "Transaction deleted Successfully",
           { transaction },
           res.statusCode
         )

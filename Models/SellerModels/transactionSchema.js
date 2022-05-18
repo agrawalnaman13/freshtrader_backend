@@ -48,22 +48,35 @@ const TransactionSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["CASH", "CARD", "INVOICE", "DRAFT"],
+      enum: ["CASH", "CARD", "INVOICE", "DRAFT", "CREDIT NOTE"],
       required: true,
     },
     total: {
       type: Number,
       required: true,
     },
+    payment_received: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     product: [Product],
     is_emailed: {
       type: Boolean,
       default: false,
     },
+    smcs_notified: {
+      type: Boolean,
+      default: false,
+    },
     status: {
       type: String,
-      enum: ["PAID", "UNPAID"],
+      enum: ["PAID", "UNPAID", "OVERDUE"],
       default: "UNPAID",
+    },
+    refund_type: {
+      type: String,
+      enum: ["RETURN", "VOID"],
     },
   },
   { timestamps: {} },

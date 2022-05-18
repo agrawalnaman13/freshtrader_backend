@@ -12,6 +12,11 @@ const {
   getSellerData,
 } = require("../Controllers/SellerController/authController");
 const {
+  getCustomerInfo,
+  getCustomerTransactions,
+  receivePayment,
+} = require("../Controllers/SellerController/customerFilesController");
+const {
   getBusinesses,
   addNewBusiness,
   getProductConsignments,
@@ -88,6 +93,10 @@ const {
 const {
   getTransactions,
   updateTransactions,
+  getTransactionDetail,
+  changeTransactionStatus,
+  deleteTransaction,
+  changeAllTransactionStatus,
 } = require("../Controllers/SellerController/transactionController");
 const {
   createSellerImagePath,
@@ -190,4 +199,27 @@ router.post(
 router.post("/searchBuyers", tokenAuthorisation, searchBuyers);
 router.post("/getTransactions", tokenAuthorisation, getTransactions);
 router.post("/updateTransactions", tokenAuthorisation, updateTransactions);
+router.get(
+  "/getTransactionDetail/:id",
+  tokenAuthorisation,
+  getTransactionDetail
+);
+router.post(
+  "/changeTransactionStatus",
+  tokenAuthorisation,
+  changeTransactionStatus
+);
+router.post("/deleteTransaction", tokenAuthorisation, deleteTransaction);
+router.get("/getCustomerInfo/:id", tokenAuthorisation, getCustomerInfo);
+router.post(
+  "/getCustomerTransactions",
+  tokenAuthorisation,
+  getCustomerTransactions
+);
+router.post(
+  "/changeAllTransactionStatus",
+  tokenAuthorisation,
+  changeAllTransactionStatus
+);
+router.post("/receivePayment", tokenAuthorisation, receivePayment);
 module.exports = router;
