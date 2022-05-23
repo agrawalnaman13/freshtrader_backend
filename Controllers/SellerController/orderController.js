@@ -129,7 +129,7 @@ exports.sendCounterOffer = async (req, res, next) => {
         .json(error("Please provide payment type", res.statusCode));
     }
     order.product = product;
-    order.pick_up_date = pick_up_date;
+    order.pick_up_date = new Date(pick_up_date);
     order.pick_up_time = pick_up_time;
     order.payment = payment;
     order.status = "COUNTER";

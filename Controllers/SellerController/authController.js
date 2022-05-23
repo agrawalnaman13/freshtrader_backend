@@ -167,21 +167,27 @@ exports.updateAccountInformation = async (req, res, next) => {
 };
 
 exports.updateSellerDocuments = async (req, res, next) => {
-  const { include_food_saftey_logo } = req.body;
+  const { include_food_saftey_logo, receipt, a4 } = req.body;
   console.log(req.body);
   try {
+    let query = {
+      include_food_saftey_logo: include_food_saftey_logo,
+    };
+    if (receipt)
+      query.thermal_receipt_invoice_logo = `${req.files[0].destination.replace(
+        "./public",
+        ""
+      )}/${req.files[0].filename}`;
+    if (a4) {
+      let file = req.files[0];
+      if (req.files.length === 2) file = req.files[0];
+      query.a4_invoice_logo = `${file.destination.replace("./public", "")}/${
+        file.filename
+      }`;
+    }
     const newSeller = await Wholeseller.findOneAndUpdate(
       { _id: req.seller._id },
-      {
-        thermal_receipt_invoice_logo: `${req.files[0].destination.replace(
-          "./public",
-          ""
-        )}/${req.files[0].filename}`,
-        a4_invoice_logo: `${req.files[1].destination.replace("./public", "")}/${
-          req.files[0].filename
-        }`,
-        include_food_saftey_logo: include_food_saftey_logo,
-      }
+      query
     );
 
     res

@@ -26,7 +26,7 @@ exports.orderProduct = async (req, res, next) => {
       buyer: req.buyer._id,
       seller,
       product,
-      pick_up_date,
+      pick_up_date: new Date(pick_up_date),
       pick_up_time,
       notes,
       payment,

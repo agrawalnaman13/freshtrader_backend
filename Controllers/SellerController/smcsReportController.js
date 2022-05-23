@@ -1,22 +1,16 @@
 const mongoose = require("mongoose");
 const { success, error } = require("../../service_response/adminApiResponse");
 const Transaction = require("../../Models/SellerModels/transactionSchema");
-const Buyer = require("../../Models/BuyerModels/buyerSchema");
 
 exports.getSMCSReport = async (req, res, next) => {
   try {
-    const { date, sortBy, filterBy } = req.body;
+    const { from, till } = req.body;
     const transactions = await Transaction.aggregate([
       {
         $project: {
           seller: 1,
           buyer: 1,
           total: 1,
-          payment_received: 1,
-          status: 1,
-          ref: 1,
-          type: 1,
-          smcs_notified: 1,
           createdAt: 1,
           year: {
             $year: "$createdAt",
@@ -47,55 +41,56 @@ exports.getSMCSReport = async (req, res, next) => {
         $match: {
           "buyer.is_smcs": true,
           $and: [
-            date
+            from
               ? {
                   $and: [
-                    { year: new Date(date).getFullYear() },
-                    { month: new Date(date).getMonth() + 1 },
-                    { day: new Date(date).getDate() },
+                    { year: { $gte: new Date(from).getFullYear() } },
+                    { month: { $gte: new Date(from).getMonth() + 1 } },
+                    { day: { $gte: new Date(from).getDate() } },
                   ],
                 }
               : {},
-            filterBy === 1 ? { type: "CASH" } : {},
-            filterBy === 2
-              ? { $and: [{ "buyer.is_smcs": true }, { type: "INVOICE" }] }
+            till
+              ? {
+                  $and: [
+                    { year: { $lte: new Date(till).getFullYear() } },
+                    { month: { $lte: new Date(till).getMonth() + 1 } },
+                    { day: { $lte: new Date(till).getDate() } },
+                  ],
+                }
               : {},
-            filterBy === 3
-              ? { $and: [{ "buyer.is_smcs": false }, { type: "INVOICE" }] }
-              : {},
-            filterBy === 4 ? { type: "CREDIT NOTE" } : {},
-            filterBy === 5 ? { status: "PAID" } : {},
-            filterBy === 6 ? { status: "UNPAID" } : {},
-            filterBy === 7 ? { status: "OVERDUE" } : {},
           ],
         },
       },
       {
-        $sort:
-          sortBy === 1
-            ? { createdAt: -1 }
-            : sortBy === 2
-            ? { createdAt: 1 }
-            : sortBy === 3
-            ? { type: 1 }
-            : sortBy === 4
-            ? { total: -1 }
-            : sortBy === 5
-            ? { total: 1 }
-            : sortBy === 6
-            ? { smcs_notified: 1 }
-            : sortBy === 7
-            ? { status: 1 }
-            : { createdAt: -1 },
+        $group: {
+          _id: {
+            buyer: "$buyer",
+          },
+          total: { $sum: "$total" },
+        },
       },
     ]);
-
+    let report = [];
+    for (const transaction of transactions) {
+      report.push({
+        buyer: transaction._id.buyer,
+        total: transaction.total,
+      });
+    }
+    const total = transactions.reduce(function (a, b) {
+      return a + b.total;
+    }, 0);
+    const smcs_code = report.reduce(function (a, b) {
+      console.log(a, b.buyer?.smcs_code);
+      return a + +b.buyer?.smcs_code;
+    }, 0);
     res
       .status(200)
       .json(
         success(
-          "Customer's transactions fetched Successfully",
-          { transactions },
+          "Report fetched Successfully",
+          { report, total, smcs_code },
           res.statusCode
         )
       );

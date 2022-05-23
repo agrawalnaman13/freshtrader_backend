@@ -17,6 +17,9 @@ const {
   receivePayment,
 } = require("../Controllers/SellerController/customerFilesController");
 const {
+  getEndOfDayReport,
+} = require("../Controllers/SellerController/endOfDayController");
+const {
   getBusinesses,
   addNewBusiness,
   getProductConsignments,
@@ -49,6 +52,9 @@ const {
   editCategoryName,
   saveLayout,
   getLayout,
+  getMyPOSProducts,
+  moveProduct,
+  changeVarietyStatus,
 } = require("../Controllers/SellerController/posLayoutController");
 const {
   addSellerProduct,
@@ -76,6 +82,9 @@ const {
   getSalesman,
   deleteSalesman,
 } = require("../Controllers/SellerController/salesmanController");
+const {
+  getSMCSReport,
+} = require("../Controllers/SellerController/smcsReportController");
 const {
   addStation,
   addDevice,
@@ -136,6 +145,9 @@ router.get("/deleteSalesman/:id", tokenAuthorisation, deleteSalesman);
 router.post("/editCategoryName", tokenAuthorisation, editCategoryName);
 router.post("/saveLayout", tokenAuthorisation, saveLayout);
 router.get("/getLayout", tokenAuthorisation, getLayout);
+router.post("/getMyPOSProducts", tokenAuthorisation, getMyPOSProducts);
+router.post("/moveProduct", tokenAuthorisation, moveProduct);
+router.post("/changeVarietyStatus", tokenAuthorisation, changeVarietyStatus);
 router.post("/addSupplier", tokenAuthorisation, addSupplier);
 router.post("/updateSupplier", tokenAuthorisation, updateSupplier);
 router.get("/getSuppliers", tokenAuthorisation, getSuppliers);
@@ -222,4 +234,6 @@ router.post(
   changeAllTransactionStatus
 );
 router.post("/receivePayment", tokenAuthorisation, receivePayment);
+router.post("/getSMCSReport", tokenAuthorisation, getSMCSReport);
+router.post("/getEndOfDayReport", tokenAuthorisation, getEndOfDayReport);
 module.exports = router;

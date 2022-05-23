@@ -52,6 +52,10 @@ const SellerProductSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "unit",
     },
+    status: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: {} },
   { collection: "sellerProduct" }

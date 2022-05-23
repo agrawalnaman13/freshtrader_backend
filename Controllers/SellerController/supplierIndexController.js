@@ -3,6 +3,7 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const validator = require("validator");
 const SellerSupplier = require("../../Models/SellerModels/sellerSuppliersSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
+const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 exports.addSupplier = async (req, res, next) => {
   try {
     const {
@@ -208,6 +209,9 @@ exports.deleteSupplier = async (req, res, next) => {
     await SellerSupplier.findOneAndDelete({
       _id: req.params.id,
       seller: req.seller._id,
+    });
+    await SellerPallets.findOneAndDelete({
+      received_from: req.params.id,
     });
     res
       .status(200)

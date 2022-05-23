@@ -5,7 +5,6 @@ const UnitSchema = new mongoose.Schema(
     unit: {
       type: String,
       required: true,
-      unique: true,
     },
     weight: {
       type: Number,

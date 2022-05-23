@@ -72,7 +72,7 @@ exports.updateSellerProduct = async (req, res, next) => {
     if (!productId) {
       return res
         .status(200)
-        .json(error("product id is required", res.statusCode));
+        .json(error("Product id is required", res.statusCode));
     }
     const product = await SellerProduct.findById(productId);
     if (!product) {

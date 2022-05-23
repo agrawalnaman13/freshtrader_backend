@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const ProductType = require("../../Models/AdminModels/productTypeSchema");
+const ProductVariety = require("../../Models/AdminModels/productVarietySchema");
 const SellerPOSLayout = require("../../Models/SellerModels/posLayoutSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
@@ -150,6 +152,125 @@ exports.getLayout = async (req, res, next) => {
     res
       .status(200)
       .json(success("Layout Fetched Successfully", { layout }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getMyPOSProducts = async (req, res, next) => {
+  try {
+    const { filterBy, search } = req.body;
+    const myProducts = await SellerProduct.find({
+      seller: req.seller._id,
+    }).distinct("type");
+    const products = await ProductType.aggregate([
+      {
+        $lookup: {
+          localField: "variety",
+          foreignField: "_id",
+          from: "productvarieties",
+          as: "variety",
+        },
+      },
+      { $unwind: "$variety" },
+      {
+        $addFields: {
+          isAdded: {
+            $in: ["$_id", myProducts],
+          },
+        },
+      },
+      {
+        $match: {
+          $and: [
+            search
+              ? {
+                  $or: [
+                    { "type.type": { $regex: search, $options: "$i" } },
+                    { "variety.variety": { $regex: search, $options: "$i" } },
+                  ],
+                }
+              : {},
+            filterBy === 1
+              ? {
+                  isAdded: true,
+                }
+              : {},
+            filterBy === 2
+              ? {
+                  isAdded: false,
+                }
+              : {},
+          ],
+        },
+      },
+    ]);
+    res
+      .status(200)
+      .json(
+        success("Products fetched successfully", { products }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.moveProduct = async (req, res, next) => {
+  try {
+    const { typeId, varietyId } = req.body;
+    if (!typeId) {
+      return res.status(200).json(error("Type id is required", res.statusCode));
+    }
+    const type = await ProductType.findById(typeId);
+    if (!type) {
+      return res.status(200).json(error("Invalid type id", res.statusCode));
+    }
+    if (!varietyId) {
+      return res
+        .status(200)
+        .json(error("Variety id is required", res.statusCode));
+    }
+    const variety = await ProductVariety.findById(varietyId);
+    if (!variety) {
+      return res.status(200).json(error("Invalid variety id", res.statusCode));
+    }
+    const products = await SellerProduct.find({ type: typeId });
+    for (const product of products) {
+      await ProductType.findByIdAndUpdate(product._id, { variety: varietyId });
+    }
+    res
+      .status(200)
+      .json(success("Product changed successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changeVarietyStatus = async (req, res, next) => {
+  try {
+    const { varietyId, status } = req.body;
+    if (!varietyId) {
+      return res
+        .status(200)
+        .json(error("Variety id is required", res.statusCode));
+    }
+    const variety = await ProductVariety.findById(varietyId);
+    if (!variety) {
+      return res.status(200).json(error("Invalid variety id", res.statusCode));
+    }
+    if (status === undefined || status === "") {
+      return res.status(200).json(error("Status is required", res.statusCode));
+    }
+    const products = await SellerProduct.find({ variety: varietyId });
+    for (const product of products) {
+      await SellerProduct.findByIdAndUpdate(product._id, { status: status });
+    }
+    res
+      .status(200)
+      .json(success("Variety status changed successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

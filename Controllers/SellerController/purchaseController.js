@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
@@ -37,6 +38,13 @@ exports.createConsignment = async (req, res, next) => {
       cash_purchase,
       products,
     });
+    for (const product of products) {
+      await Inventory.create({
+        seller: req.seller._id,
+        productId: product.productId,
+        consignment: consignment._id,
+      });
+    }
     res
       .status(200)
       .json(
