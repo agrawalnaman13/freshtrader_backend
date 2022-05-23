@@ -4,6 +4,7 @@ const Transaction = require("../../Models/SellerModels/transactionSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
 const moment = require("moment");
+const { parse } = require("json2csv");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { date, sortBy, filterBy } = req.body;
@@ -13,7 +14,7 @@ exports.getTransactions = async (req, res, next) => {
         $project: {
           seller: 1,
           buyer: 1,
-          product: 1,
+          products: 1,
           ref: 1,
           type: 1,
           total: 1,
@@ -104,7 +105,7 @@ exports.getTransactions = async (req, res, next) => {
       },
     ]);
     for (const transaction of transactions) {
-      for (const product of transaction.product) {
+      for (const product of transaction.products) {
         product.productId = await SellerProduct.findById(product.productId)
           .populate(["variety", "type", "units"])
           .select(["variety", "type", "units"]);
@@ -130,7 +131,7 @@ exports.getTransactions = async (req, res, next) => {
 
 exports.updateTransactions = async (req, res, next) => {
   try {
-    const { transactionId, product } = req.body;
+    const { transactionId, products } = req.body;
     console.log(req.body);
     if (!transactionId) {
       return res
@@ -143,10 +144,10 @@ exports.updateTransactions = async (req, res, next) => {
         .status(200)
         .json(error("Invalid transaction id", res.statusCode));
     }
-    if (!product.length) {
+    if (!products.length) {
       return res.status(200).json(error("Product is required", res.statusCode));
     }
-    transaction.product = product;
+    transaction.products = products;
     await transaction.save();
     res
       .status(200)
@@ -168,7 +169,7 @@ exports.getTransactionDetail = async (req, res, next) => {
     const transaction = await Transaction.findById(req.params.id)
       .populate(["seller", "buyer"])
       .lean();
-    for (const product of transaction.product) {
+    for (const product of transaction.products) {
       product.productId = await SellerProduct.findById(product.productId)
         .populate(["variety", "type", "units"])
         .select(["variety", "type", "units"]);
@@ -292,6 +293,26 @@ exports.deleteTransaction = async (req, res, next) => {
         .status(200)
         .json(error("Delete type is required", res.statusCode));
     }
+    for (const product of transaction.products) {
+      const consignment = await Purchase.findById(product.consignment);
+      consignment.products = consignment.products.map((p) => {
+        if (String(p.productId) === String(product._id)) {
+          if (type === 1) {
+            p.sold -= product.quantity;
+          } else if (type === 1) {
+            p.sold -= product.quantity;
+            p.void += product.quantity;
+          }
+          p.sold_percentage = (p.sold / p.received) * 100;
+          p.sales = p.sold * p.average_sales_price;
+          p.inv_on_hand = p.received - p.sold - p.void;
+          p.gross_profit = p.received * p.cost_per_unit - p.sales;
+          p.gross_profit_percentage = (p.gross_profit / p.sales) * 100;
+        }
+        return p;
+      });
+      await consignment.save();
+    }
     await Transaction.findByIdAndDelete(transactionId);
     res
       .status(200)
@@ -302,6 +323,45 @@ exports.deleteTransaction = async (req, res, next) => {
           res.statusCode
         )
       );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.downloadTransactionCSV = async (req, res, next) => {
+  try {
+    const { transactions } = req.body;
+    if (!transactions.length) {
+      return res
+        .status(200)
+        .json(error("Transactions are required", res.statusCode));
+    }
+    const fields = [
+      "DATE",
+      "TIME",
+      "REF#",
+      "TYPE",
+      "BUYER",
+      "TOTAL",
+      "EMAILED",
+      "STATUS",
+    ];
+    let response = [];
+    for (const transaction of transactions) {
+      response.push({
+        DATE: moment(transaction.createdAt).format("LL"),
+        TIME: moment(transaction.createdAt).format("LL"),
+        REF: transaction.ref,
+        TYPE: transaction.type,
+        BUYER: transaction.buyer.business_trading_name,
+        EMAILED: transaction.is_emailed ? "YES" : "NO",
+        STATUS: transaction.status,
+      });
+    }
+    const opts = { fields };
+    const csv = parse(response, opts);
+    return res.status(200).send(csv);
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

@@ -195,7 +195,17 @@ exports.getProductConsignments = async (req, res, next) => {
 
 exports.processTransaction = async (req, res, next) => {
   try {
-    const { buyer, type, total, product, salesman, station } = req.body;
+    const {
+      buyer,
+      type,
+      total,
+      products,
+      salesman,
+      station,
+      refund_type,
+      pallets,
+      delivery_note,
+    } = req.body;
     console.log(req.body);
     if (!buyer) {
       return res.status(200).json(error("Buyer is required", res.statusCode));
@@ -225,7 +235,7 @@ exports.processTransaction = async (req, res, next) => {
         .status(200)
         .json(error("Transaction type is required", res.statusCode));
     }
-    if (!["CASH", "CARD", "INVOICE", "DRAFT"].includes(type)) {
+    if (!["CASH", "CARD", "INVOICE", "DRAFT", "CREDIT NOTE"].includes(type)) {
       return res
         .status(200)
         .json(error("Invalid transaction type", res.statusCode));
@@ -233,23 +243,75 @@ exports.processTransaction = async (req, res, next) => {
     if (!total) {
       return res.status(200).json(error("Total is required", res.statusCode));
     }
-    if (!product.length) {
+    if (!products.length) {
       return res.status(200).json(error("Product is required", res.statusCode));
     }
-    const transaction = await Transaction.create({
+    if (type === "CREDIT NOTE") {
+      if (!refund_type) {
+        return res
+          .status(200)
+          .json(error("Refund type is required", res.statusCode));
+      }
+      if (!["RETURN", "VOID"].includes(refund_type)) {
+        return res
+          .status(200)
+          .json(error("Invalid refund type", res.statusCode));
+      }
+    }
+    let query = {
       seller: req.seller._id,
       buyer,
       type,
       total,
-      product,
+      products,
       salesman,
       station,
       status: type === "CARD" || type === "CASH" ? "PAID" : "UNPAID",
       payment_received: type === "CARD" || type === "CASH" ? total : 0,
-    });
+      pallets,
+      delivery_note,
+    };
+    if (type === "CREDIT NOTE") {
+      query = {
+        seller: req.seller._id,
+        buyer,
+        type,
+        total,
+        products,
+        salesman,
+        station,
+        status: "",
+        refund_type,
+        pallets,
+        delivery_note,
+      };
+    }
+    const transaction = await Transaction.create(query);
     const ref = String(transaction._id).slice(18, 24);
     transaction.ref = ref;
     await transaction.save();
+    for (const product of products) {
+      const consignment = await Purchase.findById(product.consignment);
+      consignment.products = consignment.products.map((p) => {
+        if (String(p.productId) === String(product._id)) {
+          if (type === "CREDIT NOTE" && refund_type === "VOID") {
+            p.sold -= product.quantity;
+            p.void += product.quantity;
+          } else if (type === "CREDIT NOTE" && refund_type === "RETURN") {
+            p.sold -= product.quantity;
+          } else {
+            p.sold += product.quantity;
+          }
+          p.sold_percentage = (p.sold / p.received) * 100;
+          p.sales = p.sold * p.average_sales_price;
+          p.inv_on_hand = p.received - p.sold - p.void;
+          p.gross_profit = p.received * p.cost_per_unit - p.sales;
+          p.gross_profit_percentage = (p.gross_profit / p.sales) * 100;
+        }
+        return p;
+      });
+      await consignment.save();
+    }
     res
       .status(200)
       .json(

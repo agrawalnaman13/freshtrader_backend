@@ -10,45 +10,59 @@ const Product = new mongoose.Schema(
     },
     advised: {
       type: Number,
+      default: 0,
     },
     received: {
       type: Number,
+      default: 0,
     },
     waste: {
       type: Number,
+      default: 0,
     },
     graded: {
       type: Number,
+      default: 0,
     },
     cost_per_unit: {
       type: Number,
+      default: 0,
     },
     total_cost: {
       type: Number,
+      default: 0,
     },
     sold: {
       type: Number,
+      default: 0,
     },
     sold_percentage: {
       type: Number,
+      default: 0,
     },
     average_sales_price: {
       type: Number,
+      default: 0,
     },
     total_sales: {
       type: Number,
+      default: 0,
     },
     void: {
       type: Number,
+      default: 0,
     },
     inv_on_hand: {
       type: Number,
+      default: 0,
     },
     gross_profit: {
       type: Number,
+      default: 0,
     },
     gross_profit_percentage: {
       type: Number,
+      default: 0,
     },
   },
   {

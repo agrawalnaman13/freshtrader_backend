@@ -71,12 +71,22 @@ const TransactionSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["PAID", "UNPAID", "OVERDUE"],
+      enum: ["PAID", "UNPAID", "OVERDUE", ""],
       default: "UNPAID",
     },
     refund_type: {
       type: String,
-      enum: ["RETURN", "VOID"],
+      enum: ["RETURN", "VOID", ""],
+      default: "",
+    },
+    pallets: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    delivery_note: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: {} },

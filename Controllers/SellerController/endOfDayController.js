@@ -9,7 +9,7 @@ exports.getEndOfDayReport = async (req, res, next) => {
       {
         $project: {
           seller: 1,
-          product: 1,
+          products: 1,
           total: 1,
           type: 1,
           createdAt: 1,
@@ -22,11 +22,11 @@ exports.getEndOfDayReport = async (req, res, next) => {
           day: {
             $dayOfMonth: "$createdAt",
           },
-          credit_product: {
-            $cond: [{ $eq: ["$type", "CREDIT NOTE"] }, "$product", []],
+          credit_products: {
+            $cond: [{ $eq: ["$type", "CREDIT NOTE"] }, "$products", []],
           },
-          bought_product: {
-            $cond: [{ $ne: ["$type", "CREDIT NOTE"] }, "$product", []],
+          bought_products: {
+            $cond: [{ $ne: ["$type", "CREDIT NOTE"] }, "$products", []],
           },
         },
       },
@@ -47,11 +47,11 @@ exports.getEndOfDayReport = async (req, res, next) => {
         },
       },
     ]);
-    const products = transactions.map(({ bought_product }) => {
-      return bought_product;
+    const products = transactions.map(({ bought_products }) => {
+      return bought_products;
     });
-    const credit_products = transactions.map(({ credit_product }) => {
-      return credit_product;
+    const credit_products = transactions.map(({ credit_products }) => {
+      return credit_products;
     });
     let quantity = 0,
       sales = 0,

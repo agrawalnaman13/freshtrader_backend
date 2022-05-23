@@ -197,3 +197,29 @@ exports.changeOrderNotification = async (req, res, next) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.getOrderCount = async (req, res, next) => {
+  try {
+    const newOrderCount = await Order.find({
+      status: "PENDING",
+    }).countDocuments();
+    const counterOrderCount = await Order.find({
+      status: "COUNTER",
+    }).countDocuments();
+    const confirmedOrderCount = await Order.find({
+      status: "CONFIRMED",
+    }).countDocuments();
+    res
+      .status(200)
+      .json(
+        success(
+          "Order count fetched successfully",
+          { newOrderCount, counterOrderCount, confirmedOrderCount },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};

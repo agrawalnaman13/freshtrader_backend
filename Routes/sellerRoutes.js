@@ -35,6 +35,7 @@ const {
   sendCounterOffer,
   changeOrderNotification,
   processOrder,
+  getOrderCount,
 } = require("../Controllers/SellerController/orderController");
 const {
   getPallets,
@@ -106,6 +107,7 @@ const {
   changeTransactionStatus,
   deleteTransaction,
   changeAllTransactionStatus,
+  downloadTransactionCSV,
 } = require("../Controllers/SellerController/transactionController");
 const {
   createSellerImagePath,
@@ -144,7 +146,7 @@ router.get("/getSalesman", tokenAuthorisation, getSalesman);
 router.get("/deleteSalesman/:id", tokenAuthorisation, deleteSalesman);
 router.post("/editCategoryName", tokenAuthorisation, editCategoryName);
 router.post("/saveLayout", tokenAuthorisation, saveLayout);
-router.get("/getLayout", tokenAuthorisation, getLayout);
+router.post("/getLayout", tokenAuthorisation, getLayout);
 router.post("/getMyPOSProducts", tokenAuthorisation, getMyPOSProducts);
 router.post("/moveProduct", tokenAuthorisation, moveProduct);
 router.post("/changeVarietyStatus", tokenAuthorisation, changeVarietyStatus);
@@ -202,6 +204,7 @@ router.post("/getOrders", tokenAuthorisation, getOrders);
 router.get("/getOrderDetails/:id", tokenAuthorisation, getOrderDetails);
 router.post("/changeOrderStatus", tokenAuthorisation, changeOrderStatus);
 router.post("/sendCounterOffer", tokenAuthorisation, sendCounterOffer);
+router.get("/getOrderCount", tokenAuthorisation, getOrderCount);
 router.post("/processOrder", tokenAuthorisation, processOrder);
 router.post(
   "/changeOrderNotification",
@@ -232,6 +235,11 @@ router.post(
   "/changeAllTransactionStatus",
   tokenAuthorisation,
   changeAllTransactionStatus
+);
+router.post(
+  "/downloadTransactionCSV",
+  tokenAuthorisation,
+  downloadTransactionCSV
 );
 router.post("/receivePayment", tokenAuthorisation, receivePayment);
 router.post("/getSMCSReport", tokenAuthorisation, getSMCSReport);

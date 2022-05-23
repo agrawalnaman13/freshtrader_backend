@@ -95,63 +95,43 @@ exports.saveLayout = async (req, res, next) => {
 
 exports.getLayout = async (req, res, next) => {
   try {
-    const layout = await SellerPOSLayout.findOne({
+    const { category } = req.body;
+    if (!category) {
+      return res
+        .status(200)
+        .json(error("Please provide category", res.statusCode));
+    }
+    let products = [];
+    const varieties = await SellerProduct.find({
       seller: req.seller._id,
-    }).lean();
-    const types = {
-      fruits: [],
-      vegetables: [],
-      herbs: [],
-      others: [],
-    };
-    for (const variety of layout.variety.fruits) {
-      let type = await SellerProduct.find({
-        variety: variety.variety,
-      }).populate("type");
-      type = type.map(({ type }) => type);
-      types.fruits.push({
-        variety: variety.variety,
-        status: variety.status,
-        type: type,
+      category,
+    }).distinct("variety");
+    for (const variety of varieties) {
+      const varietyData = await ProductVariety.findById(variety);
+      const types = await SellerProduct.find({
+        seller: req.seller._id,
+        category,
+        variety,
+      })
+        .populate("type")
+        .select("type");
+      products.push({
+        variety: varietyData,
+        types: types,
       });
     }
-    for (const variety of layout.variety.vegetables) {
-      let type = await SellerProduct.find({
-        variety: variety.variety,
-      }).populate("type");
-      type = type.map(({ type }) => type);
-      types.vegetables.push({
-        variety: variety.variety,
-        status: variety.status,
-        type: type,
-      });
-    }
-    for (const variety of layout.variety.herbs) {
-      let type = await SellerProduct.find({
-        variety: variety.variety,
-      }).populate("type");
-      type = type.map(({ type }) => type);
-      types.herbs.push({
-        variety: variety.variety,
-        status: variety.status,
-        type: type,
-      });
-    }
-    for (const variety of layout.variety.others) {
-      let type = await SellerProduct.find({
-        variety: variety.variety,
-      }).populate("type");
-      type = type.map(({ type }) => type);
-      types.others.push({
-        variety: variety.variety,
-        status: variety.status,
-        type: type,
-      });
-    }
-    layout.variety = types;
+    const categories = await SellerPOSLayout.findOne({
+      seller: req.seller._id,
+    });
     res
       .status(200)
-      .json(success("Layout Fetched Successfully", { layout }, res.statusCode));
+      .json(
+        success(
+          "Layout Fetched Successfully",
+          { products: products, categories: categories.categories },
+          res.statusCode
+        )
+      );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

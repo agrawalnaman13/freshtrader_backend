@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const { success, error } = require("../../service_response/adminApiResponse");
 const Transaction = require("../../Models/SellerModels/transactionSchema");
-
+const PDFDocument = require("pdfkit");
+// const fs = require("../template/template.html");
+var wkhtmltopdf = require("wkhtmltopdf");
 exports.getSMCSReport = async (req, res, next) => {
   try {
-    const { from, till } = req.body;
+    const { from, till, download } = req.body;
     const transactions = await Transaction.aggregate([
       {
         $project: {
@@ -85,15 +87,24 @@ exports.getSMCSReport = async (req, res, next) => {
       console.log(a, b.buyer?.smcs_code);
       return a + +b.buyer?.smcs_code;
     }, 0);
-    res
-      .status(200)
-      .json(
-        success(
-          "Report fetched Successfully",
-          { report, total, smcs_code },
-          res.statusCode
-        )
-      );
+    if (download) {
+      wkhtmltopdf("../template/template.html", {
+        output: "./example.pdf",
+        "viewport-size": "1280x1024",
+        "page-width": "400",
+        "page-height": "600",
+      });
+    } else {
+      res
+        .status(200)
+        .json(
+          success(
+            "Report fetched Successfully",
+            { report, total, smcs_code },
+            res.statusCode
+          )
+        );
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
