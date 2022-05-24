@@ -8,6 +8,8 @@ const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Transaction = require("../../Models/SellerModels/transactionSchema");
 const SellerSalesman = require("../../Models/SellerModels/sellerSalesmanSchema");
 const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
+const printer = require("pdf-to-printer");
+const path = require("path");
 exports.getBusinesses = async (req, res, next) => {
   try {
     const { search, smcs } = req.body;
@@ -43,6 +45,13 @@ exports.getBusinesses = async (req, res, next) => {
         },
       },
     ]);
+    // const tmpFilePath = path.join(
+    //   `./../template/contract-1639041977917 (1).pdf`
+    // );
+    // console.log(tmpFilePath);
+    // await printer.print(tmpFilePath, {
+    //   printer: "thermal",
+    // });
     res
       .status(200)
       .json(success("Buyers Fetched Successfully", { buyers }, res.statusCode));
@@ -123,7 +132,6 @@ exports.addNewBusiness = async (req, res, next) => {
       is_smcs: is_smcs,
       market_seller: market_seller,
       smcs_code: smcs_code,
-      seller: req.seller._id,
     });
     await SellerPartnerBuyers.create({
       buyer: business._id,

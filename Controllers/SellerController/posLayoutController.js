@@ -108,13 +108,15 @@ exports.getLayout = async (req, res, next) => {
     }).distinct("variety");
     for (const variety of varieties) {
       const varietyData = await ProductVariety.findById(variety);
-      const types = await SellerProduct.find({
+      const typeIds = await SellerProduct.find({
         seller: req.seller._id,
         category,
         variety,
-      })
-        .populate("type")
-        .select("type");
+      }).distinct("type");
+      let types = [];
+      for (let type of typeIds) {
+        types.push(await ProductType.findById(type));
+      }
       products.push({
         variety: varietyData,
         types: types,
@@ -128,7 +130,7 @@ exports.getLayout = async (req, res, next) => {
       .json(
         success(
           "Layout Fetched Successfully",
-          { products: products, categories: categories.categories },
+          { products: products, categories: categories.category },
           res.statusCode
         )
       );
