@@ -131,7 +131,7 @@ exports.getTransactions = async (req, res, next) => {
 
 exports.updateTransactions = async (req, res, next) => {
   try {
-    const { transactionId, products } = req.body;
+    const { transactionId, products, total } = req.body;
     console.log(req.body);
     if (!transactionId) {
       return res
@@ -147,7 +147,11 @@ exports.updateTransactions = async (req, res, next) => {
     if (!products.length) {
       return res.status(200).json(error("Product is required", res.statusCode));
     }
+    if (!total) {
+      return res.status(200).json(error("Total is required", res.statusCode));
+    }
     transaction.products = products;
+    transaction.total = total;
     await transaction.save();
     res
       .status(200)
@@ -340,7 +344,8 @@ exports.downloadTransactionCSV = async (req, res, next) => {
     const fields = [
       "DATE",
       "TIME",
-      "REF#",
+      "SALESMEN",
+      "REF",
       "TYPE",
       "BUYER",
       "TOTAL",
@@ -351,10 +356,12 @@ exports.downloadTransactionCSV = async (req, res, next) => {
     for (const transaction of transactions) {
       response.push({
         DATE: moment(transaction.createdAt).format("LL"),
-        TIME: moment(transaction.createdAt).format("LL"),
+        TIME: moment(transaction.createdAt).format("hh:mm A"),
+        SALESMEN: transaction.salesman.full_name,
         REF: transaction.ref,
         TYPE: transaction.type,
         BUYER: transaction.buyer.business_trading_name,
+        TOTAL: transaction.total,
         EMAILED: transaction.is_emailed ? "YES" : "NO",
         STATUS: transaction.status,
       });

@@ -45,11 +45,11 @@ exports.getBusinesses = async (req, res, next) => {
         },
       },
     ]);
-    // const tmpFilePath = path.join(
-    //   `./../template/contract-1639041977917 (1).pdf`
+    // const dirPath = path.join(
+    //   __dirname.replace("SellerController", "templates"),
+    //   "/smcs_report.pdf"
     // );
-    // console.log(tmpFilePath);
-    // await printer.print(tmpFilePath, {
+    // await printer.print(dirPath, {
     //   printer: "thermal",
     // });
     res

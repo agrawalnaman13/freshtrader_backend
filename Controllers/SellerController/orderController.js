@@ -201,12 +201,15 @@ exports.changeOrderNotification = async (req, res, next) => {
 exports.getOrderCount = async (req, res, next) => {
   try {
     const newOrderCount = await Order.find({
+      seller: req.seller._id,
       status: "PENDING",
     }).countDocuments();
     const counterOrderCount = await Order.find({
+      seller: req.seller._id,
       status: "COUNTER",
     }).countDocuments();
     const confirmedOrderCount = await Order.find({
+      seller: req.seller._id,
       status: "CONFIRMED",
     }).countDocuments();
     res

@@ -8,6 +8,10 @@ const Product = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  grade: {
+    type: String,
+    required: true,
+  },
   consignment: {
     type: mongoose.Types.ObjectId,
     ref: "purchase",
@@ -44,7 +48,7 @@ const OrderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["CONFIRMED", "PENDING", "CANCELED", "COUNTER"],
+      enum: ["CONFIRMED", "PENDING", "CANCELED", "COUNTER", "COMPLETED"],
       default: "PENDING",
     },
   },
