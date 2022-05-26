@@ -300,6 +300,8 @@ exports.processTransaction = async (req, res, next) => {
     await transaction.save();
     for (const product of products) {
       const consignment = await Purchase.findById(product.consignment);
+      let sold = 0,
+        voids = 0;
       consignment.products = consignment.products.map((p) => {
         if (String(p.productId) === String(product._id)) {
           if (type === "CREDIT NOTE" && refund_type === "VOID") {
@@ -315,10 +317,24 @@ exports.processTransaction = async (req, res, next) => {
           p.inv_on_hand = p.received - p.sold - p.void;
           p.gross_profit = p.received * p.cost_per_unit - p.sales;
           p.gross_profit_percentage = (p.gross_profit / p.sales) * 100;
+          sold = p.sold;
+          voids = p.void;
         }
         return p;
       });
       await consignment.save();
+      await Inventory.findOneAndUpdate(
+        {
+          seller: req.seller._id,
+          productId: product._id,
+          consignment: product.consignment,
+        },
+        {
+          purchase: +product.received,
+          sold: +sold,
+          void: +voids,
+        }
+      );
     }
     res
       .status(200)

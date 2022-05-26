@@ -3,6 +3,7 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const ProductVariety = require("../../Models/AdminModels/productVarietySchema");
 const ProductType = require("../../Models/AdminModels/productTypeSchema");
+const Inventory = require("../../Models/SellerModels/inventorySchema");
 
 exports.addSellerProduct = async (req, res, next) => {
   try {
@@ -25,6 +26,10 @@ exports.addSellerProduct = async (req, res, next) => {
       variety,
       type,
       add_gst,
+    });
+    await Inventory.create({
+      seller: req.seller._id,
+      productId: product._id,
     });
     res
       .status(200)
@@ -144,13 +149,17 @@ exports.addProductUnit = async (req, res, next) => {
         .json(error("Unit is already added", res.statusCode));
     }
     if (product.unit) {
-      await SellerProduct.create({
+      const newProduct = await SellerProduct.create({
         seller: req.seller._id,
         category: product.category,
         variety: product.variety,
         type: product.type,
         add_gst: product.add_gst,
         units: units,
+      });
+      await Inventory.create({
+        seller: req.seller._id,
+        productId: newProduct._id,
       });
     } else {
       await SellerProduct.findByIdAndUpdate(productId, {
@@ -323,11 +332,13 @@ exports.getMyProductList = async (req, res, next) => {
         .status(200)
         .json(error("Invalid product variety", res.statusCode));
     }
-    const typeList = await SellerProduct.find({
+    const types = await SellerProduct.find({
       variety: variety,
-    })
-      .select("type")
-      .populate("type");
+    }).distinct("type");
+    let typeList = [];
+    for (const type of types) {
+      typeList.push(await ProductType.findById(type));
+    }
     res
       .status(200)
       .json(

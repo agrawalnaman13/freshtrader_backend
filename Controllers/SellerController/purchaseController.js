@@ -39,11 +39,33 @@ exports.createConsignment = async (req, res, next) => {
       products,
     });
     for (const product of products) {
-      await Inventory.create({
+      const inventory = await Inventory.findOne({
         seller: req.seller._id,
         productId: product.productId,
-        consignment: consignment._id,
       });
+      if (!inventory.consignment) {
+        await Inventory.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            productId: product.productId,
+          },
+          {
+            consignment: consignment._id,
+            purchase: +product.received,
+            sold: +product.sold,
+            void: +product.void,
+          }
+        );
+      } else {
+        await Inventory.create({
+          seller: req.seller._id,
+          productId: product.productId,
+          consignment: consignment._id,
+          purchase: +product.received,
+          sold: +product.sold,
+          void: +product.void,
+        });
+      }
     }
     res
       .status(200)

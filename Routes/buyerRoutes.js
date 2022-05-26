@@ -16,6 +16,8 @@ const {
   getCartDetails,
   reorderProduct,
   getOrderCount,
+  changeOrderNotification,
+  getOrderNotification,
 } = require("../Controllers/BuyerController/orderController");
 const {
   getPallets,
@@ -55,5 +57,14 @@ router.post(
 );
 router.post("/updateTransactions", tokenAuthorisationBuyer, updateTransactions);
 router.get("/getPallets", tokenAuthorisationBuyer, getPallets);
-
+router.post(
+  "/changeOrderNotification",
+  tokenAuthorisationBuyer,
+  changeOrderNotification
+);
+router.get(
+  "/getOrderNotification",
+  tokenAuthorisationBuyer,
+  getOrderNotification
+);
 module.exports = router;

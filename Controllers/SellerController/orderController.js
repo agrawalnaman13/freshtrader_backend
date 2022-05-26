@@ -174,6 +174,29 @@ exports.processOrder = async (req, res, next) => {
   }
 };
 
+exports.getOrderNotification = async (req, res, next) => {
+  try {
+    const notification = await Wholeseller.findById(req.seller._id).select([
+      "notify_new_order",
+      "notify_declined_offer",
+      "notify_confirmed_offer",
+      "notify_cancel_order",
+    ]);
+    res
+      .status(200)
+      .json(
+        success(
+          "Notification fetched successfully",
+          { notification },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.changeOrderNotification = async (req, res, next) => {
   try {
     const {

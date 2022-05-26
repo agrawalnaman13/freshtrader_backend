@@ -4,6 +4,7 @@ const ProductVariety = require("../../Models/AdminModels/productVarietySchema");
 const SellerPOSLayout = require("../../Models/SellerModels/posLayoutSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
+const { getProductInventory } = require("./inventoryController");
 
 exports.editCategoryName = async (req, res, next) => {
   try {
@@ -107,7 +108,13 @@ exports.getLayout = async (req, res, next) => {
       category,
     }).distinct("variety");
     for (const variety of varieties) {
-      const varietyData = await ProductVariety.findById(variety);
+      const varietyData = await ProductVariety.findById(variety).lean();
+      const status = await SellerProduct.findOne({
+        seller: req.seller._id,
+        category,
+        variety,
+      });
+      varietyData.status = status.status;
       const typeIds = await SellerProduct.find({
         seller: req.seller._id,
         category,
@@ -115,7 +122,9 @@ exports.getLayout = async (req, res, next) => {
       }).distinct("type");
       let types = [];
       for (let type of typeIds) {
-        types.push(await ProductType.findById(type));
+        const typeData = await ProductType.findById(type).lean();
+        typeData.inv = await getProductInventory(req.seller._id, type);
+        types.push(typeData);
       }
       products.push({
         variety: varietyData,

@@ -48,6 +48,18 @@ const BuyerSchema = new mongoose.Schema(
       enum: ["FREE", "SMALL BUSINESS", "ENTERPRISE"],
       default: "ENTERPRISE",
     },
+    notify_counter_order: {
+      type: Boolean,
+      default: true,
+    },
+    notify_order_cancelation: {
+      type: Boolean,
+      default: true,
+    },
+    notify_order_confirmation: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: {} },
   { collection: "buyer" }

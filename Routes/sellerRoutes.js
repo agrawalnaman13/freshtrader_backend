@@ -36,6 +36,7 @@ const {
   changeOrderNotification,
   processOrder,
   getOrderCount,
+  getOrderNotification,
 } = require("../Controllers/SellerController/orderController");
 const {
   getPallets,
@@ -206,6 +207,7 @@ router.post("/changeOrderStatus", tokenAuthorisation, changeOrderStatus);
 router.post("/sendCounterOffer", tokenAuthorisation, sendCounterOffer);
 router.get("/getOrderCount", tokenAuthorisation, getOrderCount);
 router.post("/processOrder", tokenAuthorisation, processOrder);
+router.get("/getOrderNotification", tokenAuthorisation, getOrderNotification);
 router.post(
   "/changeOrderNotification",
   tokenAuthorisation,

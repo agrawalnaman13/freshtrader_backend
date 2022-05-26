@@ -1,24 +1,47 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Home Page</title>
-	<style type="text/css" media="screen">
-		body {
-			background-color: skyblue;
-			text-decoration-color: white;
-			font-size:5em;
-		}
-	</style>
-</head>
-
-<body>
-	Hobbies of <%=data.name%> are:<br/>
-	
-	<ul>
-		<% data.hobbies.forEach((item)=>{%>
-		<li><%=item%></li>
-		<%});%>
-	</ul>
-</body>
-
+<html lang="en">
+   <body>
+      <header class="header">
+         <div class="container">
+            <div class="row align-items-center justify-content-between">
+               <div class="col-lg-3 col-md-auto col">
+                  <a class="header_logo" href="javascript:;">
+                  <img src="assets/img/logo.png" alt="LOGO">
+                  </a>
+               </div>
+               <div class="col-auto ps-md-3 ps-0 d-md-block d-none">
+                  <button class="menus_toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                     SMCS Report
+                  </button> 
+               </div>
+            </div>
+         </div>
+      </header>
+      <section class="smcs-report">
+         <div class="container-fluid px-0"> 
+            <div class="smcs-report-table comman_table_design">
+               <div class="table-responsive">
+                  <table class="table"> 
+                     <thead>
+                       <tr>
+                         <th>SMCS Number</th>
+                         <th>Customer</th>
+                         <th>Total</th> 
+                       </tr>
+                     </thead> 
+                     <tbody>
+						<% data.list.forEach((item)=>{%>
+							<tr>
+								<td><%=item.buyer.smcs_code %></td>
+								<td><%=item.buyer.business_trading_name %></td> 
+								<td><%=item.total %></td> 
+							 </tr>
+							<%});%>
+                     </tbody>
+                   </table>
+               </div>
+            </div>
+         </div>
+      </section>
+   </body>
 </html>

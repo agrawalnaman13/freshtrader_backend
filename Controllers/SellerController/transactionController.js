@@ -298,6 +298,8 @@ exports.deleteTransaction = async (req, res, next) => {
         .json(error("Delete type is required", res.statusCode));
     }
     for (const product of transaction.products) {
+      let sold = 0,
+        voids = 0;
       const consignment = await Purchase.findById(product.consignment);
       consignment.products = consignment.products.map((p) => {
         if (String(p.productId) === String(product._id)) {
@@ -312,9 +314,22 @@ exports.deleteTransaction = async (req, res, next) => {
           p.inv_on_hand = p.received - p.sold - p.void;
           p.gross_profit = p.received * p.cost_per_unit - p.sales;
           p.gross_profit_percentage = (p.gross_profit / p.sales) * 100;
+          sold = p.sold;
+          voids = p.void;
         }
         return p;
       });
+      await Inventory.findOneAndUpdate(
+        {
+          seller: req.seller._id,
+          productId: product._id,
+          consignment: product.consignment,
+        },
+        {
+          sold: +sold,
+          void: +voids,
+        }
+      );
       await consignment.save();
     }
     await Transaction.findByIdAndDelete(transactionId);

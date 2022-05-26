@@ -5,6 +5,7 @@ const SellerPartnerBuyers = require("../../Models/SellerModels/partnerBuyersSche
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
+const Buyer = require("../../Models/BuyerModels/buyerSchema");
 exports.getSellers = async (req, res, next) => {
   try {
     const sellers = await SellerPartnerBuyers.find({
@@ -433,6 +434,50 @@ exports.getOrderCount = async (req, res, next) => {
         success(
           "Order count fetched successfully",
           { sentOrderCount, counterOrderCount, confirmedOrderCount, cartCount },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changeOrderNotification = async (req, res, next) => {
+  try {
+    const {
+      notify_counter_order,
+      notify_order_cancelation,
+      notify_order_confirmation,
+    } = req.body;
+    console.log(req.body);
+    await Buyer.findByIdAndUpdate(req.buyer._id, {
+      notify_counter_order,
+      notify_order_cancelation,
+      notify_order_confirmation,
+    });
+    res
+      .status(200)
+      .json(success("Notification changed successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getOrderNotification = async (req, res, next) => {
+  try {
+    const notification = await Buyer.findById(req.buyer._id).select([
+      "notify_counter_order",
+      "notify_order_cancelation",
+      "notify_order_confirmation",
+    ]);
+    res
+      .status(200)
+      .json(
+        success(
+          "Notification fetched successfully",
+          { notification },
           res.statusCode
         )
       );
