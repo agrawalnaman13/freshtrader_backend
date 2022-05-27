@@ -66,18 +66,57 @@ exports.login = async (req, res, next) => {
 };
 
 exports.updateProfile = async (req, res, next) => {
-  const {
-    business_trading_name,
-    abn,
-    entity_name,
-    address,
-    phone_number,
-    market,
-    stall_location,
-    smcs_code,
-  } = req.body;
-  console.log(req.body);
   try {
+    const {
+      business_trading_name,
+      abn,
+      entity_name,
+      address,
+      phone_number,
+      market,
+      stall_location,
+      smcs_code,
+    } = req.body;
+    console.log(req.body);
+    if (!business_trading_name) {
+      return res
+        .status(200)
+        .json(error("Please provide business trading name", res.statusCode));
+    }
+    if (!phone_number) {
+      return res
+        .status(200)
+        .json(error("Please provide phone number", res.statusCode));
+    }
+    if (!abn) {
+      return res.status(200).json(error("Please provide abn", res.statusCode));
+    }
+    if (!entity_name) {
+      return res
+        .status(200)
+        .json(error("Please provide entity name", res.statusCode));
+    }
+    if (!address) {
+      return res
+        .status(200)
+        .json(error("Please provide address", res.statusCode));
+    }
+    if (!market) {
+      return res
+        .status(200)
+        .json(error("Please provide your market", res.statusCode));
+    }
+    if (!stall_location) {
+      return res
+        .status(200)
+        .json(error("Please provide stall location", res.statusCode));
+    }
+    if (!smcs_code) {
+      return res
+        .status(200)
+        .json(error("Please provide smcs code", res.statusCode));
+    }
+
     const newSeller = await Wholeseller.findOneAndUpdate(
       { _id: req.seller._id },
       {

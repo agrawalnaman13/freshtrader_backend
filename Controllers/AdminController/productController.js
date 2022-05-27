@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
-const { success, error } = require("../service_response/adminApiResponse");
-const validator = require("validator");
-const sendMail = require("../services/mail");
-const ProductVariety = require("../Models/AdminModels/productVarietySchema");
-const Unit = require("../Models/AdminModels/unitSchema");
-const ProductType = require("../Models/AdminModels/productTypeSchema");
-const ProductUnit = require("../Models/AdminModels/productUnitSchema");
+const { success, error } = require("../../service_response/adminApiResponse");
+const ProductVariety = require("../../Models/AdminModels/productVarietySchema");
+const Unit = require("../../Models/AdminModels/unitSchema");
+const ProductType = require("../../Models/AdminModels/productTypeSchema");
+const ProductUnit = require("../../Models/AdminModels/productUnitSchema");
 
 exports.addVariety = async (req, res, next) => {
   try {

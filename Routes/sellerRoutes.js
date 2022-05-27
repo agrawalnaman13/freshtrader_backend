@@ -27,6 +27,10 @@ const {
 } = require("../Controllers/SellerController/inputBusinessSaleController");
 const {
   getInventory,
+  resetInventory,
+  resetCarryOver,
+  adjustCarryOver,
+  printInventory,
 } = require("../Controllers/SellerController/inventoryController");
 const {
   getOrders,
@@ -190,6 +194,10 @@ router.get(
   getConsignmentDetail
 );
 router.post("/getInventory", tokenAuthorisation, getInventory);
+router.get("/resetInventory", tokenAuthorisation, resetInventory);
+router.get("/resetCarryOver", tokenAuthorisation, resetCarryOver);
+router.post("/adjustCarryOver", tokenAuthorisation, adjustCarryOver);
+router.post("/printInventory", tokenAuthorisation, printInventory);
 router.post("/getBusinesses", tokenAuthorisation, getBusinesses);
 router.post("/addNewBusiness", tokenAuthorisation, addNewBusiness);
 router.post(

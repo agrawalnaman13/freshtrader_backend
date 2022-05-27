@@ -9,7 +9,7 @@ const {
   getProductType,
   addProductUnit,
   getProductUnit,
-} = require("../Controllers/adminController");
+} = require("../Controllers/AdminController/productController");
 const {
   createProductImagePath,
   uploadProductImage,
