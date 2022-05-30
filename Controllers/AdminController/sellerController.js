@@ -8,7 +8,8 @@ exports.sellerSignup = async (req, res) => {
       business_trading_name,
       abn,
       entity_name,
-      address,
+      address_line1,
+      address_line2,
       phone_number,
       market,
       stall_location,
@@ -43,10 +44,15 @@ exports.sellerSignup = async (req, res) => {
         .status(200)
         .json(error("Please provide entity name", res.statusCode));
     }
-    if (!address) {
+    if (!address_line1) {
       return res
         .status(200)
-        .json(error("Please provide address", res.statusCode));
+        .json(error("Please provide address line1", res.statusCode));
+    }
+    if (!address_line2) {
+      return res
+        .status(200)
+        .json(error("Please provide address line2", res.statusCode));
     }
     if (!market) {
       return res
@@ -80,7 +86,8 @@ exports.sellerSignup = async (req, res) => {
       business_trading_name: business_trading_name,
       abn: abn,
       entity_name: entity_name,
-      address: address,
+      address_line1: address_line1,
+      address_line2: address_line2,
       phone_number: phone_number,
       market: market,
       stall_location: stall_location,
@@ -93,7 +100,7 @@ exports.sellerSignup = async (req, res) => {
       .status(200)
       .json(
         success(
-          "Profile Updated Successfully",
+          "Profile Created Successfully",
           { seller: newSeller },
           res.statusCode
         )

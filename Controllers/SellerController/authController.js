@@ -71,7 +71,8 @@ exports.updateProfile = async (req, res, next) => {
       business_trading_name,
       abn,
       entity_name,
-      address,
+      address_line1,
+      address_line2,
       phone_number,
       market,
       stall_location,
@@ -96,10 +97,15 @@ exports.updateProfile = async (req, res, next) => {
         .status(200)
         .json(error("Please provide entity name", res.statusCode));
     }
-    if (!address) {
+    if (!address_line1) {
       return res
         .status(200)
-        .json(error("Please provide address", res.statusCode));
+        .json(error("Please provide address line1", res.statusCode));
+    }
+    if (!address_line2) {
+      return res
+        .status(200)
+        .json(error("Please provide address line2", res.statusCode));
     }
     if (!market) {
       return res
@@ -123,7 +129,8 @@ exports.updateProfile = async (req, res, next) => {
         business_trading_name: business_trading_name,
         abn: abn,
         entity_name: entity_name,
-        address: address,
+        address_line1: address_line1,
+        address_line2: address_line2,
         phone_number: phone_number,
         market: market,
         stall_location: stall_location,
@@ -153,6 +160,11 @@ exports.updateSellerPassword = async (req, res, next) => {
   }
   if (!validator.isEmail(email))
     return res.status(200).json(error("Invalid Email", res.statusCode));
+  if (!password) {
+    return res
+      .status(200)
+      .json(error("Please provide password", res.statusCode));
+  }
   try {
     const ourSeller = await Wholeseller.findOne({ email });
     if (!ourSeller) {
@@ -176,9 +188,34 @@ exports.updateSellerPassword = async (req, res, next) => {
 };
 
 exports.updateAccountInformation = async (req, res, next) => {
-  const { account_name, bsb, account, sales_invoice_due_date, csv } = req.body;
-  console.log(req.body);
   try {
+    const { account_name, bsb, account, sales_invoice_due_date, csv } =
+      req.body;
+    console.log(req.body);
+    if (!account_name) {
+      return res
+        .status(200)
+        .json(error("Please provide account name", res.statusCode));
+    }
+    if (!bsb) {
+      return res.status(200).json(error("Please provide bsb", res.statusCode));
+    }
+    if (!account) {
+      return res
+        .status(200)
+        .json(error("Please provide account", res.statusCode));
+    }
+    if (!sales_invoice_due_date) {
+      return res
+        .status(200)
+        .json(error("Please provide sales invoice due date", res.statusCode));
+    }
+    if (!csv) {
+      return res.status(200).json(error("Please provide csv", res.statusCode));
+    }
+    if (!["Xero", "MYOB", "Saasu", "Quickbooks"].includes(csv)) {
+      return res.status(200).json(error("Invalid csv", res.statusCode));
+    }
     const newSeller = await Wholeseller.findOneAndUpdate(
       { _id: req.seller._id },
       {
@@ -195,6 +232,43 @@ exports.updateAccountInformation = async (req, res, next) => {
       .json(
         success(
           "Account Information Updated Successfully",
+          { seller: newSeller },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updateOrderSetting = async (req, res, next) => {
+  try {
+    const { public_ordering, publish_prices } = req.body;
+    console.log(req.body);
+    if (public_ordering == "" || public_ordering == undefined) {
+      return res
+        .status(200)
+        .json(error("Please provide public ordering", res.statusCode));
+    }
+    if (publish_prices === "" || publish_prices === undefined) {
+      return res
+        .status(200)
+        .json(error("Please provide publish prices", res.statusCode));
+    }
+    const newSeller = await Wholeseller.findOneAndUpdate(
+      { _id: req.seller._id },
+      {
+        public_ordering,
+        publish_prices,
+      }
+    );
+
+    res
+      .status(200)
+      .json(
+        success(
+          "Order Setting Updated Successfully",
           { seller: newSeller },
           res.statusCode
         )

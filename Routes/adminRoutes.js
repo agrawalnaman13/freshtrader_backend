@@ -11,6 +11,9 @@ const {
   getProductUnit,
 } = require("../Controllers/AdminController/productController");
 const {
+  sellerSignup,
+} = require("../Controllers/AdminController/sellerController");
+const {
   createProductImagePath,
   uploadProductImage,
 } = require("../helpers/uploadProductImages");
@@ -29,5 +32,6 @@ router.post(
 router.post("/getProductType", tokenAuthorisation, getProductType);
 router.post("/addProductUnit", addProductUnit);
 router.post("/getProductUnit", tokenAuthorisation, getProductUnit);
+router.post("/sellerSignup", sellerSignup);
 
 module.exports = router;

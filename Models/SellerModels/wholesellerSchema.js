@@ -15,7 +15,10 @@ const WholesellerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
+    address_line1: {
+      type: String,
+    },
+    address_line2: {
       type: String,
     },
     phone_number: {
@@ -56,6 +59,7 @@ const WholesellerSchema = new mongoose.Schema(
     },
     csv: {
       type: String,
+      enum: ["Xero", "MYOB", "Saasu", "Quickbooks"],
     },
     thermal_receipt_invoice_logo: {
       type: String,
@@ -65,6 +69,14 @@ const WholesellerSchema = new mongoose.Schema(
     },
     include_food_saftey_logo: {
       type: Boolean,
+    },
+    public_ordering: {
+      type: Boolean,
+      default: true,
+    },
+    publish_prices: {
+      type: Boolean,
+      default: true,
     },
     notify_new_order: {
       type: Boolean,

@@ -10,6 +10,7 @@ const {
   updateSellerDocuments,
   updateSellerPassword,
   getSellerData,
+  updateOrderSetting,
 } = require("../Controllers/SellerController/authController");
 const {
   getCustomerInfo,
@@ -135,6 +136,7 @@ router.post(
   tokenAuthorisation,
   updateAccountInformation
 );
+router.post("/updateOrderSetting", tokenAuthorisation, updateOrderSetting);
 router.post(
   "/updateSellerDocuments",
   tokenAuthorisation,
