@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const WholesellerSchema = new mongoose.Schema(
   {
+    profile_image: {
+      type: String,
+    },
     business_trading_name: {
       type: String,
       required: true,
@@ -27,6 +30,7 @@ const WholesellerSchema = new mongoose.Schema(
     },
     market: {
       type: String,
+      enum: ["Sydney Produce and Growers Market", "Sydney Flower Market"],
     },
     stall_location: {
       type: String,
@@ -91,6 +95,10 @@ const WholesellerSchema = new mongoose.Schema(
       default: true,
     },
     notify_cancel_order: {
+      type: Boolean,
+      default: true,
+    },
+    status: {
       type: Boolean,
       default: true,
     },

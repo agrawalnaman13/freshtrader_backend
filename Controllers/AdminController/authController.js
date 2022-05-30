@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const validator = require("validator");
-exports.sellerSignup = async (req, res) => {
+exports.adminSignup = async (req, res) => {
   try {
     const {
       business_trading_name,
@@ -81,16 +80,8 @@ exports.sellerSignup = async (req, res) => {
         .status(200)
         .json(error("Please provide password", res.statusCode));
     }
-    if (!req.files.length) {
-      return res
-        .status(200)
-        .json(error("Please provide profile image", res.statusCode));
-    }
 
     const newSeller = await Wholeseller.create({
-      profile_image: `${req.files[0].destination.replace("./public", "")}/${
-        req.files[0].filename
-      }`,
       business_trading_name: business_trading_name,
       abn: abn,
       entity_name: entity_name,
@@ -112,37 +103,6 @@ exports.sellerSignup = async (req, res) => {
           { seller: newSeller },
           res.statusCode
         )
-      );
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("error", res.statusCode));
-  }
-};
-
-exports.getSellerData = async (req, res) => {
-  try {
-    const seller = await Wholeseller.findById(req.params.id);
-    if (!seller) {
-      return res.status(200).json(error("Invalid seller id", res.statusCode));
-    }
-    res
-      .status(200)
-      .json(
-        success("Profile Fetched Successfully", { seller }, res.statusCode)
-      );
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("error", res.statusCode));
-  }
-};
-
-exports.getSellerList = async (req, res) => {
-  try {
-    const sellers = await Wholeseller.find();
-    res
-      .status(200)
-      .json(
-        success("Profile Fetched Successfully", { sellers }, res.statusCode)
       );
   } catch (err) {
     console.log(err);

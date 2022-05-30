@@ -12,7 +12,13 @@ const {
 } = require("../Controllers/AdminController/productController");
 const {
   sellerSignup,
+  getSellerData,
+  getSellerList,
 } = require("../Controllers/AdminController/sellerController");
+const {
+  createAdminSellerImagePath,
+  uploadAdminSellerImage,
+} = require("../helpers/uploadAdminImages");
 const {
   createProductImagePath,
   uploadProductImage,
@@ -32,6 +38,13 @@ router.post(
 router.post("/getProductType", tokenAuthorisation, getProductType);
 router.post("/addProductUnit", addProductUnit);
 router.post("/getProductUnit", tokenAuthorisation, getProductUnit);
-router.post("/sellerSignup", sellerSignup);
+router.post(
+  "/sellerSignup",
+  createAdminSellerImagePath,
+  uploadAdminSellerImage.any(),
+  sellerSignup
+);
+router.get("/getSellerData/:id", getSellerData);
+router.get("/getSellerList", getSellerList);
 
 module.exports = router;
