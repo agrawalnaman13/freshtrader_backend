@@ -138,12 +138,35 @@ exports.getSellerData = async (req, res) => {
 
 exports.getSellerList = async (req, res) => {
   try {
-    const sellers = await Wholeseller.find();
+    const { filterBy } = req.body;
+    const sellers = await Wholeseller.find({
+      $and: [
+        filterBy === 1 ? { market: "Sydney Produce and Growers Market" } : {},
+        filterBy === 2 ? { market: "Sydney Flower Market" } : {},
+      ],
+    });
     res
       .status(200)
       .json(
         success("Profile Fetched Successfully", { sellers }, res.statusCode)
       );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changeSellerStatus = async (req, res) => {
+  try {
+    const seller = await Wholeseller.findById(req.params.id);
+    if (!seller) {
+      return res.status(200).json(error("Invalid seller id", res.statusCode));
+    }
+    seller.status = !seller.status;
+    await seller.save();
+    res
+      .status(200)
+      .json(success("Status Updated Successfully", { seller }, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

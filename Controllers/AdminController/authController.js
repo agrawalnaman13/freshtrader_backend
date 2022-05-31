@@ -1,79 +1,25 @@
 const mongoose = require("mongoose");
 const { success, error } = require("../../service_response/adminApiResponse");
 const validator = require("validator");
+const Admin = require("../../Models/AdminModels/adminSchema");
 exports.adminSignup = async (req, res) => {
   try {
-    const {
-      business_trading_name,
-      abn,
-      entity_name,
-      address_line1,
-      address_line2,
-      phone_number,
-      market,
-      stall_location,
-      is_smcs,
-      smcs_code,
-      email,
-      password,
-    } = req.body;
+    const { email, full_name, password } = req.body;
     console.log(req.body);
-    if (!business_trading_name) {
-      return res
-        .status(200)
-        .json(error("Please provide business trading name", res.statusCode));
-    }
-    if (!phone_number) {
-      return res
-        .status(200)
-        .json(error("Please provide phone number", res.statusCode));
-    }
     if (!email) {
       return res
         .status(200)
         .json(error("Please provide email", res.statusCode));
     }
-    if (!validator.isEmail(email))
-      return res.status(200).json(error("Invalid Email", res.statusCode));
-    if (!abn) {
-      return res.status(200).json(error("Please provide abn", res.statusCode));
-    }
-    if (!entity_name) {
+    if (!full_name) {
       return res
         .status(200)
-        .json(error("Please provide entity name", res.statusCode));
+        .json(error("Please provide full name", res.statusCode));
     }
-    if (!address_line1) {
+    if (!req.files.length) {
       return res
         .status(200)
-        .json(error("Please provide address line1", res.statusCode));
-    }
-    if (!address_line2) {
-      return res
-        .status(200)
-        .json(error("Please provide address line2", res.statusCode));
-    }
-    if (!market) {
-      return res
-        .status(200)
-        .json(error("Please provide your market", res.statusCode));
-    }
-    if (!stall_location) {
-      return res
-        .status(200)
-        .json(error("Please provide stall location", res.statusCode));
-    }
-    if (is_smcs === undefined || is_smcs === "") {
-      return res
-        .status(200)
-        .json(error("Is this business part of SMCS?", res.statusCode));
-    }
-    if (is_smcs === true) {
-      if (!smcs_code) {
-        return res
-          .status(200)
-          .json(error("Please provide smcs code", res.statusCode));
-      }
+        .json(error("Please provide profile image", res.statusCode));
     }
     if (!password) {
       return res
@@ -81,28 +27,170 @@ exports.adminSignup = async (req, res) => {
         .json(error("Please provide password", res.statusCode));
     }
 
-    const newSeller = await Wholeseller.create({
-      business_trading_name: business_trading_name,
-      abn: abn,
-      entity_name: entity_name,
-      address_line1: address_line1,
-      address_line2: address_line2,
-      phone_number: phone_number,
-      market: market,
-      stall_location: stall_location,
-      smcs_code: smcs_code,
-      is_smcs: is_smcs,
+    const admin = await Admin.create({
       email: email,
+      full_name: full_name,
       password: password,
+      profile_image: `${req.files[0].destination.replace("./public", "")}/${
+        req.files[0].filename
+      }`,
     });
     res
       .status(200)
+      .json(success("Profile Created Successfully", { admin }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.login = async (req, res, next) => {
+  const { email, password } = req.body;
+  console.log(req.body);
+  if (!email || !password) {
+    return res
+      .status(200)
+      .json(error("Please provide both email and password", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  try {
+    const admin = await Admin.findOne({ email }).select("+password");
+    if (!admin) {
+      return res.status(200).json(error("Invalid email", res.statusCode));
+    }
+    if (!(await admin.correctPassword(password, admin.password))) {
+      return res.status(200).json(error("Invalid Password", res.statusCode));
+    }
+    const token = await admin.generateAuthToken();
+    res
+      .header("x-auth-token-admin", token)
+      .header("access-control-expose-headers", "x-auth-token-admin")
+      .status(200)
       .json(
-        success(
-          "Profile Created Successfully",
-          { seller: newSeller },
-          res.statusCode
-        )
+        success("Logged In Successfully", { admin, token }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getAdminData = async (req, res, next) => {
+  try {
+    const admin = await Admin.findById(req.admin._id).select("-password");
+    res
+      .status(200)
+      .json(
+        success("Admin Data Fetched Successfully", { admin }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  console.log(req.body);
+  if (!email) {
+    return res.status(200).json(error("Please provide email", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(200).json(error("Invalid email", res.statusCode));
+    }
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    await Admin.findOneAndUpdate({ email }, { otp: otp });
+    res.status(200).json(success("OTP Sent", { otp }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.verifyOTP = async (req, res, next) => {
+  const { email, otp } = req.body;
+  console.log(req.body);
+  if (!email) {
+    return res.status(200).json(error("Please provide email", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  if (!otp) {
+    return res.status(200).json(error("Please provide otp", res.statusCode));
+  }
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(200).json(error("Invalid email", res.statusCode));
+    }
+    if (admin.otp !== otp) {
+      return res.status(200).json(error("Invalid OTP", res.statusCode));
+    }
+    await Admin.findOneAndUpdate({ email }, { otp: "" });
+    res.status(200).json(success("OTP Verified", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updatePassword = async (req, res, next) => {
+  const { email, password } = req.body;
+  console.log(req.body);
+  if (!email || !password) {
+    return res
+      .status(200)
+      .json(error("Please provide both email and password", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  try {
+    const admin = await Admin.findOne({ email }).select("+password");
+    if (!admin) {
+      return res.status(200).json(error("Invalid email", res.statusCode));
+    }
+    await Admin.findOneAndUpdate({ email }, { password: password });
+    res
+      .status(200)
+      .json(
+        success("Password Updated Successfully", { admin }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changePassword = async (req, res, next) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    console.log(req.body);
+    if (!oldPassword) {
+      return res
+        .status(200)
+        .json(error("Please provide old password", res.statusCode));
+    }
+    if (!newPassword) {
+      return res
+        .status(200)
+        .json(error("Please provide new password", res.statusCode));
+    }
+    const admin = await Admin.findById(req.admin._id).select("+password");
+    if (!(await admin.correctPassword(oldPassword, admin.password))) {
+      return res
+        .status(200)
+        .json(error("Invalid old Password", res.statusCode));
+    }
+    await Admin.findByIdAndUpdate(req.admin._id, { password: newPassword });
+    res
+      .status(200)
+      .json(
+        success("Password Updated Successfully", { admin }, res.statusCode)
       );
   } catch (err) {
     console.log(err);

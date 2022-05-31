@@ -42,16 +42,69 @@ exports.addSellerProduct = async (req, res, next) => {
 
 exports.getSellerProduct = async (req, res, next) => {
   try {
-    const { variety, category, type } = req.body;
+    const { variety, category, type, search } = req.body;
     console.log(req.body);
-    const products = await SellerProduct.find({
-      seller: req.seller._id,
-      variety,
-      category,
-      type,
-    })
-      .sort({ variety: 1 })
-      .populate(["variety", "type", "units", "suppliers"]);
+    const products = await SellerProduct.aggregate([
+      {
+        $match: {
+          seller: mongoose.Types.ObjectId(req.seller._id),
+          variety: mongoose.Types.ObjectId(variety),
+          category: category,
+          type: mongoose.Types.ObjectId(type),
+        },
+      },
+      {
+        $lookup: {
+          localField: "type",
+          foreignField: "_id",
+          from: "producttypes",
+          as: "type",
+        },
+      },
+      { $unwind: "$type" },
+      {
+        $lookup: {
+          localField: "variety",
+          foreignField: "_id",
+          from: "productvarieties",
+          as: "variety",
+        },
+      },
+      { $unwind: "$variety" },
+      {
+        $lookup: {
+          localField: "units",
+          foreignField: "_id",
+          from: "units",
+          as: "units",
+        },
+      },
+      { $unwind: "$units" },
+      {
+        $lookup: {
+          localField: "suppliers",
+          foreignField: "_id",
+          from: "sellersuppliers",
+          as: "suppliers",
+        },
+      },
+      {
+        $match: {
+          $or: [
+            search ? { "type.type": { $regex: search, $options: "$i" } } : {},
+            search
+              ? {
+                  suppliers: {
+                    $elemMatch: {
+                      business_trading_name: { $regex: search, $options: "$i" },
+                    },
+                  },
+                }
+              : {},
+          ],
+        },
+      },
+    ]);
     res
       .status(200)
       .json(
@@ -237,6 +290,7 @@ exports.searchSellerProduct = async (req, res, next) => {
           as: "units",
         },
       },
+      { $unwind: "$units" },
       {
         $lookup: {
           localField: "suppliers",

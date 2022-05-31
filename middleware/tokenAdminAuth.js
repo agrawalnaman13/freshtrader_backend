@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const { error } = require("../service_response/adminApiResponse");
 function tokenAdminAuthorisation(req, res, next) {
   const token = req.header("x-auth-token-admin");
@@ -8,8 +7,8 @@ function tokenAdminAuthorisation(req, res, next) {
       .status(401)
       .json(error("Access Denied. No token provided.", res.statusCode));
   try {
-    const decoded = jwt.verify(token, config.get("jwtprivatekey"));
-    // req.user = decoded;
+    const decoded = jwt.verify(token, "ultra-security");
+    req.admin = decoded;
     next();
   } catch (ex) {
     return res
