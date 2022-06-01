@@ -81,16 +81,13 @@ exports.sellerSignup = async (req, res) => {
         .status(200)
         .json(error("Please provide password", res.statusCode));
     }
-    if (!req.files.length) {
-      return res
-        .status(200)
-        .json(error("Please provide profile image", res.statusCode));
-    }
 
     const newSeller = await Wholeseller.create({
-      profile_image: `${req.files[0].destination.replace("./public", "")}/${
-        req.files[0].filename
-      }`,
+      profile_image: req.files.length
+        ? `${req.files[0].destination.replace("./public", "")}/${
+            req.files[0].filename
+          }`
+        : "",
       business_trading_name: business_trading_name,
       abn: abn,
       entity_name: entity_name,
@@ -144,7 +141,7 @@ exports.getSellerList = async (req, res) => {
         filterBy === 1 ? { market: "Sydney Produce and Growers Market" } : {},
         filterBy === 2 ? { market: "Sydney Flower Market" } : {},
       ],
-    });
+    }).sort({ createdAt: -1 });
     res
       .status(200)
       .json(

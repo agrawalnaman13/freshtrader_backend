@@ -4,6 +4,8 @@ const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const ProductVariety = require("../../Models/AdminModels/productVarietySchema");
 const ProductType = require("../../Models/AdminModels/productTypeSchema");
 const Inventory = require("../../Models/SellerModels/inventorySchema");
+const Unit = require("../../Models/AdminModels/unitSchema");
+const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 
 exports.addSellerProduct = async (req, res, next) => {
   try {
@@ -190,6 +192,13 @@ exports.addProductUnit = async (req, res, next) => {
     if (!product) {
       return res.status(200).json(error("Invalid product id", res.statusCode));
     }
+    if (!units) {
+      return res.status(200).json(error("unit is required", res.statusCode));
+    }
+    const unit = await Unit.findById(units);
+    if (!unit) {
+      return res.status(200).json(error("Invalid unit", res.statusCode));
+    }
     const isProduct = await SellerProduct.findOne({
       category: product.category,
       variety: product.variety,
@@ -201,7 +210,7 @@ exports.addProductUnit = async (req, res, next) => {
         .status(200)
         .json(error("Unit is already added", res.statusCode));
     }
-    if (product.unit) {
+    if (product.units) {
       const newProduct = await SellerProduct.create({
         seller: req.seller._id,
         category: product.category,
@@ -338,6 +347,24 @@ exports.getProductDetail = async (req, res, next) => {
       .status(200)
       .json(
         success("Product fetched Successfully", { product }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getCategoryList = async (req, res, next) => {
+  try {
+    const seller = await Wholeseller.findById(req.seller._id);
+    let category = [];
+    if (seller.market === "Sydney Produce and Growers Market")
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+    else category = ["Flowers", "Foliage"];
+    res
+      .status(200)
+      .json(
+        success("Product fetched Successfully", { category }, res.statusCode)
       );
   } catch (err) {
     console.log(err);
