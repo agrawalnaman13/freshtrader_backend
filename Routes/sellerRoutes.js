@@ -75,6 +75,7 @@ const {
   getMyVarietyList,
   getMyProductList,
   getCategoryList,
+  getMyProductUnit,
 } = require("../Controllers/SellerController/productController");
 const {
   createConsignment,
@@ -212,6 +213,7 @@ router.get("/getProductDetail/:id", tokenAuthorisation, getProductDetail);
 router.get("/getCategoryList", tokenAuthorisation, getCategoryList);
 router.post("/getMyVarietyList", tokenAuthorisation, getMyVarietyList);
 router.post("/getMyProductList", tokenAuthorisation, getMyProductList);
+router.post("/getMyProductUnit", tokenAuthorisation, getMyProductUnit);
 router.post("/processTransaction", tokenAuthorisation, processTransaction);
 router.post("/getOrders", tokenAuthorisation, getOrders);
 router.get("/getOrderDetails/:id", tokenAuthorisation, getOrderDetails);

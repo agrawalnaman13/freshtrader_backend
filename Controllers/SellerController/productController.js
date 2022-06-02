@@ -237,6 +237,36 @@ exports.addProductUnit = async (req, res, next) => {
   }
 };
 
+exports.getMyProductUnit = async (req, res, next) => {
+  try {
+    const { productId } = req.body;
+    console.log(req.body);
+    if (!productId) {
+      return res
+        .status(200)
+        .json(error("product id is required", res.statusCode));
+    }
+    const product = await SellerProduct.findById(productId);
+    if (!product) {
+      return res.status(200).json(error("Invalid product id", res.statusCode));
+    }
+    const units = await SellerProduct.find({
+      category: product.category,
+      variety: product.variety,
+      type: product.type,
+    }).select("units");
+
+    return res
+      .status(200)
+      .json(
+        success("Product unit fetched successfully", { units }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.deleteSellerProduct = async (req, res, next) => {
   try {
     const { productId } = req.body;

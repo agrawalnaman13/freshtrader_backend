@@ -129,6 +129,7 @@ const PurchaseSchema = new mongoose.Schema(
     },
     completion_date: {
       type: Date,
+      default: Date.now(),
       required: false,
     },
   },

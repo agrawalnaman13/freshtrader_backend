@@ -151,7 +151,7 @@ exports.getLayout = async (req, res, next) => {
 
 exports.getMyPOSProducts = async (req, res, next) => {
   try {
-    const { filterBy, search } = req.body;
+    const { filterBy, search, category, variety, type } = req.body;
     const myProducts = await SellerProduct.find({
       seller: req.seller._id,
     }).distinct("type");
