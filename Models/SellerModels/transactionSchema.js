@@ -88,6 +88,10 @@ const TransactionSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    orderId: {
+      type: mongoose.Types.ObjectId,
+      ref: "order",
+    },
   },
   { timestamps: {} },
   { collection: "Transaction" }

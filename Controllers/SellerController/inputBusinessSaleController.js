@@ -12,6 +12,7 @@ const printer = require("pdf-to-printer");
 const path = require("path");
 const { checkABN } = require("./authController");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
+const Order = require("../../Models/BuyerModels/orderSchema");
 exports.getBusinesses = async (req, res, next) => {
   try {
     const { search, smcs } = req.body;
@@ -170,6 +171,7 @@ exports.getProductConsignments = async (req, res, next) => {
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
+          status: "ACTIVE",
         },
       },
       { $unwind: "$products" },
@@ -218,6 +220,7 @@ exports.processTransaction = async (req, res, next) => {
       refund_type,
       pallets,
       delivery_note,
+      orderId,
     } = req.body;
     console.log(req.body);
     if (!buyer) {
@@ -271,6 +274,12 @@ exports.processTransaction = async (req, res, next) => {
           .json(error("Invalid refund type", res.statusCode));
       }
     }
+    if (orderId) {
+      const order = await Order.findById(orderId);
+      if (!order) {
+        return res.status(200).json(error("Invalid order id", res.statusCode));
+      }
+    }
     let query = {
       seller: req.seller._id,
       buyer,
@@ -283,6 +292,7 @@ exports.processTransaction = async (req, res, next) => {
       payment_received: type === "CARD" || type === "CASH" ? total : 0,
       pallets,
       delivery_note,
+      orderId,
     };
     if (type === "CREDIT NOTE") {
       query = {
@@ -297,6 +307,7 @@ exports.processTransaction = async (req, res, next) => {
         refund_type,
         pallets,
         delivery_note,
+        orderId,
       };
     }
     const transaction = await Transaction.create(query);
@@ -340,27 +351,36 @@ exports.processTransaction = async (req, res, next) => {
           void: +voids,
         }
       );
-      const myPallets = await SellerPallets.findOne({
-        seller: req.seller._id,
-        taken_by: buyer,
-      });
-      let sellerPallets = {};
-      if (!myPallets) {
-        sellerPallets = await SellerPallets.create({
+      if (type !== "CREDIT NOTE" || refund_type !== "VOID") {
+        const myPallets = await SellerPallets.findOne({
           seller: req.seller._id,
-          taken_by: buyerId,
-          pallets_taken: +pallets,
+          taken_by: buyer,
         });
-      } else {
-        sellerPallets = await SellerPallets.findOneAndUpdate(
-          {
+        if (!myPallets) {
+          await SellerPallets.create({
             seller: req.seller._id,
-            taken_by: buyerId,
-          },
-          {
-            pallets_taken: myPallets.pallets_taken + +pallets,
-          }
-        );
+            taken_by: buyer,
+            pallets_taken: +pallets,
+          });
+        } else {
+          await SellerPallets.findOneAndUpdate(
+            {
+              seller: req.seller._id,
+              taken_by: buyer,
+            },
+            {
+              pallets_taken:
+                type === "CREDIT NOTE" && refund_type === "RETURN"
+                  ? myPallets.pallets_taken - +pallets
+                  : myPallets.pallets_taken + +pallets,
+            }
+          );
+        }
+        if (orderId && refund_type !== "RETURN") {
+          await Order.findByIdAndUpdate(orderId, {
+            status: "COMPLETED",
+          });
+        }
       }
     }
     res

@@ -36,6 +36,10 @@ const BuyerSchema = new mongoose.Schema(
       type: Boolean,
       required: false,
     },
+    market: {
+      type: String,
+      enum: ["Sydney Produce and Growers Market", "Sydney Flower Market"],
+    },
     is_smcs: {
       type: Boolean,
       required: true,
@@ -57,6 +61,10 @@ const BuyerSchema = new mongoose.Schema(
       default: true,
     },
     notify_order_confirmation: {
+      type: Boolean,
+      default: true,
+    },
+    status: {
       type: Boolean,
       default: true,
     },

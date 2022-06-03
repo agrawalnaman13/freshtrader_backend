@@ -6,8 +6,14 @@ const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const SellerPartnerBuyers = require("../../Models/SellerModels/partnerBuyersSchema");
 exports.signup = async (req, res, next) => {
   try {
-    const { business_trading_name, phone_number, email, password, is_smcs } =
-      req.body;
+    const {
+      business_trading_name,
+      phone_number,
+      email,
+      password,
+      is_smcs,
+      market,
+    } = req.body;
     console.log(req.body);
     if (!business_trading_name) {
       return res
@@ -44,12 +50,25 @@ exports.signup = async (req, res, next) => {
         .status(200)
         .json(error("Is this business part of SMCS?", res.statusCode));
     }
+    if (!market) {
+      return res
+        .status(200)
+        .json(error("Please provide your market", res.statusCode));
+    }
+    if (
+      !["Sydney Produce and Growers Market", "Sydney Flower Market"].includes(
+        market
+      )
+    ) {
+      return res.status(200).json(error("Invalid market", res.statusCode));
+    }
     const ourBuyer = await Buyer.create({
       business_trading_name: business_trading_name,
       email: email,
       password: password,
       phone_number: phone_number,
       is_smcs: is_smcs,
+      market: market,
     });
     await ourBuyer.save();
     const sellers = await Wholeseller.find();

@@ -5,6 +5,7 @@ const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
 const moment = require("moment");
 const { parse } = require("json2csv");
+const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { date, sortBy, filterBy } = req.body;
@@ -332,6 +333,15 @@ exports.deleteTransaction = async (req, res, next) => {
       );
       await consignment.save();
     }
+    await SellerPallets.findOneAndUpdate(
+      {
+        seller: req.seller._id,
+        taken_by: transaction.buyer,
+      },
+      {
+        pallets_taken: myPallets.pallets_taken - +transaction.pallets,
+      }
+    );
     await Transaction.findByIdAndDelete(transactionId);
     res
       .status(200)

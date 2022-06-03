@@ -7,10 +7,16 @@ const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
 const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
+const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 exports.getInventory = async (req, res) => {
   try {
-    const { active_consignment, search } = req.body;
+    const { allow_overselling, search } = req.body;
     console.log(req.body);
+    const seller = await Wholeseller.findById(req.seller._id);
+    let category = [];
+    if (seller.market === "Sydney Produce and Growers Market")
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+    else category = ["Flowers", "Foliage"];
     const inventories = await Inventory.aggregate([
       {
         $match: {
@@ -58,6 +64,7 @@ exports.getInventory = async (req, res) => {
       { $unwind: "$productId.type" },
       {
         $match: {
+          "productId.variety.product": { $in: category },
           $and: [
             search
               ? {
@@ -80,6 +87,7 @@ exports.getInventory = async (req, res) => {
           ],
         },
       },
+      { $sort: { "productId.variety.product": 1 } },
     ]);
     for (const inventory of inventories) {
       if (inventory.consignment)

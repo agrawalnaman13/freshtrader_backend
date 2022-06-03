@@ -6,6 +6,7 @@ const ProductType = require("../../Models/AdminModels/productTypeSchema");
 const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Unit = require("../../Models/AdminModels/unitSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
+const Purchase = require("../../Models/SellerModels/purchaseSchema");
 
 exports.addSellerProduct = async (req, res, next) => {
   try {
@@ -44,7 +45,7 @@ exports.addSellerProduct = async (req, res, next) => {
 
 exports.getSellerProduct = async (req, res, next) => {
   try {
-    const { variety, category, type, search } = req.body;
+    const { variety, category, type, search, active_consignment } = req.body;
     console.log(req.body);
     const products = await SellerProduct.aggregate([
       {
@@ -107,10 +108,36 @@ exports.getSellerProduct = async (req, res, next) => {
         },
       },
     ]);
+    let list = [];
+    if (active_consignment) {
+      for (const product of products) {
+        const consignment = await Purchase.aggregate([
+          {
+            $match: {
+              seller: mongoose.Types.ObjectId(req.seller._id),
+              status: "ACTIVE",
+            },
+          },
+          { $unwind: "$products" },
+          {
+            $match: {
+              "products.productId": {
+                $eq: mongoose.Types.ObjectId(product._id),
+              },
+            },
+          },
+        ]);
+        if (consignment.length) list.push(product);
+      }
+    } else list = list.concat(products);
     res
       .status(200)
       .json(
-        success("Product Fetched Successfully", { products }, res.statusCode)
+        success(
+          "Product Fetched Successfully",
+          { products: list },
+          res.statusCode
+        )
       );
   } catch (err) {
     console.log(err);
@@ -254,7 +281,7 @@ exports.getMyProductUnit = async (req, res, next) => {
       category: product.category,
       variety: product.variety,
       type: product.type,
-      unit: { $exists: true },
+      units: { $exists: true },
     })
       .select("units")
       .populate("units");

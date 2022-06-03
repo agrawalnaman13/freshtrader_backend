@@ -38,25 +38,8 @@ exports.createConsignment = async (req, res, next) => {
       cash_purchase,
       products,
     });
-    for (const product of products) {
-      const inventory = await Inventory.findOne({
-        seller: req.seller._id,
-        productId: product.productId,
-      });
-      if (!inventory.consignment) {
-        await Inventory.findOneAndUpdate(
-          {
-            seller: req.seller._id,
-            productId: product.productId,
-          },
-          {
-            consignment: consignment._id,
-            purchase: +product.received,
-            sold: +product.sold,
-            void: +product.void,
-          }
-        );
-      } else {
+    if (status === "ACTIVE") {
+      for (const product of products) {
         await Inventory.create({
           seller: req.seller._id,
           productId: product.productId,
@@ -166,7 +149,7 @@ exports.removeProductFromConsignment = async (req, res, next) => {
 
 exports.changeConsignmentStatus = async (req, res, next) => {
   try {
-    const { consignmentId, status } = req.body;
+    const { consignmentId, status, completion_date } = req.body;
     console.log(req.body);
     if (!status) {
       return res
@@ -185,6 +168,29 @@ exports.changeConsignmentStatus = async (req, res, next) => {
         .json(error("Invalid consignment Id", res.statusCode));
     }
     consignment.status = status;
+    if (status === "ACTIVE") {
+      for (const product of consignment.products) {
+        await Inventory.create({
+          seller: req.seller._id,
+          productId: product.productId,
+          consignment: consignment._id,
+          purchase: +product.received,
+          sold: +product.sold,
+          void: +product.void,
+        });
+      }
+      if (completion_date) {
+        consignment.completion_date = new Date(completion_date);
+      }
+    } else if (status === "COMPLETE") {
+      const inventories = await Inventory.find({
+        seller: req.seller._id,
+        consignment: consignment._id,
+      });
+      for (const inventory of inventories) {
+        await Inventory.findByIdAndDelete(inventory._id);
+      }
+    }
     await consignment.save();
     res
       .status(200)

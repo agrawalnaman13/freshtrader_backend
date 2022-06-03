@@ -63,6 +63,13 @@ exports.sellerSignup = async (req, res) => {
         .status(200)
         .json(error("Please provide your market", res.statusCode));
     }
+    if (
+      !["Sydney Produce and Growers Market", "Sydney Flower Market"].includes(
+        market
+      )
+    ) {
+      return res.status(200).json(error("Invalid market", res.statusCode));
+    }
     if (!stall_location) {
       return res
         .status(200)

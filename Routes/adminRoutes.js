@@ -10,6 +10,14 @@ const {
   changePassword,
 } = require("../Controllers/AdminController/authController");
 const {
+  getBuyerData,
+  getBuyerList,
+  changeBuyerStatus,
+} = require("../Controllers/AdminController/buyerController");
+const {
+  getDashboardCount,
+} = require("../Controllers/AdminController/dashboardController");
+const {
   addVariety,
   getVariety,
   addUnit,
@@ -25,6 +33,12 @@ const {
   getSellerList,
   changeSellerStatus,
 } = require("../Controllers/AdminController/sellerController");
+const {
+  addSubscription,
+  getSubscriptionDetail,
+  getSubscriptionList,
+  changeSubscriptionStatus,
+} = require("../Controllers/AdminController/subscriptionController");
 const {
   createAdminSellerImagePath,
   uploadAdminSellerImage,
@@ -75,5 +89,29 @@ router.get(
   tokenAdminAuthorisation,
   changeSellerStatus
 );
+router.get("/getBuyerData/:id", tokenAdminAuthorisation, getBuyerData);
+router.post("/getBuyerList", tokenAdminAuthorisation, getBuyerList);
+router.get(
+  "/changeBuyerStatus/:id",
+  tokenAdminAuthorisation,
+  changeBuyerStatus
+);
+router.post("/addSubscription", tokenAdminAuthorisation, addSubscription);
+router.post(
+  "/getSubscriptionDetail",
+  tokenAdminAuthorisation,
+  getSubscriptionDetail
+);
+router.get(
+  "/getSubscriptionList",
+  tokenAdminAuthorisation,
+  getSubscriptionList
+);
+router.get(
+  "/changeSubscriptionStatus/:id",
+  tokenAdminAuthorisation,
+  changeSubscriptionStatus
+);
+router.get("/getDashboardCount", tokenAdminAuthorisation, getDashboardCount);
 
 module.exports = router;
