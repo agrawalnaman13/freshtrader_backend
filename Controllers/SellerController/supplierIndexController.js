@@ -278,6 +278,7 @@ exports.getSuppliersProduct = async (req, res, next) => {
 exports.getMyProducts = async (req, res, next) => {
   try {
     const { supplierId, filterBy, search } = req.body;
+    console.log(req.body);
     if (!supplierId) {
       return res
         .status(200)

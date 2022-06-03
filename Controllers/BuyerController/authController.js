@@ -51,6 +51,7 @@ exports.signup = async (req, res, next) => {
       phone_number: phone_number,
       is_smcs: is_smcs,
     });
+    await ourBuyer.save();
     const sellers = await Wholeseller.find();
     for (const seller of sellers) {
       await SellerPartnerBuyers.create({

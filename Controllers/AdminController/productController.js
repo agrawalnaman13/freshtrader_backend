@@ -39,7 +39,17 @@ exports.getVariety = async (req, res, next) => {
 
 exports.addUnit = async (req, res, next) => {
   try {
-    const newUnit = await Unit.create(req.body);
+    const { unit, weight, variety } = req.body;
+    const newUnit = await Unit.create({
+      unit,
+      weight,
+      added_by: req.seller._id,
+    });
+    await ProductUnit.create({
+      unit: newUnit._id,
+      variety,
+      added_by: req.seller._id,
+    });
     return res
       .status(200)
       .json(

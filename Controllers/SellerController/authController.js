@@ -2,6 +2,7 @@ const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const validator = require("validator");
 const { success, error } = require("../../service_response/adminApiResponse");
 const SellerPOSLayout = require("../../Models/SellerModels/posLayoutSchema");
+const SellerStaff = require("../../Models/SellerModels/staffSchema");
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   console.log(req.body);
@@ -10,11 +11,36 @@ exports.login = async (req, res, next) => {
       .status(200)
       .json(error("Please provide both email and password", res.statusCode));
   }
-  if (!validator.isEmail(email))
-    return res.status(200).json(error("Invalid Email", res.statusCode));
+  // if (!validator.isEmail(email))
+  //   return res.status(200).json(error("Invalid Email", res.statusCode));
   try {
     const ourSeller = await Wholeseller.findOne({ email }).select("+password");
     if (!ourSeller) {
+      const ourStaff = await SellerStaff.findOne({ username: email }).select(
+        "+password"
+      );
+      if (ourStaff) {
+        if (!(await ourStaff.correctPassword(password, ourStaff.password))) {
+          return res
+            .status(200)
+            .json(error("Invalid Password", res.statusCode));
+        }
+        const seller = await Wholeseller.findById(ourStaff.seller).select(
+          "+password"
+        );
+        const token = await seller.generateAuthToken();
+        return res
+          .header("x-auth-token", token)
+          .header("access-control-expose-headers", "x-auth-token")
+          .status(200)
+          .json(
+            success(
+              "Logged In Successfully",
+              { seller: seller, staff: ourStaff, token: token },
+              res.statusCode
+            )
+          );
+      }
       return res.status(200).json(error("Invalid email", res.statusCode));
     }
     if (!(await ourSeller.correctPassword(password, ourSeller.password))) {
@@ -122,7 +148,9 @@ exports.updateProfile = async (req, res, next) => {
         .status(200)
         .json(error("Please provide smcs code", res.statusCode));
     }
-
+    if (!this.checkABN(+abn)) {
+      return res.status(200).json(error("Invalid ABN", res.statusCode));
+    }
     const newSeller = await Wholeseller.findOneAndUpdate(
       { _id: req.seller._id },
       {
@@ -336,5 +364,21 @@ exports.getSellerData = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.checkABN = (abn) => {
+  try {
+    abn -= 10000000000;
+    const weighting = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    let sum = 0;
+    for (var i = 0; i < String(abn).length; i++) {
+      console.log(String(abn)[i]);
+      sum += +String(abn)[i] * weighting[i];
+    }
+    if (sum % 89 === 0) return true;
+    else return false;
+  } catch (err) {
+    console.log(err);
   }
 };

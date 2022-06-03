@@ -203,7 +203,7 @@ exports.changeConsignmentStatus = async (req, res, next) => {
 
 exports.getConsignments = async (req, res, next) => {
   try {
-    const { sortBy, filterBy, date } = req.body;
+    const { sortBy, filterBy, date, search } = req.body;
     console.log(req.body);
     const consignments = await Purchase.aggregate([
       {
@@ -236,6 +236,24 @@ exports.getConsignments = async (req, res, next) => {
             filterBy === 5 ? { documents: "COMPLETE" } : {},
             filterBy === 6 ? { documents: "MISSING" } : {},
             date ? { createdAt: new Date(date) } : {},
+            search
+              ? {
+                  $or: [
+                    {
+                      "supplier.business_trading_name": {
+                        $regex: search,
+                        $options: "$i",
+                      },
+                    },
+                    {
+                      consign_id: {
+                        $regex: search,
+                        $options: "$i",
+                      },
+                    },
+                  ],
+                }
+              : {},
           ],
         },
       },

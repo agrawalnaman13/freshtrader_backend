@@ -12,6 +12,10 @@ const ProductUnitSchema = new mongoose.Schema(
       ref: "unit",
       required: true,
     },
+    added_by: {
+      type: String,
+      default: "Admin",
+    },
   },
   { timestamps: {} },
   { collection: "productUnit" }

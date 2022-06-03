@@ -5,11 +5,15 @@ const ProductVarietySchema = new mongoose.Schema(
     product: {
       type: String,
       required: true,
-      enum: ["Fruits", "Herbs", "Vegetables", "Others"],
+      enum: ["Fruits", "Herbs", "Vegetables", "Others", "Flowers", "Foliage"],
     },
     variety: {
       type: String,
       required: true,
+    },
+    added_by: {
+      type: String,
+      default: "Admin",
     },
   },
   { timestamps: {} },

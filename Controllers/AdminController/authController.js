@@ -35,6 +35,7 @@ exports.adminSignup = async (req, res) => {
         req.files[0].filename
       }`,
     });
+    await admin.save();
     res
       .status(200)
       .json(success("Profile Created Successfully", { admin }, res.statusCode));
@@ -154,7 +155,8 @@ exports.updatePassword = async (req, res, next) => {
     if (!admin) {
       return res.status(200).json(error("Invalid email", res.statusCode));
     }
-    await Admin.findOneAndUpdate({ email }, { password: password });
+    admin.password = password;
+    await admin.save();
     res
       .status(200)
       .json(
@@ -186,7 +188,8 @@ exports.changePassword = async (req, res, next) => {
         .status(200)
         .json(error("Invalid old Password", res.statusCode));
     }
-    await Admin.findByIdAndUpdate(req.admin._id, { password: newPassword });
+    admin.password = newPassword;
+    await admin.save();
     res
       .status(200)
       .json(

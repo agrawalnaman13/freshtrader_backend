@@ -15,6 +15,10 @@ const ProductTypeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    added_by: {
+      type: String,
+      default: "Admin",
+    },
   },
   { timestamps: {} },
   { collection: "productType" }

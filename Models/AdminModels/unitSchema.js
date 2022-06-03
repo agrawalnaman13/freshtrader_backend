@@ -10,6 +10,10 @@ const UnitSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    added_by: {
+      type: String,
+      default: "Admin",
+    },
   },
   { timestamps: {} },
   { collection: "unit" }

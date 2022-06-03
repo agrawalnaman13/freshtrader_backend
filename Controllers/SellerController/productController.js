@@ -254,7 +254,10 @@ exports.getMyProductUnit = async (req, res, next) => {
       category: product.category,
       variety: product.variety,
       type: product.type,
-    }).select("units");
+      unit: { $exists: true },
+    })
+      .select("units")
+      .populate("units");
 
     return res
       .status(200)
@@ -389,7 +392,7 @@ exports.getCategoryList = async (req, res, next) => {
     const seller = await Wholeseller.findById(req.seller._id);
     let category = [];
     if (seller.market === "Sydney Produce and Growers Market")
-      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+      category = ["Fruits", "Vegetables", "Herbs", "Others"];
     else category = ["Flowers", "Foliage"];
     res
       .status(200)
@@ -410,9 +413,9 @@ exports.getMyVarietyList = async (req, res, next) => {
         .status(200)
         .json(error("Category is required", res.statusCode));
     }
-    if (!["Fruits", "Herbs", "Vegetables", "Others"].includes(category)) {
-      return res.status(200).json(error("Invalid Category", res.statusCode));
-    }
+    // if (!["Fruits", "Herbs", "Vegetables", "Others"].includes(category)) {
+    //   return res.status(200).json(error("Invalid Category", res.statusCode));
+    // }
     const varieties = await SellerProduct.find({
       category: category,
     }).distinct("variety");
@@ -454,6 +457,34 @@ exports.getMyProductList = async (req, res, next) => {
       .status(200)
       .json(
         success("Product fetched Successfully", { typeList }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.addMissingProduct = async (req, res, next) => {
+  try {
+    const { category, variety, type } = req.body;
+    console.log(req.body, req.files);
+    const newVariety = await ProductVariety.create({
+      variety: variety,
+      product: category,
+      added_by: req.seller._id,
+    });
+    const newType = await ProductType.create({
+      variety: newVariety._id,
+      type: type,
+      image: `${req.files[0].destination.replace("./public", "")}/${
+        req.files[0].filename
+      }`,
+      added_by: req.seller._id,
+    });
+    return res
+      .status(200)
+      .json(
+        success("Type Added Successfully", { type: newType }, res.statusCode)
       );
   } catch (err) {
     console.log(err);

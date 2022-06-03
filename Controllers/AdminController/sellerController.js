@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const validator = require("validator");
+const { checkABN } = require("../SellerController/authController");
 exports.sellerSignup = async (req, res) => {
   try {
     const {
@@ -38,6 +39,9 @@ exports.sellerSignup = async (req, res) => {
       return res.status(200).json(error("Invalid Email", res.statusCode));
     if (!abn) {
       return res.status(200).json(error("Please provide abn", res.statusCode));
+    }
+    if (checkABN(+abn)) {
+      return res.status(200).json(error("Invalid ABN", res.statusCode));
     }
     if (!entity_name) {
       return res

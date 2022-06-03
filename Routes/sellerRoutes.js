@@ -76,6 +76,7 @@ const {
   getMyProductList,
   getCategoryList,
   getMyProductUnit,
+  addMissingProduct,
 } = require("../Controllers/SellerController/productController");
 const {
   createConsignment,
@@ -94,6 +95,12 @@ const {
 const {
   getSMCSReport,
 } = require("../Controllers/SellerController/smcsReportController");
+const {
+  addStaff,
+  getStaff,
+  getStaffDetail,
+  updateStaff,
+} = require("../Controllers/SellerController/staffController");
 const {
   addStation,
   addDevice,
@@ -125,6 +132,13 @@ const tokenAuthorisation = require("../middleware/tokenAuth");
 const router = express.Router();
 router.post("/login", login);
 router.post("/addSellerProduct", tokenAuthorisation, addSellerProduct);
+router.post(
+  "/addMissingProduct",
+  tokenAuthorisation,
+  createSellerImagePath,
+  uploadSellerImage.any(),
+  addMissingProduct
+);
 router.post("/getSellerProduct", tokenAuthorisation, getSellerProduct);
 router.post("/updateSellerProduct", tokenAuthorisation, updateSellerProduct);
 router.post("/deleteSellerProduct", tokenAuthorisation, deleteSellerProduct);
@@ -260,4 +274,8 @@ router.post(
 router.post("/receivePayment", tokenAuthorisation, receivePayment);
 router.post("/getSMCSReport", tokenAuthorisation, getSMCSReport);
 router.post("/getEndOfDayReport", tokenAuthorisation, getEndOfDayReport);
+router.post("/addStaff", tokenAuthorisation, addStaff);
+router.get("/getStaff", tokenAuthorisation, getStaff);
+router.get("/getStaffDetail/:id", tokenAuthorisation, getStaffDetail);
+router.post("/updateStaff", tokenAuthorisation, updateStaff);
 module.exports = router;

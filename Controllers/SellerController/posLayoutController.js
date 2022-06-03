@@ -151,11 +151,17 @@ exports.getLayout = async (req, res, next) => {
 
 exports.getMyPOSProducts = async (req, res, next) => {
   try {
-    const { filterBy, search, category, variety, type } = req.body;
+    const { filterBy, search, category, variety } = req.body;
+    console.log(req.body);
     const myProducts = await SellerProduct.find({
+      category: category,
+      variety: variety,
       seller: req.seller._id,
     }).distinct("type");
     const products = await ProductType.aggregate([
+      {
+        $match: { variety: mongoose.Types.ObjectId(variety) },
+      },
       {
         $lookup: {
           localField: "variety",

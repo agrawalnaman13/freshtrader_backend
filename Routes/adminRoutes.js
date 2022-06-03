@@ -50,7 +50,7 @@ router.post("/changePassword", tokenAdminAuthorisation, changePassword);
 router.get("/getAdminData", tokenAdminAuthorisation, getAdminData);
 router.post("/addVariety", addVariety);
 router.post("/getVariety", tokenAuthorisation, getVariety);
-router.post("/addUnit", addUnit);
+router.post("/addUnit", tokenAuthorisation, addUnit);
 router.post("/getUnit", getUnit);
 router.post(
   "/addProductType",
