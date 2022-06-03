@@ -207,6 +207,34 @@ exports.getConsignments = async (req, res, next) => {
     console.log(req.body);
     const consignments = await Purchase.aggregate([
       {
+        $project: {
+          seller: 1,
+          supplier: 1,
+          co_op_agent: 1,
+          consign: 1,
+          con_id: 1,
+          consign_pallets: 1,
+          consign_notes: 1,
+          grading: 1,
+          grader_name: 1,
+          status: 1,
+          documents_received: 1,
+          smcs_purchase: 1,
+          cash_purchase: 1,
+          products: 1,
+          createdAt: 1,
+          year: {
+            $year: "$createdAt",
+          },
+          month: {
+            $month: "$createdAt",
+          },
+          day: {
+            $dayOfMonth: "$createdAt",
+          },
+        },
+      },
+      {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
         },
@@ -235,7 +263,15 @@ exports.getConsignments = async (req, res, next) => {
             filterBy === 4 ? { status: "AWAITING DELIVERY" } : {},
             filterBy === 5 ? { documents: "COMPLETE" } : {},
             filterBy === 6 ? { documents: "MISSING" } : {},
-            date ? { createdAt: new Date(date) } : {},
+            date
+              ? {
+                  $and: [
+                    { year: new Date(date).getFullYear() },
+                    { month: new Date(date).getMonth() + 1 },
+                    { day: new Date(date).getDate() },
+                  ],
+                }
+              : {},
             search
               ? {
                   $or: [
@@ -246,7 +282,7 @@ exports.getConsignments = async (req, res, next) => {
                       },
                     },
                     {
-                      consign_id: {
+                      con_id: {
                         $regex: search,
                         $options: "$i",
                       },

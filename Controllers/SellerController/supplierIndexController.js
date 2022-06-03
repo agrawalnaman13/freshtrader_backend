@@ -4,6 +4,7 @@ const validator = require("validator");
 const SellerSupplier = require("../../Models/SellerModels/sellerSuppliersSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
+const { checkABN } = require("./authController");
 exports.addSupplier = async (req, res, next) => {
   try {
     const {
@@ -36,6 +37,9 @@ exports.addSupplier = async (req, res, next) => {
       return res.status(200).json(error("Invalid Email", res.statusCode));
     if (!abn) {
       return res.status(200).json(error("Please provide abn", res.statusCode));
+    }
+    if (!checkABN(+abn)) {
+      return res.status(200).json(error("Invalid ABN", res.statusCode));
     }
     if (!entity_name) {
       return res
@@ -123,6 +127,9 @@ exports.updateSupplier = async (req, res, next) => {
       return res.status(200).json(error("Invalid Email", res.statusCode));
     if (!abn) {
       return res.status(200).json(error("Please provide abn", res.statusCode));
+    }
+    if (!checkABN(+abn)) {
+      return res.status(200).json(error("Invalid ABN", res.statusCode));
     }
     if (!entity_name) {
       return res

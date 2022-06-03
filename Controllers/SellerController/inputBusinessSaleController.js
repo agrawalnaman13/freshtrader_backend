@@ -10,6 +10,8 @@ const SellerSalesman = require("../../Models/SellerModels/sellerSalesmanSchema")
 const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 const printer = require("pdf-to-printer");
 const path = require("path");
+const { checkABN } = require("./authController");
+const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 exports.getBusinesses = async (req, res, next) => {
   try {
     const { search, smcs } = req.body;
@@ -94,6 +96,9 @@ exports.addNewBusiness = async (req, res, next) => {
       return res.status(200).json(error("Invalid Email", res.statusCode));
     if (!abn) {
       return res.status(200).json(error("Please provide abn", res.statusCode));
+    }
+    if (!checkABN(+abn)) {
+      return res.status(200).json(error("Invalid ABN", res.statusCode));
     }
     if (!entity_name) {
       return res
@@ -335,6 +340,28 @@ exports.processTransaction = async (req, res, next) => {
           void: +voids,
         }
       );
+      const myPallets = await SellerPallets.findOne({
+        seller: req.seller._id,
+        taken_by: buyer,
+      });
+      let sellerPallets = {};
+      if (!myPallets) {
+        sellerPallets = await SellerPallets.create({
+          seller: req.seller._id,
+          taken_by: buyerId,
+          pallets_taken: +pallets,
+        });
+      } else {
+        sellerPallets = await SellerPallets.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            taken_by: buyerId,
+          },
+          {
+            pallets_taken: myPallets.pallets_taken + +pallets,
+          }
+        );
+      }
     }
     res
       .status(200)
