@@ -54,6 +54,7 @@ exports.getSellerProduct = async (req, res, next) => {
           variety: mongoose.Types.ObjectId(variety),
           category: category,
           type: mongoose.Types.ObjectId(type),
+          status: true,
         },
       },
       {

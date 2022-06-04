@@ -25,7 +25,15 @@ exports.addVariety = async (req, res, next) => {
 
 exports.getVariety = async (req, res, next) => {
   try {
-    const varieties = await ProductVariety.find(req.body);
+    const { product } = req.body;
+    const varieties = await ProductVariety.find({
+      product: product,
+      $or: [
+        { added_by: "admin" },
+        { added_by: undefined },
+        { added_by: req.seller._id },
+      ],
+    }).sort({ variety: 1 });
     return res
       .status(200)
       .json(
@@ -63,7 +71,9 @@ exports.addUnit = async (req, res, next) => {
 
 exports.getUnit = async (req, res, next) => {
   try {
-    const units = await Unit.find();
+    const units = await Unit.find({
+      $or: [{ added_by: "admin" }, { added_by: undefined }],
+    });
     return res
       .status(200)
       .json(success("Unit fetched Successfully", { units }, res.statusCode));
@@ -97,7 +107,16 @@ exports.addProductType = async (req, res, next) => {
 exports.getProductType = async (req, res, next) => {
   try {
     const { variety } = req.body;
-    const types = await ProductType.find({ variety }).populate("variety");
+    const types = await ProductType.find({
+      variety: variety,
+      $or: [
+        { added_by: "admin" },
+        { added_by: undefined },
+        { added_by: req.seller._id },
+      ],
+    })
+      .populate("variety")
+      .sort({ type: 1 });
     return res
       .status(200)
       .json(success("Type Fetched Successfully", { types }, res.statusCode));
@@ -124,10 +143,16 @@ exports.addProductUnit = async (req, res, next) => {
 exports.getProductUnit = async (req, res, next) => {
   try {
     const { variety } = req.body;
-    const units = await ProductUnit.find({ variety }).populate([
-      "variety",
-      "unit",
-    ]);
+    const units = await ProductUnit.find({
+      variety: variety,
+      $or: [
+        { added_by: "admin" },
+        { added_by: undefined },
+        { added_by: req.seller._id },
+      ],
+    })
+      .populate(["variety", "unit"])
+      .sort({ "unit.weight": 1 });
     return res
       .status(200)
       .json(success("Unit Fetched Successfully", { units }, res.statusCode));
