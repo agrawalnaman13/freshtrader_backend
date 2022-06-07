@@ -41,7 +41,7 @@ const TransactionSchema = new mongoose.Schema(
     station: {
       type: mongoose.Types.ObjectId,
       ref: "sellerStation",
-      required: true,
+      required: false,
     },
     ref: {
       type: String,

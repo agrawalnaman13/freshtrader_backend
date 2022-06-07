@@ -7,7 +7,7 @@ const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Unit = require("../../Models/AdminModels/unitSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
-
+const { getProductInventory } = require("./inventoryController");
 exports.addSellerProduct = async (req, res, next) => {
   try {
     const { category, variety, type, add_gst } = req.body;
@@ -284,8 +284,8 @@ exports.getMyProductUnit = async (req, res, next) => {
       type: product.type,
       units: { $exists: true },
     })
-      .select("units")
-      .populate("units");
+      .select(["units", "price", "type", "variety"])
+      .populate(["units", "type", "variety"]);
 
     return res
       .status(200)
@@ -479,7 +479,14 @@ exports.getMyProductList = async (req, res, next) => {
     }).distinct("type");
     let typeList = [];
     for (const type of types) {
-      typeList.push(await ProductType.findById(type));
+      const typeData = await ProductType.findById(type).lean();
+      typeData.inv = await getProductInventory(type);
+      typeData.productId = (
+        await SellerProduct.findOne({ type }).populate("units").sort({
+          "units.weight": 1,
+        })
+      )._id;
+      typeList.push(typeData);
     }
     res
       .status(200)

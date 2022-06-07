@@ -192,7 +192,7 @@ exports.getSuppliers = async (req, res, next) => {
   try {
     const suppliers = await SellerSupplier.find({
       seller: req.seller._id,
-    }).sort({ createdAt: 1 });
+    }).sort({ createdAt: -1 });
     res
       .status(200)
       .json(

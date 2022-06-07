@@ -45,8 +45,8 @@ exports.createConsignment = async (req, res, next) => {
           productId: product.productId,
           consignment: consignment._id,
           purchase: +product.received,
-          sold: +product.sold,
-          void: +product.void,
+          sold: product.sold ? +product.sold : 0,
+          void: product.void ? +product.void : 0,
         });
       }
     }
@@ -123,13 +123,13 @@ exports.removeProductFromConsignment = async (req, res, next) => {
         .json(error("Invalid consignment Id", res.statusCode));
     }
     const product = consignment.products.filter(
-      (pr) => String(pr._id) === String(productId)
+      (pr) => String(pr.productId) === String(productId)
     );
     if (!product.length) {
       return res.status(200).json(error("Invalid product Id", res.statusCode));
     }
     consignment.products = consignment.products.filter(
-      (pr) => String(pr._id) !== String(productId)
+      (pr) => String(pr.productId) !== String(productId)
     );
     await consignment.save();
     res
@@ -309,7 +309,7 @@ exports.getConsignments = async (req, res, next) => {
             ? { completion_date: 1 }
             : sortBy === 7
             ? { completion_date: -1 }
-            : { createdAt: 1 },
+            : { createdAt: -1 },
       },
     ]);
     let list = [];
@@ -366,6 +366,13 @@ exports.deleteConsignment = async (req, res, next) => {
         .json(error("Invalid consignment Id", res.statusCode));
     }
     await Purchase.findByIdAndDelete(req.params.id);
+    const inventories = await Inventory.find({
+      seller: req.seller._id,
+      consignment: req.params.id,
+    });
+    for (const inventory of inventories) {
+      await Inventory.findByIdAndDelete(inventory._id);
+    }
     res
       .status(200)
       .json(success("Consignment Deleted Successfully", {}, res.statusCode));
@@ -377,7 +384,9 @@ exports.deleteConsignment = async (req, res, next) => {
 
 exports.getConsignmentDetail = async (req, res, next) => {
   try {
-    const consignment = await Purchase.findById(req.params.id).lean();
+    const consignment = await Purchase.findById(req.params.id)
+      .populate("supplier")
+      .lean();
     if (!consignment) {
       return res
         .status(200)

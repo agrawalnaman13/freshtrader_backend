@@ -13,6 +13,7 @@ const path = require("path");
 const { checkABN } = require("./authController");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const Order = require("../../Models/BuyerModels/orderSchema");
+const Inventory = require("../../Models/SellerModels/inventorySchema");
 exports.getBusinesses = async (req, res, next) => {
   try {
     const { search, smcs } = req.body;
@@ -154,6 +155,18 @@ exports.addNewBusiness = async (req, res, next) => {
   }
 };
 
+exports.getBusinessDetail = async (req, res, next) => {
+  try {
+    const buyer = await Buyer.findById(req.params.id);
+    res
+      .status(200)
+      .json(success("Buyer Fetched Successfully", { buyer }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.getProductConsignments = async (req, res, next) => {
   try {
     const { productId } = req.body;
@@ -221,6 +234,7 @@ exports.processTransaction = async (req, res, next) => {
       pallets,
       delivery_note,
       orderId,
+      print,
     } = req.body;
     console.log(req.body);
     if (!buyer) {
@@ -239,13 +253,13 @@ exports.processTransaction = async (req, res, next) => {
     if (!salesman_data) {
       return res.status(200).json(error("Invalid salesman id", res.statusCode));
     }
-    if (!station) {
-      return res.status(200).json(error("Station is required", res.statusCode));
-    }
-    const station_data = await SellerStation.findById(station);
-    if (!station_data) {
-      return res.status(200).json(error("Invalid station id", res.statusCode));
-    }
+    // if (!station) {
+    //   return res.status(200).json(error("Station is required", res.statusCode));
+    // }
+    // const station_data = await SellerStation.findById(station);
+    // if (!station_data) {
+    //   return res.status(200).json(error("Invalid station id", res.statusCode));
+    // }
     if (!type) {
       return res
         .status(200)
@@ -255,6 +269,14 @@ exports.processTransaction = async (req, res, next) => {
       return res
         .status(200)
         .json(error("Invalid transaction type", res.statusCode));
+    }
+    if (!print) {
+      return res
+        .status(200)
+        .json(error("Print type is required", res.statusCode));
+    }
+    if (!["INVOICE", "DELIVERY DOCKET", "BOTH"].includes(print)) {
+      return res.status(200).json(error("Invalid print type", res.statusCode));
     }
     if (!total) {
       return res.status(200).json(error("Total is required", res.statusCode));
@@ -287,12 +309,10 @@ exports.processTransaction = async (req, res, next) => {
       total,
       products,
       salesman,
-      station,
       status: type === "CARD" || type === "CASH" ? "PAID" : "UNPAID",
       payment_received: type === "CARD" || type === "CASH" ? total : 0,
       pallets,
       delivery_note,
-      orderId,
     };
     if (type === "CREDIT NOTE") {
       query = {
@@ -302,14 +322,14 @@ exports.processTransaction = async (req, res, next) => {
         total,
         products,
         salesman,
-        station,
         status: "",
         refund_type,
         pallets,
         delivery_note,
-        orderId,
       };
     }
+    if (station) query.station = station;
+    if (orderId) query.orderId = orderId;
     const transaction = await Transaction.create(query);
     const ref = String(transaction._id).slice(18, 24);
     transaction.ref = ref;
@@ -319,7 +339,7 @@ exports.processTransaction = async (req, res, next) => {
       let sold = 0,
         voids = 0;
       consignment.products = consignment.products.map((p) => {
-        if (String(p.productId) === String(product._id)) {
+        if (String(p.productId) === String(product.productId)) {
           if (type === "CREDIT NOTE" && refund_type === "VOID") {
             p.sold -= product.quantity;
             p.void += product.quantity;
@@ -346,7 +366,6 @@ exports.processTransaction = async (req, res, next) => {
           consignment: product.consignment,
         },
         {
-          purchase: +product.received,
           sold: +sold,
           void: +voids,
         }

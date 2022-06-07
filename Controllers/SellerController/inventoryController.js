@@ -217,7 +217,7 @@ exports.adjustCarryOver = async (req, res) => {
 
 exports.printInventory = async (req, res) => {
   try {
-    const { active_consignment, search, station } = req.body;
+    const { search, station } = req.body;
     if (!station) {
       return res.status(200).json(error("Station is required", res.statusCode));
     }
@@ -321,9 +321,7 @@ exports.printInventory = async (req, res) => {
           res.download(res1.filename);
         }
       );
-    res
-      .status(200)
-      .json(success("Carry Over Changed Successfully", {}, res.statusCode));
+    res.status(200).json(success("Printed Successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
