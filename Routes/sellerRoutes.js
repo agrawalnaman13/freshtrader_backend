@@ -298,6 +298,5 @@ router.post("/createSupport", tokenAuthorisation, createSupport);
 router.post("/replySupport", tokenAuthorisation, replySupport);
 router.get("/changeSupportStatus/:id", tokenAuthorisation, changeSupportStatus);
 router.get("/getSupport", tokenAuthorisation, getSupport);
-router.get("/deleteSupport/:id", tokenAuthorisation, deleteSupport);
 router.get("/getSupportDetail/:id", tokenAuthorisation, getSupportDetail);
 module.exports = router;

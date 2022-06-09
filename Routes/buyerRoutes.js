@@ -26,6 +26,9 @@ const {
   buyPlan,
 } = require("../Controllers/BuyerController/subscriptionController");
 const {
+  getSupport,
+} = require("../Controllers/BuyerController/supportController");
+const {
   getTransactions,
   downloadTransactionCSV,
 } = require("../Controllers/BuyerController/transactionController");
@@ -71,4 +74,5 @@ router.get(
   getOrderNotification
 );
 router.post("/buyPlan", tokenAuthorisationBuyer, buyPlan);
+router.get("/getSupport", tokenAuthorisationBuyer, getSupport);
 module.exports = router;

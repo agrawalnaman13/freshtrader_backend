@@ -45,7 +45,7 @@ exports.getStaff = async (req, res, next) => {
   try {
     const staffs = await SellerStaff.find({
       seller: req.seller._id,
-    });
+    }).sort({ createdAt: -1 });
     res
       .status(200)
       .json(success("Staff Fetched Successfully", { staffs }, res.statusCode));

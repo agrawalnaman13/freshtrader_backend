@@ -16,6 +16,12 @@ const {
   changeBuyerStatus,
 } = require("../Controllers/AdminController/buyerController");
 const {
+  createContent,
+  updateContent,
+  getContents,
+  deleteContent,
+} = require("../Controllers/AdminController/contentController");
+const {
   getDashboardCount,
 } = require("../Controllers/AdminController/dashboardController");
 const {
@@ -41,7 +47,16 @@ const {
   changeSubscriptionStatus,
 } = require("../Controllers/AdminController/subscriptionController");
 const {
+  getSupport,
+} = require("../Controllers/AdminController/supportController");
+const {
+  getTransactions,
+} = require("../Controllers/AdminController/transactionController");
+const {
   replySupport,
+  deleteSupport,
+  getSupportDetail,
+  changeSupportStatus,
 } = require("../Controllers/SellerController/supportController");
 const {
   createAdminSellerImagePath,
@@ -119,4 +134,17 @@ router.get(
 );
 router.get("/getDashboardCount", tokenAdminAuthorisation, getDashboardCount);
 router.post("/replySupport", tokenAdminAuthorisation, replySupport);
+router.get("/deleteSupport/:id", tokenAdminAuthorisation, deleteSupport);
+router.get("/getSupportDetail/:id", tokenAdminAuthorisation, getSupportDetail);
+router.get(
+  "/changeSupportStatus/:id",
+  tokenAdminAuthorisation,
+  changeSupportStatus
+);
+router.post("/getSupport", tokenAdminAuthorisation, getSupport);
+router.post("/getTransactions", tokenAdminAuthorisation, getTransactions);
+router.post("/createContent", tokenAdminAuthorisation, createContent);
+router.post("/updateContent", tokenAdminAuthorisation, updateContent);
+router.post("/getContents", tokenAdminAuthorisation, getContents);
+router.get("/deleteContent/:id", tokenAdminAuthorisation, deleteContent);
 module.exports = router;
