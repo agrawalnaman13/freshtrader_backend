@@ -167,6 +167,21 @@ exports.getBusinessDetail = async (req, res, next) => {
   }
 };
 
+exports.checkBusinessOverdue = async (req, res, next) => {
+  try {
+    const buyer = await SellerPartnerBuyers.findOne({
+      seller: req.seller._id,
+      buyer: req.params.id,
+    }).select("overdue");
+    res
+      .status(200)
+      .json(success("Buyer Fetched Successfully", { buyer }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.getProductConsignments = async (req, res, next) => {
   try {
     const { productId } = req.body;
@@ -235,6 +250,9 @@ exports.processTransaction = async (req, res, next) => {
       delivery_note,
       orderId,
       print,
+      make_non_smcs,
+      cash_transaction_without_payment,
+      email,
     } = req.body;
     console.log(req.body);
     if (!buyer) {
@@ -309,10 +327,20 @@ exports.processTransaction = async (req, res, next) => {
       total,
       products,
       salesman,
-      status: type === "CARD" || type === "CASH" ? "PAID" : "UNPAID",
-      payment_received: type === "CARD" || type === "CASH" ? total : 0,
+      status:
+        type === "CARD" ||
+        (type === "CASH" && !cash_transaction_without_payment)
+          ? "PAID"
+          : "UNPAID",
+      payment_received:
+        type === "CARD" ||
+        (type === "CASH" && !cash_transaction_without_payment)
+          ? total
+          : 0,
       pallets,
       delivery_note,
+      is_smcs: make_non_smcs ? false : buyer_data.is_smcs,
+      is_emailed: email ? true : false,
     };
     if (type === "CREDIT NOTE") {
       query = {
@@ -326,6 +354,8 @@ exports.processTransaction = async (req, res, next) => {
         refund_type,
         pallets,
         delivery_note,
+        is_smcs: make_non_smcs ? false : buyer_data.is_smcs,
+        is_emailed: email ? true : false,
       };
     }
     if (station) query.station = station;
@@ -339,11 +369,15 @@ exports.processTransaction = async (req, res, next) => {
       let sold = 0,
         voids = 0;
       consignment.products = consignment.products.map((p) => {
+        console.log(p);
         if (String(p.productId) === String(product.productId)) {
-          if (type === "CREDIT NOTE" && refund_type === "VOID") {
+          if (type === "CREDIT NOTE" && product.refund_type === "VOID") {
             p.sold -= product.quantity;
             p.void += product.quantity;
-          } else if (type === "CREDIT NOTE" && refund_type === "RETURN") {
+          } else if (
+            type === "CREDIT NOTE" &&
+            product.refund_type === "RETURN"
+          ) {
             p.sold -= product.quantity;
           } else {
             p.sold += product.quantity;
@@ -362,7 +396,7 @@ exports.processTransaction = async (req, res, next) => {
       await Inventory.findOneAndUpdate(
         {
           seller: req.seller._id,
-          productId: product._id,
+          productId: product.productId,
           consignment: product.consignment,
         },
         {

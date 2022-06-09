@@ -198,10 +198,10 @@ exports.getCustomerTransactions = async (req, res, next) => {
               : {},
             filterBy === 1 ? { type: "CASH" } : {},
             filterBy === 2
-              ? { $and: [{ "buyer.is_smcs": true }, { type: "INVOICE" }] }
+              ? { $and: [{ is_smcs: true }, { type: "INVOICE" }] }
               : {},
             filterBy === 3
-              ? { $and: [{ "buyer.is_smcs": false }, { type: "INVOICE" }] }
+              ? { $and: [{ is_smcs: false }, { type: "INVOICE" }] }
               : {},
             filterBy === 4 ? { type: "CREDIT NOTE" } : {},
             filterBy === 5 ? { status: "PAID" } : {},

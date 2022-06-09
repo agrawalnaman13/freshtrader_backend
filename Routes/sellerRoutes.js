@@ -26,6 +26,7 @@ const {
   getProductConsignments,
   processTransaction,
   getBusinessDetail,
+  checkBusinessOverdue,
 } = require("../Controllers/SellerController/inputBusinessSaleController");
 const {
   getInventory,
@@ -116,6 +117,14 @@ const {
   getSuppliersProduct,
   getMyProducts,
 } = require("../Controllers/SellerController/supplierIndexController");
+const {
+  createSupport,
+  replySupport,
+  changeSupportStatus,
+  getSupport,
+  deleteSupport,
+  getSupportDetail,
+} = require("../Controllers/SellerController/supportController");
 const {
   getTransactions,
   updateTransactions,
@@ -219,6 +228,11 @@ router.post("/adjustCarryOver", tokenAuthorisation, adjustCarryOver);
 router.post("/printInventory", tokenAuthorisation, printInventory);
 router.post("/getBusinesses", tokenAuthorisation, getBusinesses);
 router.get("/getBusinessDetail/:id", tokenAuthorisation, getBusinessDetail);
+router.get(
+  "/checkBusinessOverdue/:id",
+  tokenAuthorisation,
+  checkBusinessOverdue
+);
 router.post("/addNewBusiness", tokenAuthorisation, addNewBusiness);
 router.post(
   "/getProductConsignments",
@@ -280,4 +294,10 @@ router.post("/addStaff", tokenAuthorisation, addStaff);
 router.get("/getStaff", tokenAuthorisation, getStaff);
 router.get("/getStaffDetail/:id", tokenAuthorisation, getStaffDetail);
 router.post("/updateStaff", tokenAuthorisation, updateStaff);
+router.post("/createSupport", tokenAuthorisation, createSupport);
+router.post("/replySupport", tokenAuthorisation, replySupport);
+router.get("/changeSupportStatus/:id", tokenAuthorisation, changeSupportStatus);
+router.get("/getSupport", tokenAuthorisation, getSupport);
+router.get("/deleteSupport/:id", tokenAuthorisation, deleteSupport);
+router.get("/getSupportDetail/:id", tokenAuthorisation, getSupportDetail);
 module.exports = router;

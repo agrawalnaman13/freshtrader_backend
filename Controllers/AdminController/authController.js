@@ -129,7 +129,7 @@ exports.verifyOTP = async (req, res, next) => {
     if (!admin) {
       return res.status(200).json(error("Invalid email", res.statusCode));
     }
-    if (admin.otp !== otp) {
+    if (admin.otp !== +otp) {
       return res.status(200).json(error("Invalid OTP", res.statusCode));
     }
     await Admin.findOneAndUpdate({ email }, { otp: "" });
@@ -195,6 +195,33 @@ exports.changePassword = async (req, res, next) => {
       .json(
         success("Password Updated Successfully", { admin }, res.statusCode)
       );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const { full_name } = req.body;
+    console.log(req.body);
+    if (!full_name) {
+      return res
+        .status(200)
+        .json(error("Please provide full name", res.statusCode));
+    }
+    const admin = await Admin.findById(req.admin._id);
+    admin.full_name = full_name;
+    if (req.files.length) {
+      admin.profile_image = `${req.files[0].destination.replace(
+        "./public",
+        ""
+      )}/${req.files[0].filename}`;
+    }
+    await admin.save();
+    res
+      .status(200)
+      .json(success("Profile Updated Successfully", { admin }, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

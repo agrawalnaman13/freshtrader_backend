@@ -15,6 +15,30 @@ const SellerPartnerBuyersSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    total: {
+      type: Number,
+      default: 0,
+    },
+    bought: {
+      type: Number,
+      default: 0,
+    },
+    paid: {
+      type: Number,
+      default: 0,
+    },
+    credit: {
+      type: Number,
+      default: 0,
+    },
+    opening: {
+      type: Number,
+      default: 0,
+    },
+    overdue: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: {} },
   { collection: "sellerPartnerBuyers" }

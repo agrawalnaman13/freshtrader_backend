@@ -6,6 +6,7 @@ const Purchase = require("../../Models/SellerModels/purchaseSchema");
 const moment = require("moment");
 const { parse } = require("json2csv");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
+const Inventory = require("../../Models/SellerModels/inventorySchema");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { date, sortBy, filterBy } = req.body;
@@ -72,10 +73,10 @@ exports.getTransactions = async (req, res, next) => {
               : {},
             filterBy === 1 ? { type: "CASH" } : {},
             filterBy === 2
-              ? { $and: [{ "buyer.is_smcs": true }, { type: "INVOICE" }] }
+              ? { $and: [{ is_smcs: true }, { type: "INVOICE" }] }
               : {},
             filterBy === 3
-              ? { $and: [{ "buyer.is_smcs": false }, { type: "INVOICE" }] }
+              ? { $and: [{ is_smcs: false }, { type: "INVOICE" }] }
               : {},
             filterBy === 4 ? { type: "CREDIT NOTE" } : {},
             filterBy === 5 ? { status: "PAID" } : {},
@@ -303,7 +304,7 @@ exports.deleteTransaction = async (req, res, next) => {
         voids = 0;
       const consignment = await Purchase.findById(product.consignment);
       consignment.products = consignment.products.map((p) => {
-        if (String(p.productId) === String(product._id)) {
+        if (String(p.productId) === String(product.productId)) {
           if (type === 1) {
             p.sold -= product.quantity;
           } else if (type === 1) {
@@ -323,7 +324,7 @@ exports.deleteTransaction = async (req, res, next) => {
       await Inventory.findOneAndUpdate(
         {
           seller: req.seller._id,
-          productId: product._id,
+          productId: product.productId,
           consignment: product.consignment,
         },
         {

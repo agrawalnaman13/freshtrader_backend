@@ -8,6 +8,7 @@ const {
   verifyOTP,
   updatePassword,
   changePassword,
+  updateProfile,
 } = require("../Controllers/AdminController/authController");
 const {
   getBuyerData,
@@ -40,6 +41,9 @@ const {
   changeSubscriptionStatus,
 } = require("../Controllers/AdminController/subscriptionController");
 const {
+  replySupport,
+} = require("../Controllers/SellerController/supportController");
+const {
   createAdminSellerImagePath,
   uploadAdminSellerImage,
 } = require("../helpers/uploadAdminImages");
@@ -61,6 +65,7 @@ router.post("/forgotPassword", forgotPassword);
 router.post("/verifyOTP", verifyOTP);
 router.post("/updatePassword", updatePassword);
 router.post("/changePassword", tokenAdminAuthorisation, changePassword);
+router.post("/updateProfile", tokenAdminAuthorisation, updateProfile);
 router.get("/getAdminData", tokenAdminAuthorisation, getAdminData);
 router.post("/addVariety", addVariety);
 router.post("/getVariety", tokenAuthorisation, getVariety);
@@ -113,5 +118,5 @@ router.get(
   changeSubscriptionStatus
 );
 router.get("/getDashboardCount", tokenAdminAuthorisation, getDashboardCount);
-
+router.post("/replySupport", tokenAdminAuthorisation, replySupport);
 module.exports = router;

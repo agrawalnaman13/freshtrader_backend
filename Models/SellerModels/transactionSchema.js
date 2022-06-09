@@ -20,6 +20,11 @@ const Product = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "purchase",
   },
+  refund_type: {
+    type: String,
+    enum: ["RETURN", "VOID", ""],
+    default: "",
+  },
 });
 const TransactionSchema = new mongoose.Schema(
   {
@@ -65,6 +70,10 @@ const TransactionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    is_smcs: {
+      type: Boolean,
+      default: false,
+    },
     smcs_notified: {
       type: Boolean,
       default: false,
@@ -73,11 +82,6 @@ const TransactionSchema = new mongoose.Schema(
       type: String,
       enum: ["PAID", "UNPAID", "OVERDUE", ""],
       default: "UNPAID",
-    },
-    refund_type: {
-      type: String,
-      enum: ["RETURN", "VOID", ""],
-      default: "",
     },
     pallets: {
       type: Number,

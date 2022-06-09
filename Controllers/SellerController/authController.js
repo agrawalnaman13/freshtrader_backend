@@ -274,7 +274,7 @@ exports.updateOrderSetting = async (req, res, next) => {
   try {
     const { public_ordering, publish_prices } = req.body;
     console.log(req.body);
-    if (public_ordering == "" || public_ordering == undefined) {
+    if (public_ordering === "" || public_ordering === undefined) {
       return res
         .status(200)
         .json(error("Please provide public ordering", res.statusCode));
