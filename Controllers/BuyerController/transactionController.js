@@ -5,6 +5,7 @@ const Transaction = require("../../Models/SellerModels/transactionSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const moment = require("moment");
 const { parse } = require("json2csv");
+const SellerPartnerBuyers = require("../../Models/SellerModels/partnerBuyersSchema");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { from, till, sortBy } = req.body;
@@ -139,6 +140,22 @@ exports.downloadTransactionCSV = async (req, res, next) => {
     const opts = { fields };
     const csv = parse(response, opts);
     return res.status(200).send(csv);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getBalance = async (req, res, next) => {
+  try {
+    const balance = await SellerPartnerBuyers.find({
+      buyer: req.buyer._id,
+    }).populate("seller");
+    res
+      .status(200)
+      .json(
+        success("Balance fetched Successfully", { balance }, res.statusCode)
+      );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

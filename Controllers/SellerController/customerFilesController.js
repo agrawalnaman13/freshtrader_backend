@@ -2,119 +2,17 @@ const mongoose = require("mongoose");
 const { success, error } = require("../../service_response/adminApiResponse");
 const Transaction = require("../../Models/SellerModels/transactionSchema");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
+const SellerPartnerBuyers = require("../../Models/SellerModels/partnerBuyersSchema");
 exports.getCustomerInfo = async (req, res, next) => {
   try {
-    if (!req.params.id) {
-      return res.status(200).json(error("Buyer is required", res.statusCode));
-    }
     const buyer_data = await Buyer.findById(req.params.id);
     if (!buyer_data) {
       return res.status(200).json(error("Invalid buyer id", res.statusCode));
     }
-    const transactions = await Transaction.aggregate([
-      {
-        $project: {
-          seller: 1,
-          buyer: 1,
-          total: 1,
-          status: 1,
-          type: 1,
-          createdAt: 1,
-          year: {
-            $year: "$createdAt",
-          },
-          month: {
-            $month: "$createdAt",
-          },
-          day: {
-            $dayOfMonth: "$createdAt",
-          },
-        },
-      },
-      {
-        $match: {
-          seller: mongoose.Types.ObjectId(req.seller._id),
-          buyer: mongoose.Types.ObjectId(req.params.id),
-        },
-      },
-      {
-        $project: {
-          seller: 1,
-          buyer: 1,
-          total: 1,
-          status: 1,
-          type: 1,
-          createdAt: 1,
-          year: {
-            $year: "$createdAt",
-          },
-          month: {
-            $month: "$createdAt",
-          },
-          day: {
-            $dayOfMonth: "$createdAt",
-          },
-          bought_today: {
-            $cond: [
-              {
-                $and: [
-                  { $eq: ["$year", new Date().getFullYear()] },
-                  { $eq: ["$month", new Date().getMonth() + 1] },
-                  { $eq: ["$day", new Date().getDate()] },
-                ],
-              },
-              "$total",
-              0,
-            ],
-          },
-          paid_total: { $cond: [{ $eq: ["$status", "PAID"] }, "$total", 0] },
-          credit_total: {
-            $cond: [{ $eq: ["$type", "CREDIT NOTE"] }, "$total", 0],
-          },
-        },
-      },
-      {
-        $lookup: {
-          localField: "buyer",
-          foreignField: "_id",
-          from: "buyers",
-          as: "buyer",
-        },
-      },
-      { $unwind: "$buyer" },
-      {
-        $group: {
-          _id: {
-            buyer: "$buyer",
-            year: "$year",
-            month: "$month",
-            day: "$day",
-          },
-          total_owed: { $sum: "$total" },
-          bought: { $sum: "$bought_today" },
-          paid: { $sum: "$paid_total" },
-          credit: { $sum: "$credit_total" },
-        },
-      },
-      { $sort: { _id: -1 } },
-    ]);
-    console.log(transactions);
-    const total_owed = transactions.reduce(function (a, b) {
-      return a + b.total_owed;
-    }, 0);
-    const customer = {
-      buyer: transactions[0]._id.buyer,
-      opening: total_owed - transactions[1]?.credit,
-      bought: transactions[0].bought,
-      paid: transactions[0].paid,
-      credit: transactions[0].credit,
-      closing:
-        total_owed -
-        transactions[1]?.credit -
-        transactions[0].paid -
-        transactions[0].credit,
-    };
-
+    const customer = await SellerPartnerBuyers.findOne({
+      seller: req.seller._id,
+      buyer: req.params.id,
+    }).populate("buyer");
     res
       .status(200)
       .json(
@@ -127,6 +25,38 @@ exports.getCustomerInfo = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.setCustomerInfo = async () => {
+  try {
+    const partners = await SellerPartnerBuyers.find({ status: true });
+    for (const partner of partners) {
+      partner.opening = partner.total - partner.credit;
+      partner.total = 0;
+      partner.bought = 0;
+      partner.credit = 0;
+      partner.paid = 0;
+      partner.closing = partner.opening;
+      const overdues = await Transaction.find({
+        status: "OVERDUE",
+        buyer: partner.buyer,
+        seller: partner.seller,
+      });
+      await SellerPartnerBuyers.findByIdAndUpdate(partner._id, {
+        opening: partner.opening,
+        total: partner.total,
+        credit: partner.credit,
+        bought: partner.bought,
+        paid: partner.paid,
+        closing: partner.closing,
+        overdue: overdues.length ? true : false,
+      });
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
   }
 };
 
@@ -263,8 +193,26 @@ exports.receivePayment = async (req, res, next) => {
     if (!payment) {
       return res.status(200).json(error("Payment is required", res.statusCode));
     }
-    transaction.payment_received = payment;
+    transaction.payment_received += +payment;
     await transaction.save();
+    const customer = await SellerPartnerBuyers.findOne({
+      seller: req.seller._id,
+      buyer: transaction.buyer,
+    });
+    if (customer) {
+      customer.paid += +payment;
+      customer.closing = customer.opening - customer.paid - customer.credit;
+      await SellerPartnerBuyers.findOneAndUpdate(
+        {
+          seller: req.seller._id,
+          buyer: transaction.buyer,
+        },
+        {
+          paid: customer.paid,
+          closing: customer.closing,
+        }
+      );
+    }
     res
       .status(200)
       .json(

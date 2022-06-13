@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const {
   signup,
   login,
+  getBuyerData,
 } = require("../Controllers/BuyerController/authController");
 const {
   orderProduct,
@@ -24,6 +25,7 @@ const {
 } = require("../Controllers/BuyerController/palletsController");
 const {
   buyPlan,
+  getMyPlan,
 } = require("../Controllers/BuyerController/subscriptionController");
 const {
   getSupport,
@@ -31,6 +33,7 @@ const {
 const {
   getTransactions,
   downloadTransactionCSV,
+  getBalance,
 } = require("../Controllers/BuyerController/transactionController");
 const {
   changeOrderStatus,
@@ -43,6 +46,7 @@ const tokenAuthorisationBuyer = require("../middleware/tokenBuyerAuth");
 const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
+router.get("/getBuyerData", tokenAuthorisationBuyer, getBuyerData);
 router.get("/getSellers", tokenAuthorisationBuyer, getSellers);
 router.post("/getSellersProducts", tokenAuthorisationBuyer, getSellersProducts);
 router.post("/addToCart", tokenAuthorisationBuyer, addToCart);
@@ -74,5 +78,7 @@ router.get(
   getOrderNotification
 );
 router.post("/buyPlan", tokenAuthorisationBuyer, buyPlan);
+router.get("/getMyPlan", tokenAuthorisationBuyer, getMyPlan);
 router.get("/getSupport", tokenAuthorisationBuyer, getSupport);
+router.get("/getBalance", tokenAuthorisationBuyer, getBalance);
 module.exports = router;

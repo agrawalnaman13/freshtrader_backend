@@ -270,6 +270,7 @@ exports.getSuppliersProduct = async (req, res, next) => {
     const products = await SellerProduct.find({
       seller: req.seller._id,
       suppliers: { $elemMatch: { $eq: supplierId } },
+      status: true,
     }).populate(["variety", "type", "units"]);
     res
       .status(200)
@@ -299,6 +300,7 @@ exports.getMyProducts = async (req, res, next) => {
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
+          status: true,
           $and: [
             filterBy === 1
               ? {

@@ -7,6 +7,7 @@ const moment = require("moment");
 const { parse } = require("json2csv");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const Inventory = require("../../Models/SellerModels/inventorySchema");
+const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { date, sortBy, filterBy } = req.body;
@@ -398,5 +399,29 @@ exports.downloadTransactionCSV = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.checkOverdueTransactions = async () => {
+  try {
+    const transactions = await Transaction.find({ status: "UNPAID" }).populate(
+      "seller"
+    );
+    for (const transaction of transactions) {
+      const seller = await Wholeseller.findById(transaction.seller);
+      const due_date = moment(transaction.createdAt, "DD-MM-YYYY").add(
+        transaction.seller.sales_invoice_due_date,
+        "days"
+      );
+      if (new Date(due_date) < new Date(Date.now())) {
+        await Transaction.findByIdAndUpdate(transaction._id, {
+          status: "OVERDUE",
+        });
+      }
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
   }
 };

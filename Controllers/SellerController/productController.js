@@ -283,6 +283,7 @@ exports.getMyProductUnit = async (req, res, next) => {
       variety: product.variety,
       type: product.type,
       units: { $exists: true },
+      status: true,
     })
       .select(["units", "price", "type", "variety"])
       .populate(["units", "type", "variety"]);
@@ -333,7 +334,12 @@ exports.searchSellerProduct = async (req, res, next) => {
     //   ({ business_trading_name }) => business_trading_name
     // );
     const products = await SellerProduct.aggregate([
-      { $match: { seller: mongoose.Types.ObjectId(req.seller._id) } },
+      {
+        $match: {
+          seller: mongoose.Types.ObjectId(req.seller._id),
+          status: true,
+        },
+      },
       {
         $lookup: {
           localField: "type",
@@ -446,6 +452,7 @@ exports.getMyVarietyList = async (req, res, next) => {
     // }
     const varieties = await SellerProduct.find({
       category: category,
+      status: true,
     }).distinct("variety");
     let varietyList = [];
     for (const variety of varieties) {
@@ -476,6 +483,7 @@ exports.getMyProductList = async (req, res, next) => {
     }
     const types = await SellerProduct.find({
       variety: variety,
+      status: true,
     }).distinct("type");
     let typeList = [];
     for (const type of types) {

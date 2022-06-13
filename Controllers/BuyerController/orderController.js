@@ -8,12 +8,37 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
 exports.getSellers = async (req, res, next) => {
   try {
-    const sellers = await SellerPartnerBuyers.find({
-      buyer: req.buyer._id,
-      status: true,
-    })
-      .populate("seller")
-      .select("-seller.password");
+    const sellers = await SellerPartnerBuyers.aggregate([
+      {
+        $match: {
+          buyer: mongoose.Types.ObjectId(req.buyer._id),
+        },
+      },
+      {
+        $lookup: {
+          localField: "buyer",
+          foreignField: "_id",
+          from: "buyers",
+          as: "buyer",
+        },
+      },
+      { $unwind: "$buyer" },
+      {
+        $lookup: {
+          localField: "seller",
+          foreignField: "_id",
+          from: "wholesellers",
+          as: "seller",
+        },
+      },
+      { $unwind: "$seller" },
+      {
+        $match: {
+          "buyer.market": { $eq: "$seller.market" },
+          $and: ["seller.public_ordering" ? {} : { status: true }],
+        },
+      },
+    ]);
     res
       .status(200)
       .json(
@@ -39,7 +64,13 @@ exports.getSellersProducts = async (req, res, next) => {
       return res.status(200).json(error("Invalid seller id", res.statusCode));
     }
     const products = await SellerProduct.aggregate([
-      { $match: { seller: mongoose.Types.ObjectId(seller) } },
+      {
+        $match: {
+          seller: mongoose.Types.ObjectId(seller),
+          status: true,
+          available_on_order_app: true,
+        },
+      },
       {
         $lookup: {
           localField: "type",

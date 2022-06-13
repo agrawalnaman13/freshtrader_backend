@@ -28,6 +28,11 @@ exports.login = async (req, res, next) => {
         const seller = await Wholeseller.findById(ourStaff.seller).select(
           "+password"
         );
+        if (!seller.status) {
+          return res
+            .status(200)
+            .json(error("You are not authorized to log in", res.statusCode));
+        }
         const token = await seller.generateAuthToken();
         return res
           .header("x-auth-token", token)
@@ -42,6 +47,11 @@ exports.login = async (req, res, next) => {
           );
       }
       return res.status(200).json(error("Invalid email", res.statusCode));
+    }
+    if (!ourSeller.status) {
+      return res
+        .status(200)
+        .json(error("You are not authorized to log in", res.statusCode));
     }
     if (!(await ourSeller.correctPassword(password, ourSeller.password))) {
       return res.status(200).json(error("Invalid Password", res.statusCode));

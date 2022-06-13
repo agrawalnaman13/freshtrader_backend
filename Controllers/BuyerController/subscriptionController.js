@@ -34,3 +34,18 @@ exports.buyPlan = async (req, res, next) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.getMyPlan = async (req, res, next) => {
+  try {
+    const plan = await SubscriptionHistory.findOne({
+      buyer: req.buyer._id,
+      valid_till: { $gt: new Date(Date.now()) },
+    }).populate("plan");
+    res
+      .status(200)
+      .json(success("Plan Fetched Successfully", { plan }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};

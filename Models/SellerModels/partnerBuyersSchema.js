@@ -35,6 +35,10 @@ const SellerPartnerBuyersSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    closing: {
+      type: Number,
+      default: 0,
+    },
     overdue: {
       type: Boolean,
       default: false,

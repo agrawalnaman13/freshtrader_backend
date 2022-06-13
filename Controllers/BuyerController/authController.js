@@ -111,7 +111,11 @@ exports.login = async (req, res, next) => {
     if (!ourBuyer) {
       return res.status(200).json(error("Invalid email", res.statusCode));
     }
-    console.log(ourBuyer);
+    if (!ourBuyer.status) {
+      return res
+        .status(200)
+        .json(error("You are not authorized to log in", res.statusCode));
+    }
     if (!(await ourBuyer.correctPassword(password, ourBuyer.password))) {
       return res.status(200).json(error("Invalid Password", res.statusCode));
     }
@@ -143,10 +147,23 @@ exports.searchBuyers = async (req, res, next) => {
     }
     const buyers = await Buyer.find({
       business_trading_name: { $regex: search, $options: "$i" },
+      status: true,
     }).sort({ createdAt: 1 });
     res
       .status(200)
       .json(success("Buyer fetched successfully", { buyers }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.getBuyerData = async (req, res, next) => {
+  try {
+    const buyer = await Buyer.findById(req.buyer._id);
+    res
+      .status(200)
+      .json(success("Buyer fetched successfully", { buyer }, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
