@@ -133,6 +133,10 @@ const {
   deleteTransaction,
   changeAllTransactionStatus,
   downloadTransactionCSV,
+  emailTransactionToBuyer,
+  emailAllTransactionsToBuyers,
+  printTransaction,
+  printAllTransaction,
 } = require("../Controllers/SellerController/transactionController");
 const {
   createSellerImagePath,
@@ -271,6 +275,18 @@ router.post(
   changeTransactionStatus
 );
 router.post("/deleteTransaction", tokenAuthorisation, deleteTransaction);
+router.get(
+  "/emailTransactionToBuyer/:id",
+  tokenAuthorisation,
+  emailTransactionToBuyer
+);
+router.post(
+  "/emailAllTransactionsToBuyers",
+  tokenAuthorisation,
+  emailAllTransactionsToBuyers
+);
+router.post("/printTransaction", tokenAuthorisation, printTransaction);
+router.post("/printAllTransaction", tokenAuthorisation, printAllTransaction);
 router.get("/getCustomerInfo/:id", tokenAuthorisation, getCustomerInfo);
 router.post(
   "/getCustomerTransactions",

@@ -65,7 +65,7 @@ const TransactionSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
-    product: [Product],
+    products: [Product],
     is_emailed: {
       type: Boolean,
       default: false,

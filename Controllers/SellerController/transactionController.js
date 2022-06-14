@@ -425,3 +425,92 @@ exports.checkOverdueTransactions = async () => {
     return;
   }
 };
+
+exports.emailTransactionToBuyer = async (req, res, next) => {
+  try {
+    const transaction = await Transaction.findById(req.params.id);
+    if (!transaction) {
+      return res
+        .status(200)
+        .json(error("Invalid transaction id", res.statusCode));
+    }
+    transaction.is_emailed = true;
+    await transaction.save();
+    res
+      .status(200)
+      .json(success("Email Sent Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.emailAllTransactionsToBuyers = async (req, res, next) => {
+  try {
+    const { transactionIds } = req.body;
+    console.log(req.body);
+    if (!transactionIds.length) {
+      return res
+        .status(200)
+        .json(error("Transaction id is required", res.statusCode));
+    }
+    for (const transactionId of transactionIds) {
+      const transaction = await Transaction.findById(transactionId);
+      await Transaction.findByIdAndUpdate(transactionId, {
+        is_emailed: true,
+      });
+    }
+    res
+      .status(200)
+      .json(success("Email Sent Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.printTransaction = async (req, res, next) => {
+  try {
+    const { transactionId, type } = req.body;
+    console.log(req.body);
+    if (!transactionId) {
+      return res
+        .status(200)
+        .json(error("Transaction id is required", res.statusCode));
+    }
+    const transaction = await Transaction.findById(transactionId);
+    if (!transaction) {
+      return res
+        .status(200)
+        .json(error("Invalid transaction id", res.statusCode));
+    }
+    if (!type) {
+      return res
+        .status(200)
+        .json(error("Print type is required", res.statusCode));
+    }
+    res.status(200).json(success("Print Successful", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.printAllTransaction = async (req, res, next) => {
+  try {
+    const { transactionIds } = req.body;
+    console.log(req.body);
+    if (!transactionIds.length) {
+      return res
+        .status(200)
+        .json(error("Transaction id is required", res.statusCode));
+    }
+    for (const transactionId of transactionIds) {
+      const transaction = await Transaction.findById(transactionId);
+    }
+    res.status(200).json(success("Print Successful", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
