@@ -27,6 +27,7 @@ const {
   processTransaction,
   getBusinessDetail,
   checkBusinessOverdue,
+  undoTransaction,
 } = require("../Controllers/SellerController/inputBusinessSaleController");
 const {
   getInventory,
@@ -79,6 +80,7 @@ const {
   getCategoryList,
   getMyProductUnit,
   addMissingProduct,
+  undoSellerProduct,
 } = require("../Controllers/SellerController/productController");
 const {
   createConsignment,
@@ -96,6 +98,7 @@ const {
 } = require("../Controllers/SellerController/salesmanController");
 const {
   getSMCSReport,
+  emailSMCS,
 } = require("../Controllers/SellerController/smcsReportController");
 const {
   addStaff,
@@ -146,6 +149,7 @@ const tokenAuthorisation = require("../middleware/tokenAuth");
 const router = express.Router();
 router.post("/login", login);
 router.post("/addSellerProduct", tokenAuthorisation, addSellerProduct);
+router.post("/undoSellerProduct", tokenAuthorisation, undoSellerProduct);
 router.post(
   "/addMissingProduct",
   tokenAuthorisation,
@@ -249,6 +253,7 @@ router.post("/getMyVarietyList", tokenAuthorisation, getMyVarietyList);
 router.post("/getMyProductList", tokenAuthorisation, getMyProductList);
 router.post("/getMyProductUnit", tokenAuthorisation, getMyProductUnit);
 router.post("/processTransaction", tokenAuthorisation, processTransaction);
+router.post("/undoTransaction", tokenAuthorisation, undoTransaction);
 router.post("/getOrders", tokenAuthorisation, getOrders);
 router.get("/getOrderDetails/:id", tokenAuthorisation, getOrderDetails);
 router.post("/changeOrderStatus", tokenAuthorisation, changeOrderStatus);
@@ -305,6 +310,7 @@ router.post(
 );
 router.post("/receivePayment", tokenAuthorisation, receivePayment);
 router.post("/getSMCSReport", tokenAuthorisation, getSMCSReport);
+router.post("/emailSMCS", tokenAuthorisation, emailSMCS);
 router.post("/getEndOfDayReport", tokenAuthorisation, getEndOfDayReport);
 router.post("/addStaff", tokenAuthorisation, addStaff);
 router.get("/getStaff", tokenAuthorisation, getStaff);

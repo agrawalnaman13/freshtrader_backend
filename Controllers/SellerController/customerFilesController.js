@@ -32,7 +32,7 @@ exports.setCustomerInfo = async () => {
   try {
     const partners = await SellerPartnerBuyers.find({ status: true });
     for (const partner of partners) {
-      partner.opening = partner.total - partner.credit;
+      partner.opening = +partner.total - +partner.credit;
       partner.total = 0;
       partner.bought = 0;
       partner.credit = 0;
@@ -77,6 +77,8 @@ exports.getCustomerTransactions = async (req, res, next) => {
           seller: 1,
           buyer: 1,
           total: 1,
+          salesman: 1,
+          is_smcs: 1,
           payment_received: 1,
           status: 1,
           ref: 1,
@@ -109,6 +111,15 @@ exports.getCustomerTransactions = async (req, res, next) => {
         },
       },
       { $unwind: "$buyer" },
+      {
+        $lookup: {
+          localField: "salesman",
+          foreignField: "_id",
+          from: "sellersalesmen",
+          as: "salesman",
+        },
+      },
+      { $unwind: "$salesman" },
       {
         $addFields: {
           total_owed: { $subtract: ["$total", "$payment_received"] },

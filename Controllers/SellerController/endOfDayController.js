@@ -48,10 +48,12 @@ exports.getEndOfDayReport = async (req, res, next) => {
       },
     ]);
     const products = transactions.map(({ bought_products }) => {
-      return bought_products;
+      if (bought_products) return bought_products;
+      else return [];
     });
     const credit_products = transactions.map(({ credit_products }) => {
-      return credit_products;
+      if (credit_products) return credit_products;
+      else return [];
     });
     let quantity = 0,
       sales = 0,

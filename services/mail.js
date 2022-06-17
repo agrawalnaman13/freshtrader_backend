@@ -1,32 +1,46 @@
 const nodemailer = require("nodemailer");
 const config = require("config");
 
-const sendMail = async (receiverEmailId, subjectOfMail, textOfmail) => {
+const sendMail = async (to, subject, body) => {
   const transporter = nodemailer.createTransport({
-    service: config.get("mailserverhost"),
-    port: 2525,
+    host: config.get("mailserverhost"),
+    port: 587,
+    secure: false,
+    console: true,
+    ignoreTLS: false,
     auth: {
-      type: "OAuth2",
       user: config.get("mailserverid"),
       pass: config.get("mailserverpassword"),
-      clientId: config.get("clientId"),
-      clientSecret: config.get("clientSecret"),
-      refreshToken:
-        "1//04M09DEIdl9BvCgYIARAAGAQSNwF-L9IrPjSb6PFFO9JZdKwPZeCIshPDTRiZCxeyilkAP5hjfBDQTyhdlsM1cf6c-5CEthkv6w0",
     },
   });
 
-  const mailOptions = {
+  console.debug("From " + config.get("mailserverid"));
+  console.debug("To " + to);
+  console.debug("Subject " + subject);
+  console.debug("Body " + body);
+
+  var mailOptions = {
     from: config.get("mailserverid"),
-    to: receiverEmailId,
-    subject: subjectOfMail,
-    text: textOfmail,
+    to: to,
+    subject: subject,
+    text: body,
+    html: body,
   };
-  await transporter.sendMail(mailOptions, function (error, info) {
+
+  transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
+      console.error("Exception", error);
+      // return res.status(500).json({
+      //   code: "SERVER_ERROR",
+      //   description: "something went wrong, Please try again",
+      //   error: error,
+      // });
     } else {
-      console.log("Email sent: " + info.response);
+      console.info("Email sent: " + info.response);
+      // return res.status(200).json({
+      //   message: "Notification sent by mail successfully",
+      //   data: info.response,
+      // });
     }
   });
 };

@@ -1,9 +1,12 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const validator = require("validator");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const SellerPartnerBuyers = require("../../Models/SellerModels/partnerBuyersSchema");
+const SubscriptionHistory = require("../../Models/BuyerModels/subscriptionHistorySchema");
+const Subscription = require("../../Models/AdminModels/subscriptionSchema");
 exports.signup = async (req, res, next) => {
   try {
     const {
@@ -71,6 +74,21 @@ exports.signup = async (req, res, next) => {
       market: market,
     });
     await ourBuyer.save();
+    let date = moment.utc();
+    date = moment(date).format("MM-DD-YYYY");
+    const jDateToday = new Date(date);
+    const local_date = moment(jDateToday);
+    const till = moment(local_date).add(1, "months");
+    const plan = await Subscription.findOne({
+      plan_name: "ENTERPRISE",
+    });
+    if (plan) {
+      await SubscriptionHistory.create({
+        buyer: ourBuyer._id,
+        plan: plan._id,
+        valid_till: till,
+      });
+    }
     const sellers = await Wholeseller.find();
     for (const seller of sellers) {
       await SellerPartnerBuyers.create({
@@ -164,6 +182,46 @@ exports.getBuyerData = async (req, res, next) => {
     res
       .status(200)
       .json(success("Buyer fetched successfully", { buyer }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updateAccountInformation = async (req, res, next) => {
+  try {
+    const { email, csv } = req.body;
+    console.log(req.body);
+    if (!email) {
+      return res
+        .status(200)
+        .json(error("Please provide email", res.statusCode));
+    }
+    if (!validator.isEmail(email))
+      return res.status(200).json(error("Invalid Email", res.statusCode));
+    if (!csv) {
+      return res.status(200).json(error("Please provide csv", res.statusCode));
+    }
+    if (!["Xero", "MYOB", "Saasu", "Quickbooks"].includes(csv)) {
+      return res.status(200).json(error("Invalid csv", res.statusCode));
+    }
+    const newBuyer = await Buyer.findOneAndUpdate(
+      { _id: req.buyer._id },
+      {
+        report_email: email,
+        csv: csv,
+      }
+    );
+
+    res
+      .status(200)
+      .json(
+        success(
+          "Account Information Updated Successfully",
+          { buyer: newBuyer },
+          res.statusCode
+        )
+      );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

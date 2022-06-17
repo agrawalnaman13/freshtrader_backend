@@ -1,0 +1,1256 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+
+:root {
+	scroll-behavior: smooth;
+}
+
+body, html {
+    font-family: 'Poppins';
+    overflow: hidden; 
+}
+
+p {
+	font-weight: 400;
+}
+
+a {
+	color: #A7E66E;
+	text-decoration: none;
+}
+a:hover {
+	color: #374251;
+	text-decoration: none;
+}
+
+html ,body{
+	scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Poppins';
+}
+    /* width */
+ ::-webkit-scrollbar {
+        width: 8px;
+        height: 0;
+        background-color: #fff;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: unset;  
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #7e868f; 
+    border-radius: 0;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #7e868f; 
+  }
+
+/*--------------------------------------------------------------
+# Fonts
+--------------------------------------------------------------*/
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Black.woff2') format('woff2'), url('../fonts/Poppins-Black.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-ExtraLight.woff2') format('woff2'), url('../fonts/Poppins-ExtraLight.woff') format('woff');
+	font-weight: 200;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Light.woff2') format('woff2'), url('../fonts/Poppins-Light.woff') format('woff');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-ExtraBold.woff2') format('woff2'), url('../fonts/Poppins-ExtraBold.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Medium.woff2') format('woff2'), url('../fonts/Poppins-Medium.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Bold.woff2') format('woff2'), url('../fonts/Poppins-Bold.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Regular.woff2') format('woff2'), url('../fonts/Poppins-Regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Thin.woff2') format('woff2'), url('../fonts/Poppins-Thin.woff') format('woff');
+	font-weight: 100;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-SemiBold.woff2') format('woff2'), url('../fonts/Poppins-SemiBold.woff') format('woff');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+ 
+
+/* main css  */
+
+.fresh_trader_main {
+    background-color: #374251; 	
+    width: 100%;
+    display: none;
+	position: relative; 
+}
+ 
+::-webkit-scrollbar{
+	display: none;
+}
+.container {
+    padding: 0 20px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+
+
+@media (max-width: 767px){ 
+	.fresh_trader_main {
+		display: block; 
+	}
+	.splash_screen {
+		height: 100vh;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: top;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.splash_screen a img {
+		max-width: 185px;
+	}
+	.welcome_screen {
+		height: 100vh;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: top;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		width: 100%; 
+		position: relative;
+	}
+	.welcome_screen_inner {
+		padding: 0 20px 25px;
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+		z-index: 9;
+		left: 0;
+		right: 0;
+	}
+	.welcome_screen_inner img {
+		max-width: 210px;
+		width: 100%;
+		margin-bottom: 30px;
+	}
+	.welcome_screen_inner p {
+		color: #fff;
+		font-size: 15px;
+		font-weight: 400;
+		line-height: 28px;
+	}
+	.btn_comman {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 8px;
+		padding: 16px 20px;
+		font-weight: 600;
+		font-size: 16px;
+		border: 0;
+		width: 100%;
+	}
+	.btn_red{
+		background-color: #e73f33;
+		color: #fff;
+		font-weight: 500;
+	}
+	.btn_green{
+		background-color: #A7E66E;
+		color: #374251;
+		font-weight: 600;
+	}
+	.btn_light{
+		background-color: #5f6874;
+		color: #fff !important;
+		font-weight: 400;
+	}
+	.welcome_screen_btns {
+		margin-top: 45px;
+	}
+	.back-btn img {
+		max-width: 41px;
+	}
+	.freshtrader_header {
+		position: fixed;
+		padding: 0;
+		height: 70px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		top: 0;
+		background-color: #374251;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+		padding: 0 7px;
+		z-index: 9999;
+	}
+	/* .back-btn {
+		position: absolute;
+		left: 20px;
+		padding: 0;
+		display: inline-block;
+		z-index: 0;
+	} */
+	.header_menus {
+		color: #fff !important;
+		font-weight: 500;
+		font-size: 17px;
+		position: relative;
+		z-index: 1;
+	}
+	.freshtrader_body {  
+		height: 100vh;
+		padding: 75px 0 70px;
+		position: relative;
+		z-index: 0;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	.freshtrader_body_inner { 
+		padding-bottom: 20px;
+	}	
+	.freshtrader_body p {
+		color: #fff;
+		font-size: 15px;
+		line-height: 27px;
+	}
+	.content-label {
+		color: #fff;
+		font-size: 16px;
+		display: block;
+		margin-bottom: 8px;
+		font-weight: 400;
+	}
+	.form-control {
+		height: 56px;
+		font-size: 15px;
+		background-color: #5f6874 !important;
+		border: 0;
+		color: #fff !important;
+		box-shadow: unset !important;
+		outline: 0;
+		padding: 8px 20px;
+		border-radius: 12px;
+	}
+	.form-control::placeholder {
+		color: #acacac;
+	}
+	.custom_check_outer span {
+		display: block;
+		font-size: 13px;
+		color: #fff;
+		margin-top: -4px;
+	}
+	.custom_checkbox label::before {
+		position: absolute;
+		content: '';
+		top: 5px;
+	    height: 14px;
+    	width: 14px;
+		border-radius: 50px;
+		left: 5px;
+		background-color: #8ad145;
+		opacity: 0;
+		z-index: 2;
+	}
+	.custom_checkbox label::after {
+		position: absolute;
+		content: '';
+		top: 0;
+		height: 24px;
+		width: 24px;
+		border-radius: 50px;
+		left: 0;
+		border: 1px solid #f2f2f2;
+	}
+	.custom_checkbox label {
+		position: relative;
+		display: inline-block;
+		padding: 3px 0 0 34px;
+		color: #fff;
+		font-size: 14px;
+	}
+	.custom_checkbox input[type="radio"]:checked ~ label::before {
+		opacity: 1;
+	}
+	.custom_checkbox input{
+		display: none;
+	}
+	.box_checkbox span {
+		background-color: #5f6874;
+		border-radius: 14px;
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 70px;
+		margin-bottom: 8px;
+	}
+	.box_checkbox span img {
+		max-width: 50px;
+		filter: brightness(10.5);
+	}
+	.box_checkbox label {
+		width: 100%;
+		font-size: 15px;
+		color: #fff;
+		text-align: center;
+	}
+	.box_checkbox input[type="radio"]:checked ~ label span{
+		background-color: #A7E66E;
+	}
+	.box_checkbox input[type="radio"]:checked ~ label span img {
+		filter: invert(11);
+	}
+	.logo_main img {
+		max-width: 180px;
+	}
+	.menus-single img {
+		max-width: 23px;
+	}
+	.freshtrader_menus { 
+		background-color: #8ad145;
+		width: 88%; 
+		text-align: center;
+		border-radius: 16px;
+		height: 70px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0 auto;
+	}
+	.freshtrader_menus_outer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+		height: 100px;
+	    background-color: #374251;
+		display: flex;
+		align-items: center;
+	} 
+	.menus-single {
+		display: block;
+		width: 22%;
+	}
+	.menus-single.active img {
+		filter: brightness(0);
+	}
+	.freshtrader_main_body {
+		height: calc(100vh - 100px);
+		padding: 75px 0 70px;
+		position: relative;
+		z-index: 0;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	.table_overflow {
+		overflow-x: unset;
+		margin: 0 -20px;
+	}
+	.trader_main_inner {
+		position: relative;
+	}
+	.welcome_box {
+		background-color: #8ad145;
+		border-radius: 6px;
+		padding: 25px;
+		display: block;
+		color: #000;
+	}
+	.welcome_box h2 {
+		font-weight: 700;
+		margin: 3px 0 0;
+		font-size: 24px;
+	}
+	.welcome_box strong {
+		text-transform: capitalize;
+		font-size: 18px;
+		display: block;
+	} 
+	.faq_section .head_strong {
+		color: #fff;
+		font-size: 20px;
+		font-weight: 500;
+	}
+	.faq_section .accordion-button {
+		background: #5f6874;
+		border: 0;
+		color: #fff;
+		font-weight: 400;
+		font-size: 14px;
+		padding: 14px 18px !important;
+		line-height: 20px;
+		border-radius: 12px 12px 0 0;
+		box-shadow: unset;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.faq_section .accordion-item {
+		border: 1px solid #f2f2f2;
+		border-radius: 12px !important;
+		overflow: hidden;
+		margin-bottom: 20px;
+	}
+	.faq_section .accordion-button::after {
+		filter: brightness(10.5);
+		background-size: 19px;
+		transform: rotate(-90deg);
+		margin-right: -7px;
+		margin-left: 20px;
+	}
+	.faq_section .accordion-body {
+		font-size: 13px;
+		line-height: 22px;
+		color: #374251;
+		padding: 14px 15px;
+	}
+	.faq_section .accordion-button:not(.collapsed)::after {
+		transform: rotate(-180deg);
+		filter: brightness(30.5);
+	}
+	.order_menus_circle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 130px;
+		width: 100%;
+		border: 1px solid #fff;
+		border-radius: 20px;
+		background-color: #5f6874;
+		flex-wrap: wrap;
+	}
+	.order_menus_circle span {
+		height: 40px;
+		width: 40px;
+		background-color: #fff;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-weight: 600;
+		border-radius: 50px;
+		box-shadow: inset 0 0 10px #726d6d5e;
+		margin: 0 auto;
+	}
+	.order_menus_circle label {
+		display: block;
+		width: 100%;
+		text-align: center;
+		font-size: 14px;
+		color: #fff;
+		margin: 0;
+		line-height: 20px;
+		min-height: 30px;
+		margin-top: 10px;
+	}
+	.comman_header_main p {
+		color: #fff;
+		font-size: 15px;
+		margin: 0;
+	}
+	.table_btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #8ad145;
+		padding: 8px 22px;
+		border-radius: 6px;
+		font-size: 15px;
+		color: #374251;
+		font-weight: 600;
+	}
+	.comman_table table tr td {
+		color: #fff;
+		font-size: 15px;
+		padding: 22px 20px;
+		border: 0;
+		border-bottom: 1px solid #f2f2f238;
+		white-space: nowrap;
+	}
+	.comman_table table tr th {
+		background-color: #5f6874;
+		font-weight: 500;
+		color: #fff;
+		border: 0;
+		padding: 10px 20px;
+		white-space: nowrap;
+	}
+	.table>:not(:first-child) {
+		border-top: 0;
+	}
+	.comman_header_main {
+		padding: 0 32px;
+	}
+	.table_overflow .freshtrader_main_data {
+		overflow-x: hidden;
+	}
+	.call_btn img {
+		max-width: 40px;
+	}
+	.btn_size img{
+		max-width: 43px;
+	}
+	.search_box .form-control {
+		height: 49px;
+		border-radius: 10px;
+		padding: 10px 15px 10px 36px;
+		background-color: #fff !important;
+		font-size: 14px;
+		color: #000 !important;
+	}
+	.search_box .search_icon {
+		position: absolute;
+		top: 50%;
+		color: #5f6874;
+		font-size: 18px;
+		transform: translateY(-50%);
+		left: 23px;
+	}
+	.filter_btn img {
+		max-width: 50px;
+	}
+	.header_change_table table tr th {
+		text-align: center;
+		padding: 10px 0;
+		color: #374251;
+		background-color: #a7e66e;
+	}
+	.Add_unitform label {
+		font-size: 16px;
+		display: block;
+	}
+	.btn_form {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #8ad145;
+		padding: 8px 22px;
+		border-radius: 6px;
+		font-size: 15px;
+		color: #374251;
+		font-weight: 600;
+		border: 0;
+		height: 46px;
+	}
+	.product_img {
+		height: 80px;
+		width: 80px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 10px;
+		background-color: #fff;
+	}
+	.product_img img {
+		max-width: 43px;
+	}
+	.product_content strong {
+		font-size: 15px;
+		font-weight: 500;
+		margin: 4px 0;
+		display: block;
+	}
+	.product_content span {
+		font-size: 15px;
+		font-weight: 400;
+		margin: 4px 0;
+		display: block;
+	}
+	.Add_unitform .form-control {
+		height: 46px;
+		border-radius: 6px;
+		margin-right: 10px;
+	}
+	.sorting_modal {
+		top: auto;
+		bottom: 0;
+		height: auto;
+	}
+	.sorting_modal .modal-dialog {
+		border: 0;
+		margin: 0;
+		width: 100%;
+		max-width: 100%; 
+	}
+	.sorting_modal .modal-dialog .modal-content {
+		border: 0;
+		border-radius: 25px 25px 0 0;
+	}
+	.sorting_modal .modal-header {
+		padding: 14px 22px;
+	}  
+	.sorting_modal .modal-title {
+		font-size: 18px;
+		font-weight: 600;
+	}
+	.sorting_modal .custom_checkbox label {
+		color: #000;
+		font-size: 15px;
+		font-weight: 500;
+	}
+	.sorting_modal .custom_checkbox label::after {
+		border: 2px solid #c7c7c7;
+		height: 28px;
+		width: 28px;
+	}
+	.sorting_modal .custom_checkbox label::before {
+		height: 16px;
+		width: 16px;
+		left: 6px;
+		top: 6px;
+	}
+	.Cart_part_header , .similer_partheader {
+		background-color: #5f6874;
+		height: 46px;
+		display: flex;
+		align-items: center;
+		text-align: center;
+	}
+	.Cart_part_header strong{
+		background-color: #5f6874;
+		font-weight: 500;
+		color: #fff;
+		border: 0;
+		padding: 8px 20px;
+		white-space: nowrap;
+		font-size: 15px;
+	}
+	
+	.Cart_box {
+		text-align: center;
+		margin: 0 18px;
+		background-color: #5f6874;
+		border-radius: 5px;
+		overflow: hidden;
+		padding: 0 10px;
+	}
+	.Cart_box span {
+		color: #fff;
+		font-size: 14px;
+		display: block;
+		padding: 20px 0 22px;
+	}
+	.Cart_box .btn_size {
+		display: block;
+		padding: 16px 0 22px;
+		text-align: right;
+	}
+	.complete-order {
+		display: flex;
+		justify-content: center;
+		background-color: #A7E66E;
+		color: #374251;
+		font-size: 15px;
+		font-weight: 600;
+		padding: 14px 9px;
+		margin: 0 -11px;
+	}
+	.table_toggle_radio {
+		display: inline-block;
+	}
+	.table_toggle_radio label::after {
+		position: absolute;
+		content: '';
+		top: -15px;
+		right: 9px;
+		width: 44px;
+		height: 20px;
+		background-color: #fff;
+		border-radius: 50px;
+		transition: 0.5s all;
+	}
+	.table_toggle_radio label::before {
+		position: absolute;
+		content: '';
+		top: -17px;
+		right: 33px;
+		width: 24px;
+		height: 24px;
+		background-color: #a7e66e;
+		border-radius: 50px;
+		z-index: 1;
+		transition: 0.5s all;
+	}
+	.table_toggle_radio input:checked~label::after {
+		background-color: #A7E66E;
+	}
+	.table_toggle_radio input:checked~label::before {
+		right: 4px;
+		background-color: #fff;
+	}
+	.table_toggle_radio label {
+		position: relative;
+		display: inline-block;
+		font-weight: 400;
+		color: #fff;
+		font-size: 14px;
+		padding-right: 27px;
+	}
+	.notification_box_outer {
+		background-color: #5f6874;
+		border: 1px solid #ffffff5e;
+		border-radius: 12px;
+		margin: 0;
+		padding: 10px 14px;
+	}
+	.notification_box span {
+		color: #fff;
+		font-size: 15px;
+		display: block;
+	}
+	.notification_box {
+		border-bottom: 1px solid #ffffff5e;
+		padding: 20px 0;
+	}
+	.subscription_box {
+		padding: 16px;
+		border-radius: 14px;
+		background-color: #5f6874;
+		position: relative;
+	}
+	.subscription_img {
+		background-color: #8ad145;
+		display: flex !important;
+		height: 90px;
+		border-radius: 12px;
+		width: 120px;
+		align-items: center;
+		justify-content: center;
+	}
+	.subscription_img img {
+		max-width: 73px;
+		filter: brightness(0.5);
+	}
+	.subscription_box strong {
+		display: block;
+		color: #fff;
+		font-size: 18px;
+		font-weight: 400;
+		margin-bottom: 4px;
+	}
+	.subscription_box span {
+		display: block;
+		color: #fff;
+		font-size: 15px;
+		font-weight: 300;
+		margin-bottom: 4px;
+	}
+	.subscription_box p {
+		color: #fff;
+		font-size: 15px;
+		font-weight: 400;
+	}
+	.page_logo img {
+		max-width: 36px;
+	}
+	.menu_screen_profile {
+		border-radius: 14px;
+		background-color: #5f6874;
+		padding: 15px 6px;
+		margin: 0;
+		color: #fff;
+	}
+	.screen_profile img {
+		max-width: 50px;
+		border-radius: 50px;
+	}
+	.menu_inners strong {
+		font-weight: 400;
+		font-size: 15px;
+		display: block;
+	}
+	.menu_inners span {
+		font-weight: 400;
+		font-size: 14px;
+		display: block;
+	}
+	.icon_design {
+		font-size: 18px;
+	} 
+	.menus_onscreen {
+		border-radius: 14px;
+		background-color: #5f6874;
+		padding: 16px 19px;
+	}
+	.menusnav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		color: #fff !important;
+		font-size: 15px;
+		font-weight: 400;
+		padding: 14px 0;
+		border-bottom: 1px solid #f2f2f230;
+	}
+	.menusnav span img {
+		max-width: 18px;
+		margin-top: -2px;
+		margin-right: 12px;
+	}
+	.menusnav span {
+		display: flex;
+		align-items: center;
+	}
+	.menus_onscreen .menusnav:last-child{
+		border: 0;
+	} 
+	.accounting_menus_box {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 140px;
+		width: 100%;
+		color: #fff;
+		border: 1px solid #fff;
+		border-radius: 20px;
+		background-color: #5f6874;
+		flex-wrap: wrap;
+		padding: 14px 10px;
+	}
+	.accountingmenus_icon {
+		height: 65px;
+		width: 65px;
+		background-color: #fff;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-weight: 600;
+		border-radius: 50px;
+		margin: 0 auto;
+	}
+	.accounting_menus_box.active , .accounting_menus_box:hover {
+		background-color: #8ad145;
+		color: #000;
+		border-color: #8ad145;
+	}
+	.accountingmenus_icon img {
+		max-width: 40px;
+	}
+	.accounting_menus_box h2 {
+		font-size: 14px;
+		margin: 0;
+		width: 100%;
+		text-align: center;
+	}
+	.transactions_main table tr td {
+		vertical-align: middle;
+	}
+	.table_checkbox label::before {
+		position: absolute;
+		content: '';
+		top: 5px;
+	    height: 14px;
+    	width: 14px;
+		border-radius: 50px;
+		left: 5px;
+		background-color: #8ad145;
+		opacity: 0;
+		z-index: 2;
+	}
+	.table_checkbox label::after {
+		position: absolute;
+		content: '';
+		top: 0;
+		height: 24px;
+		width: 24px;
+		border-radius: 4px;
+		left: 0;
+		border: 1px solid #f2f2f2;
+		background-color: #5f6874;
+	}
+	.table_checkbox label {
+		position: relative;
+		padding: 0;
+		color: #fff;
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+		height: 25px;
+	}
+	.table_checkbox input[type="radio"]:checked ~ label::before {
+		opacity: 1;
+	}
+	.table_checkbox input{
+		display: none;
+	}
+	.Date_span {
+		display: block;
+		font-size: 14px;
+		margin-bottom: 4px;
+		font-weight: 400;
+	}
+	.small_span , .paid_a , .unpaid_a {
+		display: block;
+		color: #fff !important;
+		font-size: 14px;
+		font-weight: 300;
+	}
+	.paid_a{
+		color: #8ad145 !important;
+	}
+	.unpaid_a{
+		color: #f20 !important;
+	}
+	.transactions_main tr td {
+		font-size: 16px;
+	}
+	.transactions_main tr td:last-child i {
+		font-size: 22px;
+	}
+	.th_colorchange table tr th {
+		background-color: #8ad145;
+		font-size: 15px;
+		padding: 10px 20px;
+		font-weight: 500;
+		color: #000;
+	}
+	.alignment_changes table tr td:last-child , .alignment_changes table tr th:last-child {
+		text-align: end;
+	}
+	.pallet_reports .comman_table table tr td , .balance-part .comman_table table tr td {
+		padding: 16px 20px;
+	}
+	.pallet_reports .comman_table table tbody tr:last-child td {
+		background-color: #5f6874;
+		font-size: 14px;
+		padding: 12px 20px;
+		border: 0;
+	}
+	.pallet_reports .comman_table table tbody tr:last-child {
+		border-top: 50px solid #374251;
+	}
+	.balance-part-top span {
+		color: #fff;
+		font-size: 15px;
+		display: block;
+	}
+	.similer_partheader strong{ 
+		font-weight: 500;
+		color: #fff;
+		border: 0;
+		padding: 9px 15px;
+		white-space: nowrap;
+		font-size: 15px;
+	}
+	.similer_part_boxes .similer_data {
+		padding: 20px 18px;
+	}
+	.similer_data span {
+		display: block;
+		color: #fff;
+		font-size: 14px;
+	}
+	.similer_tableheader strong {
+		color: #374251;
+		border: 0;
+		padding: 9px 15px;
+		white-space: nowrap;
+		font-size: 14px;
+		font-weight: 600;
+	}
+	.similer_tableheader {
+		background-color: #a7e66e;
+		padding: 10px 0px;
+	}
+	.similer_tablebox .similer_table_data {
+		padding: 10px 18px;
+	}
+	.similer_table_data span {
+		color: #fff;
+		display: block;
+		color: #fff;
+		font-size: 14px;
+	}
+	.similer_table_data .form-group .form-control {
+		height: 38px;
+		border-radius: 6px;
+		text-align: center;
+		width: 60px;
+		padding: 1px 14px;
+		margin: 0 auto;
+	} 
+	.similer_tablebox .table_btn {
+		padding: 10px 17px;
+		font-size: 14px;
+		font-weight: 500;
+	}
+	.order_comman_part {
+		margin: 0 8px;
+	}
+	.date_btn {
+		background-color: #fcf6aa;
+		border: 0;
+		border-radius: 5px;
+		font-size: 13px;
+		font-weight: 600;
+		color: #000000;
+		padding: 10px 6px;
+		width: 100%;
+	}
+	.tomorrow_btn {
+		background-color: #b3e6fa;
+	}
+	.order_commandesign label {
+		color: #fff;
+		font-size: 15px;
+		display: block;
+	}
+	.select_date {
+		background-color: #8ad145;
+	}
+	.order_commandesign .form-control {
+		height: 40px;
+		border-radius: 5px;
+		padding: 0 11px;
+		font-size: 13px;
+		background-color: #fff !important;
+		-webkit-appearance: none;
+		color: #000 !important;
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.order_commandesign .form-control::-webkit-calendar-picker-indicator {
+		display: none;
+		-webkit-appearance: none;
+	} 
+	.sechudule_check label {
+		background: #5f6874;
+		height: 40px;
+		border-radius: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		position: relative;
+		cursor: pointer;
+	}
+	.sechudule_check label::after{
+		position: absolute;
+		content: '';
+		top: 0;
+		right: 0; 
+		height: 40px;
+		width: 50%;
+		background-color: #8ad145;
+		transition: 0.5s all;
+		border-radius: 6px;
+	}
+	.sechudule_check input:checked ~ label:after{
+		left: 0;
+		right: auto;
+		background-color: #8ad145;
+	}
+	.sechudule_check span {
+		width: 100%;
+		text-align: center;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		position: relative;
+		z-index: 1;
+		justify-content: center;
+	}
+	.order_commandesign h3 {
+		color: #fff;
+		font-size: 14px;
+		font-weight: 400;
+	}
+	.order_commandesign p {
+		font-size: 14px;
+		color: #fff;
+		font-weight: 300;
+		line-height: 23px;
+	}
+	.payment_checkbox a {
+		position: relative;
+		background-color: #5f6874;
+		border: 1px solid #fff;
+		border-radius: 8px;
+		padding: 8px 6px;
+		text-align: center;
+		line-height: 18px;
+		color: #fff;
+		font-size: 13px;
+		height: 52px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	 
+	.order_commandesign .btn_comman {
+		padding: 14px 11px;
+		text-align: center;
+		font-size: 15px;
+	}
+	.invoice_similer {
+		margin: 0 6px;
+	}
+	.invoice_id {
+		color: #fff;
+		display: block;
+		font-size: 15px;
+	}
+	.invoice_similer_header {
+		background-color: #8ad145;
+		margin: 0 -18px;
+		padding: 15px 5px;
+	}
+	.invoice_similer_header strong {
+		color: #000;
+		font-size: 14px;
+		font-weight: 600;
+		display: block;
+    	line-height: 19px;
+	}
+	.invoice_similer_header strong span {
+		font-weight: 500;
+	}
+	.invoice_body_box a {
+		display: block;
+		font-size: 16px;
+		color: #A7E66E;
+	}
+	.product_cagry {
+		color: #fff;
+		font-size: 14px;
+		margin-top: 4px;
+	}
+	.invoice_body_box span {
+		color: #fff;
+		font-size: 15px;
+		display: block;
+	}
+	.pricetotal_box span , .pricetotal_box a {
+		color: #fff;
+		font-size: 15px;
+		display: block;
+	}
+	.pricetotal_box {
+		background-color: #5f6874;
+		padding: 16px 0px 14px;
+		border-radius: 8px;
+	}
+	.pricetotal_boxfooter span, .pricetotal_boxfooter a {
+		font-size: 16px;
+		font-weight: 500;
+	}
+	.pricetotal_boxfooter a{
+		color: #8ad145;
+	}
+	.pricetotal_box a {
+		color: #8ad145;
+	}
+	.invoice_edit_total p {
+		color: #fff;
+		font-size: 14px;
+		font-weight: 300;
+		line-height: 24px;
+	}
+	.invoice_edit_total span , .invoice_edit_total strong {
+		color: #fff;
+		font-size: 16px;
+		font-weight: 400;
+	}
+	.invoice_edit_total strong{
+		color: #8ad145;
+		display: block;
+	}
+	.invoice_edit_total .btn_form {
+		color: #000;
+		font-size: 13px;
+		padding: 1px 15px;
+		height: 36px;
+		width: auto;
+		display: inline-flex;
+	}
+	.invoice_body_box .form-control {
+		border-radius: 7px;
+		height: 42px;
+		font-size: 13px;
+		text-align: center;
+		padding: 0 10px;
+	}
+	.invoice_body_box .edit-total-btn {
+		color: #000 !important;
+		font-size: 14px;
+		display: inline-flex;
+		height: 43px;
+	}
+}
+
+/* main css  */

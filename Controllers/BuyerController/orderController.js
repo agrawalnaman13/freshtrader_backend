@@ -33,16 +33,32 @@ exports.getSellers = async (req, res, next) => {
       },
       { $unwind: "$seller" },
       {
+        $addFields: {
+          isSameMarket: { $eq: ["$seller.market", "$buyer.market"] },
+        },
+      },
+      {
         $match: {
-          "buyer.market": { $eq: "$seller.market" },
-          $and: ["seller.public_ordering" ? {} : { status: true }],
+          isSameMarket: true,
         },
       },
     ]);
+    let list = [];
+    for (const seller of sellers) {
+      if (seller.seller.public_ordering) {
+        list.push(seller);
+      } else if (seller.status) {
+        list.push(seller);
+      }
+    }
     res
       .status(200)
       .json(
-        success("Sellers fetched successfully", { sellers }, res.statusCode)
+        success(
+          "Sellers fetched successfully",
+          { sellers: list },
+          res.statusCode
+        )
       );
   } catch (err) {
     console.log(err);
@@ -63,12 +79,17 @@ exports.getSellersProducts = async (req, res, next) => {
     if (!sellerData) {
       return res.status(200).json(error("Invalid seller id", res.statusCode));
     }
+    let category = [];
+    if (sellerData.market === "Sydney Produce and Growers Market")
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+    else category = ["Flowers", "Foliage"];
     const products = await SellerProduct.aggregate([
       {
         $match: {
           seller: mongoose.Types.ObjectId(seller),
           status: true,
           available_on_order_app: true,
+          category: { $in: category },
         },
       },
       {
@@ -97,6 +118,7 @@ exports.getSellersProducts = async (req, res, next) => {
           as: "units",
         },
       },
+      { $unwind: "$units" },
       { $unwind: "$grades" },
       {
         $match: {

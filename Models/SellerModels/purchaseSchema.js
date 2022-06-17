@@ -113,13 +113,10 @@ const PurchaseSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    smcs_purchase: {
-      type: Boolean,
+    purchase: {
+      type: String,
       required: true,
-    },
-    cash_purchase: {
-      type: Boolean,
-      required: true,
+      enum: ["CASH", "SMCS"],
     },
     products: [Product],
     status: {

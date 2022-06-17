@@ -63,7 +63,8 @@ const WholesellerSchema = new mongoose.Schema(
     },
     csv: {
       type: String,
-      enum: ["Xero", "MYOB", "Saasu", "Quickbooks"],
+      enum: ["Xero", "MYOB", "Saasu", "Quickbooks", ""],
+      default: "",
     },
     thermal_receipt_invoice_logo: {
       type: String,

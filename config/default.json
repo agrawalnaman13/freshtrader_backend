@@ -1,8 +1,5 @@
 {
-  "mailserverhost": "gmail",
-  "mailserverid": "Demo1regalchess@gmail.com",
-  "mailserverpassword": "Gropse@7117",
-  "clientId": "300972642099-qdemhni0p6pd40q7om9cvec2ig0pu7i0.apps.googleusercontent.com",
-  "clientSecret": "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",
-  "accessToken": "ya29.A0ARrdaM9d4CdzXvO4FKWvguYigtU73dIhJ516rCpb46n4vP5e1OS_Sd1fKHPZb2ymQKZOLHBivHJGGAj68BxBqRZshMw5ohmpc7-hciKWBWyLISnhmixlHzziZ4ZF41QZP9sjnZrisKd7fQuN1_oXggchcs4Z"
+  "mailserverhost": "smtp.gmail.com",
+  "mailserverid": "traineenaman.techgropse@gmail.com",
+  "mailserverpassword": "Gropse@7117"
 }

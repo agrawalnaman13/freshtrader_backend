@@ -17,8 +17,7 @@ exports.createConsignment = async (req, res, next) => {
       grader_name,
       status,
       documents_received,
-      smcs_purchase,
-      cash_purchase,
+      purchase,
       products,
     } = req.body;
     console.log(req.body);
@@ -34,8 +33,7 @@ exports.createConsignment = async (req, res, next) => {
       grader_name,
       status,
       documents_received,
-      smcs_purchase,
-      cash_purchase,
+      purchase,
       products,
     });
     if (status === "ACTIVE") {
@@ -225,8 +223,7 @@ exports.getConsignments = async (req, res, next) => {
           grader_name: 1,
           status: 1,
           documents_received: 1,
-          smcs_purchase: 1,
-          cash_purchase: 1,
+          purchase: 1,
           products: 1,
           createdAt: 1,
           year: {

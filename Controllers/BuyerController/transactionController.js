@@ -6,6 +6,11 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const moment = require("moment");
 const { parse } = require("json2csv");
 const SellerPartnerBuyers = require("../../Models/SellerModels/partnerBuyersSchema");
+const Buyer = require("../../Models/BuyerModels/buyerSchema");
+const pdf = require("html-pdf");
+const fs = require("fs");
+const path = require("path");
+const ejs = require("ejs");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { from, till, sortBy } = req.body;
@@ -118,28 +123,89 @@ exports.getTransactions = async (req, res, next) => {
 
 exports.downloadTransactionCSV = async (req, res, next) => {
   try {
-    const { transactions } = req.body;
-    if (!transactions.length) {
+    const { transactionIds, report_type } = req.body;
+    if (!transactionIds.length) {
       return res
         .status(200)
-        .json(error("Transactions are required", res.statusCode));
+        .json(error("Transaction ids are required", res.statusCode));
     }
-    const fields = ["DATE", "TIME", "REF", "TYPE", "SELLER", "TOTAL", "STATUS"];
-    let response = [];
-    for (const transaction of transactions) {
-      response.push({
-        DATE: moment(transaction.createdAt).format("LL"),
-        TIME: moment(transaction.createdAt).format("hh:mm A"),
-        REF: transaction.ref,
-        TYPE: transaction.type,
-        SELLER: transaction.seller.business_trading_name,
-        TOTAL: transaction.total,
-        STATUS: transaction.status,
-      });
+    if (!report_type) {
+      return res
+        .status(200)
+        .json(error("Report Type is required", res.statusCode));
     }
-    const opts = { fields };
-    const csv = parse(response, opts);
-    return res.status(200).send(csv);
+    const newTransactionIds = transactionIds.map((id) => {
+      return mongoose.Types.ObjectId(id);
+    });
+    const transactions = await Transaction.aggregate([
+      {
+        $match: {
+          _id: { $in: newTransactionIds },
+        },
+      },
+      {
+        $lookup: {
+          localField: "seller",
+          foreignField: "_id",
+          from: "wholesellers",
+          as: "seller",
+        },
+      },
+      { $unwind: "$seller" },
+    ]);
+    const buyer = await Buyer.findById(req.buyer._id).select("csv");
+    if (report_type === 1) {
+      const dirPath = path.join(
+        __dirname.replace("BuyerController", "templates"),
+        "/buyersTransaction.html"
+      );
+      const template = fs.readFileSync(dirPath, "utf8");
+      for (const transaction of transactions) {
+        transaction.createdAt = moment(transaction.createdAt).format("LLL");
+      }
+      var data = {
+        css: `${process.env.BASE_URL}/css/style1.css`,
+        logo: `${process.env.BASE_URL}/logo.png`,
+        list: transactions,
+      };
+      var html = ejs.render(template, { data: data });
+      var options = { format: "Letter" };
+      pdf
+        .create(html, options)
+        .toFile(
+          `./public/buyers/${req.buyer._id}/buyersTransaction.pdf`,
+          function (err, res1) {
+            if (err) return console.log(err);
+            console.log(res1);
+            res.download(res1.filename);
+          }
+        );
+    } else {
+      const fields = [
+        "DATE",
+        "TIME",
+        "REF",
+        "TYPE",
+        "SELLER",
+        "TOTAL",
+        "STATUS",
+      ];
+      let response = [];
+      for (const transaction of transactions) {
+        response.push({
+          DATE: moment(transaction.createdAt).format("LL"),
+          TIME: moment(transaction.createdAt).format("hh:mm A"),
+          REF: transaction.ref,
+          TYPE: transaction.type,
+          SELLER: transaction.seller.business_trading_name,
+          TOTAL: transaction.total,
+          STATUS: transaction.status,
+        });
+      }
+      const opts = { fields };
+      const csv = parse(response, opts);
+      return res.status(200).send(csv);
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

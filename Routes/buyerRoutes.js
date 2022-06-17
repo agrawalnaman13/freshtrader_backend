@@ -4,6 +4,7 @@ const {
   signup,
   login,
   getBuyerData,
+  updateAccountInformation,
 } = require("../Controllers/BuyerController/authController");
 const {
   orderProduct,
@@ -47,6 +48,11 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/getBuyerData", tokenAuthorisationBuyer, getBuyerData);
+router.get(
+  "/updateAccountInformation",
+  tokenAuthorisationBuyer,
+  updateAccountInformation
+);
 router.get("/getSellers", tokenAuthorisationBuyer, getSellers);
 router.post("/getSellersProducts", tokenAuthorisationBuyer, getSellersProducts);
 router.post("/addToCart", tokenAuthorisationBuyer, addToCart);

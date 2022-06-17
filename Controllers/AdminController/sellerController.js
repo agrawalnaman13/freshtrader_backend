@@ -40,7 +40,7 @@ exports.sellerSignup = async (req, res) => {
     if (!abn) {
       return res.status(200).json(error("Please provide abn", res.statusCode));
     }
-    if (checkABN(+abn)) {
+    if (!checkABN(+abn)) {
       return res.status(200).json(error("Invalid ABN", res.statusCode));
     }
     if (!entity_name) {

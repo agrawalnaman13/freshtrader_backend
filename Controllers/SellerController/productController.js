@@ -182,6 +182,53 @@ exports.updateSellerProduct = async (req, res, next) => {
   }
 };
 
+exports.undoSellerProduct = async (req, res, next) => {
+  try {
+    const { products } = req.body;
+    console.log(req.body);
+    if (!products.length) {
+      return res
+        .status(200)
+        .json(error("Products are required", res.statusCode));
+    }
+    for (const product of products) {
+      const pr = await SellerProduct.findById(product._id);
+      if (pr) {
+        await SellerProduct.findByIdAndUpdate(product._id, {
+          price: product.price,
+          add_gst: product.add_gst,
+          inventory_code: product.inventory_code,
+          available_on_order_app: product.available_on_order_app,
+          grades: product.grades,
+        });
+      } else {
+        await SellerProduct.create({
+          _id: product._id,
+          seller: product.seller,
+          variety: product.variety,
+          category: category,
+          type: product.type,
+          price: product.price,
+          add_gst: product.add_gst,
+          inventory_code: product.inventory_code,
+          available_on_order_app: product.available_on_order_app,
+          grades: product.grades,
+          units: product.units,
+          suppliers: product.suppliers,
+          price: product.price,
+          inventory_code: product.inventory_code,
+        });
+      }
+    }
+    return res
+      .status(200)
+      .json(success("Product updated successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.addProductSupplier = async (req, res, next) => {
   try {
     const { productId, suppliers } = req.body;

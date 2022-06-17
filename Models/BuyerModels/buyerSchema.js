@@ -48,9 +48,16 @@ const BuyerSchema = new mongoose.Schema(
       type: String,
     },
     plan: {
+      type: mongoose.Types.ObjectId,
+      ref: "subscriptions",
+    },
+    csv: {
       type: String,
-      enum: ["FREE", "SMALL BUSINESS", "ENTERPRISE"],
-      default: "ENTERPRISE",
+      enum: ["Xero", "MYOB", "Saasu", "Quickbooks", ""],
+      default: "",
+    },
+    report_email: {
+      type: String,
     },
     notify_counter_order: {
       type: Boolean,

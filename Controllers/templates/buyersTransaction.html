@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <link href=<%=data.css %> rel="stylesheet" />
+   </head>
+   <body>
+      <div class="fresh_trader_main">
+         <div class="container">
+            <div class="trader_main_inner">
+               <header class="freshtrader_header">
+                  <div class="row w-100 align-items-center">
+                     <div class="col px-0 text-center">
+                        <a class="header_menus">Transactions</a>
+                     </div>
+                  </div>
+               </header>
+               <div class="freshtrader_main_body table_overflow">
+                  <div class="freshtrader_main_data">
+                     <div class="row transactions_main comman_section_outer">
+                        <div class="col-12 comman_table transactions_table">
+                           <div class="table-responsive">
+                              <table class="table">
+                                 <tbody>
+                                    <% data.list.forEach((item)=>{%>
+                                    <tr>
+                                       <td>
+                                          <span class="Date_span"><%=item.createdAt %></span>
+                                          <span class="small_span"><%=item.type %></span>
+                                       </td>
+                                       <td>
+                                          <div class="row">
+                                             <div class="col-12">
+                                                <span class="Date_span"><%=item.seller.business_trading_name %></span> 
+                                             </div>
+                                             <div class="col-6">
+                                                <span class="small_span">#<%=item.ref %></span> 
+                                             </div>
+                                             <div class="col-6"> 
+                                                <a class="paid_a"><%=item.status %></a>
+                                             </div>
+                                          </div>
+                                       </td>
+                                       <td>$<%=item.total %></td>
+                                       <td><i class="fal fa-angle-right"></i></td>
+                                    </tr>
+                                    <%});%>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

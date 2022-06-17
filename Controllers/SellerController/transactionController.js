@@ -8,6 +8,7 @@ const { parse } = require("json2csv");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
+const sendMail = require("../../services/mail");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { date, sortBy, filterBy } = req.body;
@@ -21,6 +22,7 @@ exports.getTransactions = async (req, res, next) => {
           ref: 1,
           type: 1,
           total: 1,
+          is_smcs: 1,
           salesman: 1,
           station: 1,
           is_emailed: 1,
@@ -335,15 +337,21 @@ exports.deleteTransaction = async (req, res, next) => {
       );
       await consignment.save();
     }
-    await SellerPallets.findOneAndUpdate(
-      {
+    if (type === 1) {
+      const myPallets = await SellerPallets.findOne({
         seller: req.seller._id,
         taken_by: transaction.buyer,
-      },
-      {
-        pallets_taken: myPallets.pallets_taken - +transaction.pallets,
-      }
-    );
+      });
+      await SellerPallets.findOneAndUpdate(
+        {
+          seller: req.seller._id,
+          taken_by: transaction.buyer,
+        },
+        {
+          pallets_taken: myPallets.pallets_taken - +transaction.pallets,
+        }
+      );
+    }
     await Transaction.findByIdAndDelete(transactionId);
     res
       .status(200)
@@ -362,12 +370,42 @@ exports.deleteTransaction = async (req, res, next) => {
 
 exports.downloadTransactionCSV = async (req, res, next) => {
   try {
-    const { transactions } = req.body;
-    if (!transactions.length) {
+    const { transactionIds } = req.body;
+    if (!transactionIds.length) {
       return res
         .status(200)
         .json(error("Transactions are required", res.statusCode));
     }
+    const newTransactionIds = transactionIds.map((id) => {
+      return mongoose.Types.ObjectId(id);
+    });
+    const transactions = await Transaction.aggregate([
+      {
+        $match: {
+          _id: { $in: newTransactionIds },
+        },
+      },
+      {
+        $lookup: {
+          localField: "buyer",
+          foreignField: "_id",
+          from: "buyers",
+          as: "buyer",
+        },
+      },
+      { $unwind: "$buyer" },
+      {
+        $lookup: {
+          localField: "salesman",
+          foreignField: "_id",
+          from: "sellersalesmen",
+          as: "salesman",
+        },
+      },
+      { $unwind: "$salesman" },
+    ]);
+
+    const seller = await Wholeseller.findById(req.seller._id).select("csv");
     const fields = [
       "DATE",
       "TIME",
@@ -436,6 +474,7 @@ exports.emailTransactionToBuyer = async (req, res, next) => {
     }
     transaction.is_emailed = true;
     await transaction.save();
+    // await sendMail(transaction.buyer.email, "Freshtraders", "");
     res
       .status(200)
       .json(success("Email Sent Successfully", {}, res.statusCode));
@@ -459,6 +498,7 @@ exports.emailAllTransactionsToBuyers = async (req, res, next) => {
       await Transaction.findByIdAndUpdate(transactionId, {
         is_emailed: true,
       });
+      await sendMail(transaction.buyer.email, "Freshtraders", "");
     }
     res
       .status(200)
