@@ -124,6 +124,17 @@ exports.getTransactions = async (req, res, next) => {
 exports.downloadTransactionCSV = async (req, res, next) => {
   try {
     const { transactionIds, report_type } = req.body;
+    const buyer = await Buyer.findById(req.params.id).populate("plan");
+    if (!buyer.plan || buyer.plan?.plan_name === "Free") {
+      return res
+        .status(200)
+        .json(
+          error(
+            "Please purchase Subscription plan to download transaction",
+            res.statusCode
+          )
+        );
+    }
     if (!transactionIds.length) {
       return res
         .status(200)
@@ -153,7 +164,6 @@ exports.downloadTransactionCSV = async (req, res, next) => {
       },
       { $unwind: "$seller" },
     ]);
-    const buyer = await Buyer.findById(req.buyer._id).select("csv");
     if (report_type === 1) {
       const dirPath = path.join(
         __dirname.replace("BuyerController", "templates"),

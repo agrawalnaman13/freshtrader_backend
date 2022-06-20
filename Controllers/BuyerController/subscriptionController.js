@@ -3,6 +3,7 @@ const moment = require("moment");
 const { success, error } = require("../../service_response/adminApiResponse");
 const Subscription = require("../../Models/AdminModels/subscriptionSchema");
 const SubscriptionHistory = require("../../Models/BuyerModels/subscriptionHistorySchema");
+const Buyer = require("../../Models/BuyerModels/buyerSchema");
 exports.buyPlan = async (req, res, next) => {
   try {
     const { planId } = req.body;
@@ -47,5 +48,27 @@ exports.getMyPlan = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.checkPlan = async () => {
+  try {
+    const plans = await SubscriptionHistory.find({
+      valid_till: { $lte: new Date(Date.now()) },
+    });
+    for (const plan of plans) {
+      const free = await Subscription.findOne({
+        plan_name: "Free",
+      });
+      if (free) {
+        await Buyer.findByIdAndUpdate(plan.buyer, {
+          plan: free._id,
+        });
+      }
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
   }
 };

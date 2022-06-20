@@ -73,14 +73,13 @@ exports.signup = async (req, res, next) => {
       is_smcs: is_smcs,
       market: market,
     });
-    await ourBuyer.save();
     let date = moment.utc();
     date = moment(date).format("MM-DD-YYYY");
     const jDateToday = new Date(date);
     const local_date = moment(jDateToday);
     const till = moment(local_date).add(1, "months");
     const plan = await Subscription.findOne({
-      plan_name: "ENTERPRISE",
+      plan_name: "Enterprise",
     });
     if (plan) {
       await SubscriptionHistory.create({
@@ -88,7 +87,10 @@ exports.signup = async (req, res, next) => {
         plan: plan._id,
         valid_till: till,
       });
+      ourBuyer.plan = plan._id;
+      ourBuyer.subscription_week = Date.now() + 7 * 24 * 60 * 60 * 1000;
     }
+    await ourBuyer.save();
     const sellers = await Wholeseller.find();
     for (const seller of sellers) {
       await SellerPartnerBuyers.create({

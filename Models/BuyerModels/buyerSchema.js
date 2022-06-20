@@ -71,6 +71,15 @@ const BuyerSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    order_count: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    subscription_week: {
+      type: Date,
+      required: false,
+    },
     status: {
       type: Boolean,
       default: true,

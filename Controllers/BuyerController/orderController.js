@@ -6,6 +6,7 @@ const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
+const moment = require("moment");
 exports.getSellers = async (req, res, next) => {
   try {
     const sellers = await SellerPartnerBuyers.aggregate([
@@ -292,6 +293,25 @@ exports.orderProduct = async (req, res, next) => {
     const { seller, product, pick_up_date, pick_up_time, notes, payment } =
       req.body;
     console.log(req.body);
+    const buyer = await Buyer.findById(req.params.id).populate("plan");
+    if (!buyer.plan || buyer.plan?.plan_name === "Free") {
+      if (buyer.order_count === 5)
+        return res
+          .status(200)
+          .json(
+            error("You can't send more than 5 orders in a week", res.statusCode)
+          );
+    } else if (!buyer.plan || buyer.plan?.plan_name === "Small Enterprise") {
+      if (buyer.order_count === 15)
+        return res
+          .status(200)
+          .json(
+            error(
+              "You can't send more than 15 orders in a week",
+              res.statusCode
+            )
+          );
+    }
     if (!seller) {
       return res
         .status(200)
@@ -339,6 +359,8 @@ exports.orderProduct = async (req, res, next) => {
       buyer: req.buyer._id,
       seller,
     });
+    buyer.order_count = (buyer.order_count ? buyer.order_count : 0) + 1;
+    await buyer.save();
     res
       .status(200)
       .json(success("Order sent successfully", { order }, res.statusCode));
@@ -392,6 +414,14 @@ exports.reorderProduct = async (req, res, next) => {
   try {
     const { orderId, pick_up_date, pick_up_time, notes, payment } = req.body;
     console.log(req.body);
+    const buyer = await Buyer.findById(req.params.id).populate("plan");
+    if (!buyer.plan || buyer.plan?.plan_name === "Free") {
+      return res
+        .status(200)
+        .json(
+          error("Please purchase Subscription plan to reorder", res.statusCode)
+        );
+    }
     if (!orderId) {
       return res
         .status(200)
@@ -537,5 +567,56 @@ exports.getOrderNotification = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.checkOrderWeek = async () => {
+  try {
+    const buyers = await Buyer.find({
+      subscription_week: { $lte: new Date(Date.now()) },
+    });
+    for (const buyer of buyers) {
+      await Buyer.findByIdAndUpdate(buyer._id, {
+        subscription_week: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        order_count: 0,
+      });
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+};
+
+exports.deleteIncompleteOrders = async () => {
+  try {
+    const date = moment(new Date(Date.now()), "DD-MM-YYYY").subtract(2, "days");
+    const carts = await Cart.find({
+      createdAt: { $lte: date },
+    });
+    for (const cart of carts) {
+      await Cart.findByIdAndDelete(cart._id);
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+};
+
+exports.deleteUnconfirmedOrders = async () => {
+  try {
+    const date = moment(new Date(Date.now()), "DD-MM-YYYY").subtract(2, "days");
+    const orders = await Order.find({
+      status: "PENDING",
+      updatedAt: { $lte: date },
+    });
+    for (const order of orders) {
+      await Order.findByIdAndDelete(order._id);
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
   }
 };
