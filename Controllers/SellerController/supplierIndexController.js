@@ -272,7 +272,9 @@ exports.getSuppliersProduct = async (req, res, next) => {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
           status: true,
-          suppliers: { $elemMatch: { $eq: supplierId } },
+          suppliers: {
+            $elemMatch: { $eq: mongoose.Types.ObjectId(supplierId) },
+          },
         },
       },
       {

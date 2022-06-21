@@ -260,6 +260,8 @@ exports.processTransaction = async (req, res, next) => {
       make_non_smcs,
       cash_transaction_without_payment,
       email,
+      prev_trans,
+      transactionId,
     } = req.body;
     console.log(req.body);
     if (!buyer) {
@@ -319,6 +321,13 @@ exports.processTransaction = async (req, res, next) => {
         return res.status(200).json(error("Invalid order id", res.statusCode));
       }
     }
+    if (prev_trans) {
+      if (!transactionId) {
+        return res
+          .status(200)
+          .json(error("Transaction id is required", res.statusCode));
+      }
+    }
     let query = {
       seller: req.seller._id,
       buyer,
@@ -359,202 +368,208 @@ exports.processTransaction = async (req, res, next) => {
     }
     if (station) query.station = station;
     if (orderId) query.orderId = orderId;
-    const transaction = await Transaction.create(query);
-    const ref = String(transaction._id).slice(18, 24);
-    transaction.ref = ref;
-    await transaction.save();
-    for (const product of products) {
-      const consignment = await Purchase.findById(product.consignment);
-      let sold = 0,
-        voids = 0;
-      consignment.products = consignment.products.map((p) => {
-        console.log(p);
-        if (String(p.productId) === String(product.productId)) {
-          if (type === "CREDIT NOTE" && product.refund_type === "VOID") {
-            p.sold -= product.quantity;
-            p.void += product.quantity;
-          } else if (
-            type === "CREDIT NOTE" &&
-            product.refund_type === "RETURN"
-          ) {
-            p.sold -= product.quantity;
-          } else {
-            p.sold += product.quantity;
+    let transaction;
+    if (prev_trans && transactionId) {
+      transaction = await Transaction.findByIdAndUpdate(transactionId, query);
+    } else {
+      transaction = await Transaction.create(query);
+      const ref = String(transaction._id).slice(18, 24);
+      transaction.ref = ref;
+      await transaction.save();
+      for (const product of products) {
+        const consignment = await Purchase.findById(product.consignment);
+        let sold = 0,
+          voids = 0;
+        consignment.products = consignment.products.map((p) => {
+          console.log(p);
+          if (String(p.productId) === String(product.productId)) {
+            if (type === "CREDIT NOTE" && product.refund_type === "VOID") {
+              p.sold -= product.quantity;
+              p.void += product.quantity;
+            } else if (
+              type === "CREDIT NOTE" &&
+              product.refund_type === "RETURN"
+            ) {
+              p.sold -= product.quantity;
+            } else {
+              p.sold += product.quantity;
+            }
+            p.sold_percentage = (p.sold / p.received) * 100;
+            p.sales = p.sold * p.average_sales_price;
+            p.inv_on_hand = p.received - p.sold - p.void;
+            p.gross_profit = p.received * p.cost_per_unit - p.sales;
+            p.gross_profit_percentage = (p.gross_profit / p.sales) * 100;
+            sold = p.sold;
+            voids = p.void;
           }
-          p.sold_percentage = (p.sold / p.received) * 100;
-          p.sales = p.sold * p.average_sales_price;
-          p.inv_on_hand = p.received - p.sold - p.void;
-          p.gross_profit = p.received * p.cost_per_unit - p.sales;
-          p.gross_profit_percentage = (p.gross_profit / p.sales) * 100;
-          sold = p.sold;
-          voids = p.void;
-        }
-        return p;
-      });
-      await consignment.save();
-      await Inventory.findOneAndUpdate(
-        {
-          seller: req.seller._id,
-          productId: product.productId,
-          consignment: product.consignment,
-        },
-        {
-          sold: +sold,
-          void: +voids,
-        }
-      );
-      if (type !== "CREDIT NOTE" || refund_type !== "VOID") {
-        const myPallets = await SellerPallets.findOne({
-          seller: req.seller._id,
-          taken_by: buyer,
+          return p;
         });
-        if (!myPallets) {
-          await SellerPallets.create({
+        await consignment.save();
+        await Inventory.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            productId: product.productId,
+            consignment: product.consignment,
+          },
+          {
+            sold: +sold,
+            void: +voids,
+          }
+        );
+        if (type !== "CREDIT NOTE" || refund_type !== "VOID") {
+          const myPallets = await SellerPallets.findOne({
             seller: req.seller._id,
             taken_by: buyer,
-            pallets_taken: +pallets,
           });
-        } else {
-          await SellerPallets.findOneAndUpdate(
-            {
+          if (!myPallets) {
+            await SellerPallets.create({
               seller: req.seller._id,
               taken_by: buyer,
+              pallets_taken: +pallets,
+            });
+          } else {
+            await SellerPallets.findOneAndUpdate(
+              {
+                seller: req.seller._id,
+                taken_by: buyer,
+              },
+              {
+                pallets_taken:
+                  type === "CREDIT NOTE" && refund_type === "RETURN"
+                    ? myPallets.pallets_taken - +pallets
+                    : myPallets.pallets_taken + +pallets,
+              }
+            );
+          }
+          if (orderId && refund_type !== "RETURN") {
+            await Order.findByIdAndUpdate(orderId, {
+              status: "COMPLETED",
+            });
+          }
+        }
+        const customer = await SellerPartnerBuyers.findOne({
+          seller: req.seller._id,
+          buyer: buyer,
+        });
+        if (customer) {
+          customer.total += +total;
+          customer.opening += type !== "CREDIT NOTE" ? +total : 0;
+          customer.credit += type === "CREDIT NOTE" ? +total : 0;
+          customer.bought += +total;
+          customer.paid +=
+            type === "CARD" ||
+            (type === "CASH" && !cash_transaction_without_payment)
+              ? +total
+              : 0;
+          customer.closing = customer.opening - customer.paid - customer.credit;
+          await SellerPartnerBuyers.findOneAndUpdate(
+            {
+              seller: req.seller._id,
+              buyer: buyer,
             },
             {
-              pallets_taken:
-                type === "CREDIT NOTE" && refund_type === "RETURN"
-                  ? myPallets.pallets_taken - +pallets
-                  : myPallets.pallets_taken + +pallets,
+              opening: customer.opening,
+              total: customer.total,
+              credit: customer.credit,
+              bought: customer.bought,
+              paid: customer.paid,
+              closing: customer.closing,
             }
           );
         }
-        if (orderId && refund_type !== "RETURN") {
-          await Order.findByIdAndUpdate(orderId, {
-            status: "COMPLETED",
-          });
-        }
       }
-      const customer = await SellerPartnerBuyers.findOne({
-        seller: req.seller._id,
-        buyer: buyer,
-      });
-      if (customer) {
-        customer.total += +total;
-        customer.opening += type !== "CREDIT NOTE" ? +total : 0;
-        customer.credit += type === "CREDIT NOTE" ? +total : 0;
-        customer.bought += +total;
-        customer.paid +=
-          type === "CARD" ||
-          (type === "CASH" && !cash_transaction_without_payment)
-            ? +total
-            : 0;
-        customer.closing = customer.opening - customer.paid - customer.credit;
-        await SellerPartnerBuyers.findOneAndUpdate(
-          {
-            seller: req.seller._id,
-            buyer: buyer,
-          },
-          {
-            opening: customer.opening,
-            total: customer.total,
-            credit: customer.credit,
-            bought: customer.bought,
-            paid: customer.paid,
-            closing: customer.closing,
-          }
-        );
+      const seller = await Wholeseller.findById(req.seller._id);
+      for (const product of products) {
+        product.productId = await SellerProduct.findById(
+          product.productId
+        ).populate(["variety", "type", "units"]);
+        product.consignment = await Purchase.findById(
+          product.consignment
+        ).populate("supplier");
       }
-    }
-    const seller = await Wholeseller.findById(req.seller._id);
-    for (const product of products) {
-      product.productId = await SellerProduct.findById(
-        product.productId
-      ).populate(["variety", "type", "units"]);
-      product.consignment = await Purchase.findById(
-        product.consignment
-      ).populate("supplier");
-    }
-    const status =
-      type === "CARD" || (type === "CASH" && !cash_transaction_without_payment)
-        ? "PAID"
-        : "UNPAID";
-    const quantity = products.reduce(function (a, b) {
-      return a + b.quantity;
-    }, 0);
-    const data = {
-      logo: `${process.env.BASE_URL}/${seller.thermal_receipt_invoice_logo}`,
-      products: products,
-      seller: seller,
-      buyer: buyer_data,
-      ref: "",
-      payment: type,
-      date: {
-        day: moment(Date.now()).format("dddd"),
-        date: moment(Date.now()).format("DD/MM/YYYY"),
-        time: moment(Date.now()).format("hh:mm"),
-        a: moment(Date.now()).format("A"),
-      },
-      salesmen: salesman_data,
-      pallets: pallets,
-      delivery_note: delivery_note,
-      total: total,
-      quantity: quantity,
-      paid: status === "PAID" ? total : 0,
-      refund_type: refund_type,
-    };
-    if ((print === "INVOICE" || print === "BOTH") && type !== "CREDIT NOTE") {
-      const dirPath = path.join(
-        __dirname.replace("SellerController", "templates"),
-        "/invoice.html"
-      );
-      const template = fs.readFileSync(dirPath, "utf8");
-      var html = ejs.render(template, { data: data });
-      var options = { format: "Letter" };
-      pdf
-        .create(html, options)
-        .toFile(
-          `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
-          function (err, res1) {
-            if (err) return console.log(err);
-          }
+      const status =
+        type === "CARD" ||
+        (type === "CASH" && !cash_transaction_without_payment)
+          ? "PAID"
+          : "UNPAID";
+      const quantity = products.reduce(function (a, b) {
+        return a + b.quantity;
+      }, 0);
+      const data = {
+        logo: `${process.env.BASE_URL}/${seller.thermal_receipt_invoice_logo}`,
+        products: products,
+        seller: seller,
+        buyer: buyer_data,
+        ref: "",
+        payment: type,
+        date: {
+          day: moment(Date.now()).format("dddd"),
+          date: moment(Date.now()).format("DD/MM/YYYY"),
+          time: moment(Date.now()).format("hh:mm"),
+          a: moment(Date.now()).format("A"),
+        },
+        salesmen: salesman_data,
+        pallets: pallets,
+        delivery_note: delivery_note,
+        total: total,
+        quantity: quantity,
+        paid: status === "PAID" ? total : 0,
+        refund_type: refund_type,
+      };
+      if ((print === "INVOICE" || print === "BOTH") && type !== "CREDIT NOTE") {
+        const dirPath = path.join(
+          __dirname.replace("SellerController", "templates"),
+          "/invoice.html"
         );
-    }
-    if (
-      (print === "DELIVERY DOCKET" || print === "BOTH") &&
-      type !== "CREDIT NOTE"
-    ) {
-      const dirPath = path.join(
-        __dirname.replace("SellerController", "templates"),
-        "/delivery_docket.html"
-      );
-      const template = fs.readFileSync(dirPath, "utf8");
-      var html = ejs.render(template, { data: data });
-      var options = { format: "Letter" };
-      pdf
-        .create(html, options)
-        .toFile(
-          `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
-          function (err, res1) {
-            if (err) return console.log(err);
-          }
+        const template = fs.readFileSync(dirPath, "utf8");
+        var html = ejs.render(template, { data: data });
+        var options = { format: "Letter" };
+        pdf
+          .create(html, options)
+          .toFile(
+            `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
+            function (err, res1) {
+              if (err) return console.log(err);
+            }
+          );
+      }
+      if (
+        (print === "DELIVERY DOCKET" || print === "BOTH") &&
+        type !== "CREDIT NOTE"
+      ) {
+        const dirPath = path.join(
+          __dirname.replace("SellerController", "templates"),
+          "/delivery_docket.html"
         );
-    }
-    if (type === "CREDIT NOTE") {
-      const dirPath = path.join(
-        __dirname.replace("SellerController", "templates"),
-        "/credit_note.html"
-      );
-      const template = fs.readFileSync(dirPath, "utf8");
-      var html = ejs.render(template, { data: data });
-      var options = { format: "Letter" };
-      pdf
-        .create(html, options)
-        .toFile(
-          `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
-          function (err, res1) {
-            if (err) return console.log(err);
-          }
+        const template = fs.readFileSync(dirPath, "utf8");
+        var html = ejs.render(template, { data: data });
+        var options = { format: "Letter" };
+        pdf
+          .create(html, options)
+          .toFile(
+            `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
+            function (err, res1) {
+              if (err) return console.log(err);
+            }
+          );
+      }
+      if (type === "CREDIT NOTE") {
+        const dirPath = path.join(
+          __dirname.replace("SellerController", "templates"),
+          "/credit_note.html"
         );
+        const template = fs.readFileSync(dirPath, "utf8");
+        var html = ejs.render(template, { data: data });
+        var options = { format: "Letter" };
+        pdf
+          .create(html, options)
+          .toFile(
+            `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
+            function (err, res1) {
+              if (err) return console.log(err);
+            }
+          );
+      }
     }
     res
       .status(200)

@@ -122,7 +122,17 @@ exports.getSMCSReport = async (req, res, next) => {
           function (err, res1) {
             if (err) return console.log(err);
             console.log(res1);
-            res.download(res1.filename);
+            res
+              .status(200)
+              .json(
+                success(
+                  "Report fetched Successfully",
+                  {
+                    file: `${process.env.BASE_URL}/sellers/${req.seller._id}/smcs_report.pdf`,
+                  },
+                  res.statusCode
+                )
+              );
           }
         );
     } else {
