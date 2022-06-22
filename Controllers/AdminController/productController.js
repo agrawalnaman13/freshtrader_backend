@@ -4,7 +4,7 @@ const ProductVariety = require("../../Models/AdminModels/productVarietySchema");
 const Unit = require("../../Models/AdminModels/unitSchema");
 const ProductType = require("../../Models/AdminModels/productTypeSchema");
 const ProductUnit = require("../../Models/AdminModels/productUnitSchema");
-
+const MongoClient = require("mongodb").MongoClient;
 exports.addVariety = async (req, res, next) => {
   try {
     const newVariety = await ProductVariety.create(req.body);
@@ -29,7 +29,7 @@ exports.getVariety = async (req, res, next) => {
     const varieties = await ProductVariety.find({
       product: product,
       $or: [
-        { added_by: "admin" },
+        { added_by: "Admin" },
         { added_by: undefined },
         { added_by: req.seller._id },
       ],
@@ -72,7 +72,7 @@ exports.addUnit = async (req, res, next) => {
 exports.getUnit = async (req, res, next) => {
   try {
     const units = await Unit.find({
-      $or: [{ added_by: "admin" }, { added_by: undefined }],
+      $or: [{ added_by: "Admin" }, { added_by: undefined }],
     });
     return res
       .status(200)
@@ -110,7 +110,7 @@ exports.getProductType = async (req, res, next) => {
     const types = await ProductType.find({
       variety: variety,
       $or: [
-        { added_by: "admin" },
+        { added_by: "Admin" },
         { added_by: undefined },
         { added_by: req.seller._id },
       ],
@@ -146,7 +146,7 @@ exports.getProductUnit = async (req, res, next) => {
     const units = await ProductUnit.find({
       variety: variety,
       $or: [
-        { added_by: "admin" },
+        { added_by: "Admin" },
         { added_by: undefined },
         { added_by: req.seller._id },
       ],
@@ -156,6 +156,52 @@ exports.getProductUnit = async (req, res, next) => {
     return res
       .status(200)
       .json(success("Unit Fetched Successfully", { units }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.importDB = async (req, res, next) => {
+  try {
+    var url = "mongodb://localhost:27017/";
+    MongoClient.connect(url, function (err, db) {
+      if (err) throw err;
+      const dbo = db.db("Freshtrader");
+      const units = require("./units.json");
+      dbo.collection("units").insertMany(units, function (err, res) {
+        if (err) throw err;
+        console.log("Number of documents inserted: " + res.insertedCount);
+        db.close();
+      });
+      const producttypes = require("./producttypes.json");
+      dbo
+        .collection("producttypes")
+        .insertMany(producttypes, function (err, res) {
+          if (err) throw err;
+          console.log("Number of documents inserted: " + res.insertedCount);
+          db.close();
+        });
+      const productunits = require("./productunits.json");
+      dbo
+        .collection("productunits")
+        .insertMany(productunits, function (err, res) {
+          if (err) throw err;
+          console.log("Number of documents inserted: " + res.insertedCount);
+          db.close();
+        });
+      const productvarieties = require("./productvarieties.json");
+      dbo
+        .collection("productvarieties")
+        .insertMany(productvarieties, function (err, res) {
+          if (err) throw err;
+          console.log("Number of documents inserted: " + res.insertedCount);
+          db.close();
+        });
+    });
+    return res
+      .status(200)
+      .json(success("Products imported Successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

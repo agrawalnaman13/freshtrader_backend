@@ -32,7 +32,8 @@ mongoose
   })
   .then((con) => console.log("connected to remote database"));
 const port = 3001;
-process.env["BASE_URL"] = "http://localhost:3001";
+process.env["BASE_URL"] =
+  "http://ec2-54-197-73-213.compute-1.amazonaws.com:3001";
 cron.schedule("0 0 * * *", async () => {
   await checkOverdueTransactions();
   await setCustomerInfo();
