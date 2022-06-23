@@ -89,7 +89,6 @@ exports.getSMCSReport = async (req, res, next) => {
       return a + b.total;
     }, 0);
     const smcs_code = report.reduce(function (a, b) {
-      console.log(a, b.buyer?.smcs_code);
       return a + +b.buyer?.smcs_code;
     }, 0);
     const currentDate = new Date();
@@ -122,17 +121,15 @@ exports.getSMCSReport = async (req, res, next) => {
           function (err, res1) {
             if (err) return console.log(err);
             console.log(res1);
-            res
-              .status(200)
-              .json(
-                success(
-                  "Report fetched Successfully",
-                  {
-                    file: `${process.env.BASE_URL}/sellers/${req.seller._id}/smcs_report.pdf`,
-                  },
-                  res.statusCode
-                )
-              );
+            res.status(200).json(
+              success(
+                "Report fetched Successfully",
+                {
+                  file: `${process.env.BASE_URL}/sellers/${req.seller._id}/smcs_report.pdf`,
+                },
+                res.statusCode
+              )
+            );
           }
         );
     } else {
