@@ -125,7 +125,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
   try {
     const { transactionIds, report_type } = req.body;
     const buyer = await Buyer.findById(req.params.id).populate("plan");
-    if (!buyer.plan || buyer.plan?.plan_name === "Free") {
+    if (buyer.plan.plan_name === "Free") {
       return res
         .status(200)
         .json(
