@@ -89,7 +89,7 @@ exports.getSMCSReport = async (req, res, next) => {
       return a + b.total;
     }, 0);
     const smcs_code = report.reduce(function (a, b) {
-      return a + +b.buyer?.smcs_code;
+      return a + +b.buyer.smcs_code;
     }, 0);
     const currentDate = new Date();
     const startDate = new Date(currentDate.getFullYear(), 0, 1);
