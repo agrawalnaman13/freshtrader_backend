@@ -160,7 +160,11 @@ exports.getProductUnit = async (req, res, next) => {
       {
         $match: {
           variety: mongoose.Types.ObjectId(variety),
-          $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
+          $or: [
+            { added_by: "Admin" },
+            { added_by: undefined },
+            { added_by: req.seller._id },
+          ],
         },
       },
       {
