@@ -112,7 +112,7 @@ exports.getProductType = async (req, res, next) => {
       // variety: variety,
       // $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
     })
-      .populate("variety")
+      // .populate("variety")
       .sort({ type: 1 });
     return res
       .status(200)
