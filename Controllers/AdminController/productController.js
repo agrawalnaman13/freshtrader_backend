@@ -111,7 +111,7 @@ exports.getProductType = async (req, res, next) => {
     const types = await ProductType.aggregate([
       {
         $match: {
-          variety: mongoose.Types.ObjectId(variety),
+          // variety: mongoose.Types.ObjectId(variety),
           $or: [
             { added_by: "Admin" },
             { added_by: undefined },
