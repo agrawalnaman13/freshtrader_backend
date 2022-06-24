@@ -109,8 +109,8 @@ exports.getProductType = async (req, res, next) => {
     const { variety } = req.body;
     console.log(req.body);
     const types = await ProductType.find({
-      variety: mongoose.Types.ObjectId(variety),
-      $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
+      variety: variety,
+      // $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
     })
       .populate("variety")
       .sort({ type: 1 });
