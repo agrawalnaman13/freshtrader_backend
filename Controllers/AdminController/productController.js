@@ -175,21 +175,22 @@ exports.importDB = async (req, res, next) => {
       //     if (err) throw err;
       //     console.log("Number of documents inserted: " + res.insertedCount);
       //   });
-      // const productunits = require("./productunits.json");
-      // dbo
-      //   .collection("productunits")
-      //   .insertMany(productunits, function (err, res) {
-      //     if (err) throw err;
-      //     console.log("Number of documents inserted: " + res.insertedCount);
-      //   });
-      const productvarieties = require("./productvarieties.json");
+      const productunits = require("./productunits.json");
       dbo
-        .collection("productvarieties")
-        .insertMany(productvarieties, function (err, res) {
+        .collection("productunits")
+        .insertMany(productunits, function (err, res) {
           if (err) throw err;
           console.log("Number of documents inserted: " + res.insertedCount);
           db.close();
         });
+      // const productvarieties = require("./productvarieties.json");
+      // dbo
+      //   .collection("productvarieties")
+      //   .insertMany(productvarieties, function (err, res) {
+      //     if (err) throw err;
+      //     console.log("Number of documents inserted: " + res.insertedCount);
+      //     db.close();
+      //   });
     });
     return res
       .status(200)
