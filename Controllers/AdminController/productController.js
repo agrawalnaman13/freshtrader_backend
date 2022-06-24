@@ -107,8 +107,12 @@ exports.addProductType = async (req, res, next) => {
 exports.getProductType = async (req, res, next) => {
   try {
     const { variety } = req.body;
-    const types = await ProductType.find()
-    .sort({ type: 1 });
+    const types = await ProductType.find({
+      variety: variety,
+      $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
+    })
+      .populate("variety")
+      .sort({ type: 1 });
     return res
       .status(200)
       .json(success("Type Fetched Successfully", { types }, res.statusCode));
