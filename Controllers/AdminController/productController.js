@@ -111,7 +111,7 @@ exports.getProductType = async (req, res, next) => {
     const types = await ProductType.aggregate([
       {
         $match: {
-          // variety: mongoose.Types.ObjectId(variety),
+          variety: mongoose.Types.ObjectId(variety),
           $or: [
             { added_by: "Admin" },
             { added_by: undefined },
@@ -198,26 +198,45 @@ exports.importDB = async (req, res, next) => {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       const dbo = db.db("Freshtrader");
-      const units = require("./units.json");
+      let units = require("./units.json");
+      units = units.map((item) => {
+        item._id = mongoose.Types.ObjectId(item._id);
+        return item;
+      });
       dbo.collection("units").insertMany(units, function (err, res) {
         if (err) throw err;
         console.log("Number of documents inserted: " + res.insertedCount);
       });
-      const productvarieties = require("./productvarieties.json");
+      let productvarieties = require("./productvarieties.json");
+      productvarieties = productvarieties.map((item) => {
+        item._id = mongoose.Types.ObjectId(item._id);
+        return item;
+      });
       dbo
         .collection("productvarieties")
         .insertMany(productvarieties, function (err, res) {
           if (err) throw err;
           console.log("Number of documents inserted: " + res.insertedCount);
         });
-      const producttypes = require("./producttypes.json");
+      let producttypes = require("./producttypes.json");
+      producttypes = producttypes.map((item) => {
+        item._id = mongoose.Types.ObjectId(item._id);
+        item.variety = mongoose.Types.ObjectId(item.variety);
+        return item;
+      });
       dbo
         .collection("producttypes")
         .insertMany(producttypes, function (err, res) {
           if (err) throw err;
           console.log("Number of documents inserted: " + res.insertedCount);
         });
-      const productunits = require("./productunits.json");
+      let productunits = require("./productunits.json");
+      productunits = productunits.map((item) => {
+        item._id = mongoose.Types.ObjectId(item._id);
+        item.variety = mongoose.Types.ObjectId(item.variety);
+        item.unit = mongoose.Types.ObjectId(item.unit);
+        return item;
+      });
       dbo
         .collection("productunits")
         .insertMany(productunits, function (err, res) {
