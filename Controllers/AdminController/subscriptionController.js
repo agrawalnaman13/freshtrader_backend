@@ -125,3 +125,39 @@ exports.changeSubscriptionStatus = async (req, res) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.updateSubscription = async (req, res) => {
+  try {
+    const { subscriptionId, plan_price, plan_duration } = req.body;
+    if (!subscriptionId) {
+      return res
+        .status(200)
+        .json(error("Please provide your subscription id", res.statusCode));
+    }
+    const subscription = await Subscription.findById(subscriptionId);
+    if (!subscription) {
+      return res
+        .status(200)
+        .json(error("Invalid subscription id", res.statusCode));
+    }
+    if (!plan_price) {
+      return res
+        .status(200)
+        .json(error("Please provide your plan price", res.statusCode));
+    }
+    if (!plan_duration) {
+      return res
+        .status(200)
+        .json(error("Please provide your plan duration", res.statusCode));
+    }
+    subscription.plan_price = plan_price;
+    subscription.plan_duration = plan_duration;
+    await subscription.save();
+    res
+      .status(200)
+      .json(success("Subscription Updated Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};

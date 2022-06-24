@@ -47,6 +47,7 @@ const {
   getSubscriptionDetail,
   getSubscriptionList,
   changeSubscriptionStatus,
+  updateSubscription,
 } = require("../Controllers/AdminController/subscriptionController");
 const {
   getSupport,
@@ -134,6 +135,7 @@ router.get(
   tokenAdminAuthorisation,
   changeSubscriptionStatus
 );
+router.post("/updateSubscription", tokenAdminAuthorisation, updateSubscription);
 router.get("/getDashboardCount", tokenAdminAuthorisation, getDashboardCount);
 router.post("/replySupport", tokenAdminAuthorisation, replySupport);
 router.get("/deleteSupport/:id", tokenAdminAuthorisation, deleteSupport);
