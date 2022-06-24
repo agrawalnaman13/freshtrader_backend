@@ -178,13 +178,13 @@ exports.getProductUnit = async (req, res, next) => {
       { $unwind: "$variety" },
       {
         $lookup: {
-          localField: "units",
+          localField: "unit",
           foreignField: "_id",
           from: "units",
-          as: "units",
+          as: "unit",
         },
       },
-      { $unwind: "$units" },
+      { $unwind: "$unit" },
       { $sort: { "unit.weight": 1 } },
     ]);
     return res
