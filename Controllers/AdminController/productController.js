@@ -168,19 +168,12 @@ exports.importDB = async (req, res, next) => {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       const dbo = db.db("Freshtrader");
-      const units = require("./units.json");
-      dbo.collection("units").insertMany(units, function (err, res) {
-        if (err) throw err;
-        console.log("Number of documents inserted: " + res.insertedCount);
-        db.close();
-      });
       const producttypes = require("./producttypes.json");
       dbo
         .collection("producttypes")
         .insertMany(producttypes, function (err, res) {
           if (err) throw err;
           console.log("Number of documents inserted: " + res.insertedCount);
-          db.close();
         });
       const productunits = require("./productunits.json");
       dbo
@@ -188,7 +181,6 @@ exports.importDB = async (req, res, next) => {
         .insertMany(productunits, function (err, res) {
           if (err) throw err;
           console.log("Number of documents inserted: " + res.insertedCount);
-          db.close();
         });
       const productvarieties = require("./productvarieties.json");
       dbo
