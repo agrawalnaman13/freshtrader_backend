@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
+const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 
@@ -46,6 +47,27 @@ exports.createConsignment = async (req, res, next) => {
           sold: product.sold ? +product.sold : 0,
           void: product.void ? +product.void : 0,
         });
+      }
+      const myPallets = await SellerPallets.findOne({
+        seller: req.seller._id,
+        received_from: supplier,
+      });
+      if (!myPallets) {
+        await SellerPallets.create({
+          seller: req.seller._id,
+          received_from: supplier,
+          pallets_received: +consign_pallets,
+        });
+      } else {
+        await SellerPallets.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            received_from: supplier,
+          },
+          {
+            pallets_received: myPallets.pallets_received + +consign_pallets,
+          }
+        );
       }
     }
     res
@@ -176,6 +198,28 @@ exports.changeConsignmentStatus = async (req, res, next) => {
           sold: +product.sold,
           void: +product.void,
         });
+        const myPallets = await SellerPallets.findOne({
+          seller: req.seller._id,
+          received_from: consignment.supplier,
+        });
+        if (!myPallets) {
+          await SellerPallets.create({
+            seller: req.seller._id,
+            received_from: consignment.supplier,
+            pallets_received: +consignment.consign_pallets,
+          });
+        } else {
+          await SellerPallets.findOneAndUpdate(
+            {
+              seller: req.seller._id,
+              received_from: consignment.supplier,
+            },
+            {
+              pallets_received:
+                myPallets.pallets_received + +consignment.consign_pallets,
+            }
+          );
+        }
       }
       if (completion_date) {
         consignment.completion_date = new Date(completion_date);

@@ -535,7 +535,7 @@ exports.getMyProductList = async (req, res, next) => {
     let typeList = [];
     for (const type of types) {
       const typeData = await ProductType.findById(type).lean();
-      typeData.inv = await getProductInventory(type);
+      typeData.inv = await getProductInventory(req.seller._id, type);
       typeData.productId = (
         await SellerProduct.findOne({ type }).populate("units").sort({
           "units.weight": 1,
