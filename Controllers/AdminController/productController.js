@@ -200,3 +200,16 @@ exports.importDB = async (req, res, next) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.dropCollection = async (req, res, next) => {
+  try {
+    const db = mongoose.connection.db;
+    console.log(db);
+    await db.dropCollection(req.body.collectionName);
+
+    res.status(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+};

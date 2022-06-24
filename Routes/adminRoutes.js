@@ -34,6 +34,7 @@ const {
   addProductUnit,
   getProductUnit,
   importDB,
+  dropCollection,
 } = require("../Controllers/AdminController/productController");
 const {
   sellerSignup,
@@ -149,4 +150,5 @@ router.post("/updateContent", tokenAdminAuthorisation, updateContent);
 router.post("/getContents", tokenAdminAuthorisation, getContents);
 router.get("/deleteContent/:id", tokenAdminAuthorisation, deleteContent);
 router.get("/importDB", tokenAdminAuthorisation, importDB);
+router.post("/dropCollection", tokenAdminAuthorisation, dropCollection);
 module.exports = router;
