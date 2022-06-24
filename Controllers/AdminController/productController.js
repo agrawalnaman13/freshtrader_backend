@@ -124,15 +124,6 @@ exports.getProductType = async (req, res, next) => {
         },
       },
       { $unwind: "$variety" },
-      {
-        $lookup: {
-          localField: "units",
-          foreignField: "_id",
-          from: "units",
-          as: "units",
-        },
-      },
-      { $unwind: "$units" },
       { $sort: { type: 1 } },
     ]);
     return res
