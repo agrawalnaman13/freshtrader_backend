@@ -168,13 +168,25 @@ exports.importDB = async (req, res, next) => {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       const dbo = db.db("Freshtrader");
-      // const producttypes = require("./producttypes.json");
-      // dbo
-      //   .collection("producttypes")
-      //   .insertMany(producttypes, function (err, res) {
-      //     if (err) throw err;
-      //     console.log("Number of documents inserted: " + res.insertedCount);
-      //   });
+      const units = require("./units.json");
+      dbo.collection("units").insertMany(units, function (err, res) {
+        if (err) throw err;
+        console.log("Number of documents inserted: " + res.insertedCount);
+      });
+      const productvarieties = require("./productvarieties.json");
+      dbo
+        .collection("productvarieties")
+        .insertMany(productvarieties, function (err, res) {
+          if (err) throw err;
+          console.log("Number of documents inserted: " + res.insertedCount);
+        });
+      const producttypes = require("./producttypes.json");
+      dbo
+        .collection("producttypes")
+        .insertMany(producttypes, function (err, res) {
+          if (err) throw err;
+          console.log("Number of documents inserted: " + res.insertedCount);
+        });
       const productunits = require("./productunits.json");
       dbo
         .collection("productunits")
@@ -183,14 +195,6 @@ exports.importDB = async (req, res, next) => {
           console.log("Number of documents inserted: " + res.insertedCount);
           db.close();
         });
-      // const productvarieties = require("./productvarieties.json");
-      // dbo
-      //   .collection("productvarieties")
-      //   .insertMany(productvarieties, function (err, res) {
-      //     if (err) throw err;
-      //     console.log("Number of documents inserted: " + res.insertedCount);
-      //     db.close();
-      //   });
     });
     return res
       .status(200)
