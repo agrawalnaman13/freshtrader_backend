@@ -168,13 +168,13 @@ exports.importDB = async (req, res, next) => {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       const dbo = db.db("Freshtrader");
-      const producttypes = require("./producttypes.json");
-      dbo
-        .collection("producttypes")
-        .insertMany(producttypes, function (err, res) {
-          if (err) throw err;
-          console.log("Number of documents inserted: " + res.insertedCount);
-        });
+      // const producttypes = require("./producttypes.json");
+      // dbo
+      //   .collection("producttypes")
+      //   .insertMany(producttypes, function (err, res) {
+      //     if (err) throw err;
+      //     console.log("Number of documents inserted: " + res.insertedCount);
+      //   });
       const productunits = require("./productunits.json");
       dbo
         .collection("productunits")
