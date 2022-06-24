@@ -107,7 +107,7 @@ exports.addProductType = async (req, res, next) => {
 exports.getProductType = async (req, res, next) => {
   try {
     const { variety } = req.body;
-    console.log(req.body);
+    console.log(variety);
     const types = await ProductType.find({
       variety: variety,
       // $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
