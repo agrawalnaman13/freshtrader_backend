@@ -108,12 +108,33 @@ exports.getProductType = async (req, res, next) => {
   try {
     const { variety } = req.body;
     console.log(req.body);
-    const types = await ProductType.find({
-      // variety: variety,
-      // $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
-    })
-      // .populate("variety")
-      .sort({ type: 1 });
+    const types = await ProductType.aggregate([
+      {
+        $match: {
+          variety: mongoose.Types.ObjectId(variety),
+          $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
+        },
+      },
+      {
+        $lookup: {
+          localField: "variety",
+          foreignField: "_id",
+          from: "productvarieties",
+          as: "variety",
+        },
+      },
+      { $unwind: "$variety" },
+      {
+        $lookup: {
+          localField: "units",
+          foreignField: "_id",
+          from: "units",
+          as: "units",
+        },
+      },
+      { $unwind: "$units" },
+      { $sort: { type: 1 } },
+    ]);
     return res
       .status(200)
       .json(success("Type Fetched Successfully", { types }, res.statusCode));
@@ -140,16 +161,33 @@ exports.addProductUnit = async (req, res, next) => {
 exports.getProductUnit = async (req, res, next) => {
   try {
     const { variety } = req.body;
-    const units = await ProductUnit.find({
-      variety: variety,
-      $or: [
-        { added_by: "Admin" },
-        { added_by: undefined },
-        { added_by: req.seller._id },
-      ],
-    })
-      .populate(["variety", "unit"])
-      .sort({ "unit.weight": 1 });
+    const units = await ProductUnit.aggregate([
+      {
+        $match: {
+          variety: mongoose.Types.ObjectId(variety),
+          $or: [{ added_by: "Admin" }, { added_by: req.seller._id }],
+        },
+      },
+      {
+        $lookup: {
+          localField: "variety",
+          foreignField: "_id",
+          from: "productvarieties",
+          as: "variety",
+        },
+      },
+      { $unwind: "$variety" },
+      {
+        $lookup: {
+          localField: "units",
+          foreignField: "_id",
+          from: "units",
+          as: "units",
+        },
+      },
+      { $unwind: "$units" },
+      { $sort: { "unit.weight": 1 } },
+    ]);
     return res
       .status(200)
       .json(success("Unit Fetched Successfully", { units }, res.statusCode));
