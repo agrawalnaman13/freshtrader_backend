@@ -108,8 +108,7 @@ exports.getProductType = async (req, res, next) => {
   try {
     const { variety } = req.body;
     const types = await ProductType.find()
-      .populate("variety")
-      .sort({ type: 1 });
+    .sort({ type: 1 });
     return res
       .status(200)
       .json(success("Type Fetched Successfully", { types }, res.statusCode));
