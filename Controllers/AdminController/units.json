@@ -1,2188 +1,1456 @@
 [{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13ed"
-  },
+  "_id": "628785c569ca1eacec5b13ed",
   "unit": "2Kg",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13ee"
-  },
+  "_id": "628785c569ca1eacec5b13ee",
   "unit": "SL Tray",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13ef"
-  },
+  "_id": "628785c569ca1eacec5b13ef",
   "unit": "12Kg Ctn",
   "weight": 12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f0"
-  },
+  "_id": "628785c569ca1eacec5b13f0",
   "unit": "TL Ctn",
   "weight": 12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f1"
-  },
+  "_id": "628785c569ca1eacec5b13f1",
   "unit": "DL Ctn",
   "weight": 12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f2"
-  },
+  "_id": "628785c569ca1eacec5b13f2",
   "unit": "15Kg Ctn",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f3"
-  },
+  "_id": "628785c569ca1eacec5b13f3",
   "unit": "22L Ctn",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f4"
-  },
+  "_id": "628785c569ca1eacec5b13f4",
   "unit": "AACtn",
   "weight": 19
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f5"
-  },
+  "_id": "628785c569ca1eacec5b13f5",
   "unit": "36L Ctn",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f6"
-  },
+  "_id": "628785c569ca1eacec5b13f6",
   "unit": "1/2 Bin 50Kg",
   "weight": 50
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f7"
-  },
+  "_id": "628785c569ca1eacec5b13f7",
   "unit": "B/Bin 100Kg",
   "weight": 100
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f8"
-  },
+  "_id": "628785c569ca1eacec5b13f8",
   "unit": "B/Bin 250Kg",
   "weight": 250
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13f9"
-  },
+  "_id": "628785c569ca1eacec5b13f9",
   "unit": "SL Tray",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13fa"
-  },
+  "_id": "628785c569ca1eacec5b13fa",
   "unit": "5Kg Ctn",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13fb"
-  },
+  "_id": "628785c569ca1eacec5b13fb",
   "unit": "8Kg Ctn",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13fc"
-  },
+  "_id": "628785c569ca1eacec5b13fc",
   "unit": "DL Tray",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13fd"
-  },
+  "_id": "628785c569ca1eacec5b13fd",
   "unit": "9LCtn 5Kg",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13fe"
-  },
+  "_id": "628785c569ca1eacec5b13fe",
   "unit": "9LCtn 9Kg",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b13ff"
-  },
+  "_id": "628785c569ca1eacec5b13ff",
   "unit": "15L Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1400"
-  },
+  "_id": "628785c569ca1eacec5b1400",
   "unit": "18L Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1401"
-  },
+  "_id": "628785c569ca1eacec5b1401",
   "unit": "6Kg Tray",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1402"
-  },
+  "_id": "628785c569ca1eacec5b1402",
   "unit": "10Kg Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1403"
-  },
+  "_id": "628785c569ca1eacec5b1403",
   "unit": "DL Tray",
   "weight": 12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1404"
-  },
+  "_id": "628785c569ca1eacec5b1404",
   "unit": "18LCtn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1405"
-  },
+  "_id": "628785c569ca1eacec5b1405",
   "unit": "34LCtn",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1406"
-  },
+  "_id": "628785c569ca1eacec5b1406",
   "unit": "SL Tray",
   "weight": 5.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1407"
-  },
+  "_id": "628785c569ca1eacec5b1407",
   "unit": "8KgCtn",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1408"
-  },
+  "_id": "628785c569ca1eacec5b1408",
   "unit": "13Kg Ctn",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1409"
-  },
+  "_id": "628785c569ca1eacec5b1409",
   "unit": "13Kg Ctn Ex Large",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b140a"
-  },
+  "_id": "628785c569ca1eacec5b140a",
   "unit": "13Kg Ctn Large",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b140b"
-  },
+  "_id": "628785c569ca1eacec5b140b",
   "unit": "13Kg Ctn Medium",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b140c"
-  },
+  "_id": "628785c569ca1eacec5b140c",
   "unit": "13Kg Ctn Greens",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b140d"
-  },
+  "_id": "628785c569ca1eacec5b140d",
   "unit": "13Kg Ctn Ex Large, Greens",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b140e"
-  },
+  "_id": "628785c569ca1eacec5b140e",
   "unit": "13Kg Ctn Large, Greens",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b140f"
-  },
+  "_id": "628785c569ca1eacec5b140f",
   "unit": "13Kg Ctn Medium, Greens",
   "weight": 13
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1410"
-  },
+  "_id": "628785c569ca1eacec5b1410",
   "unit": "15Kg Ctn Ex Large",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1411"
-  },
+  "_id": "628785c569ca1eacec5b1411",
   "unit": "15Kg Ctn Large",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1412"
-  },
+  "_id": "628785c569ca1eacec5b1412",
   "unit": "15Kg Ctn Medium",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1413"
-  },
+  "_id": "628785c569ca1eacec5b1413",
   "unit": "15Kg Ctn Greens",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1414"
-  },
+  "_id": "628785c569ca1eacec5b1414",
   "unit": "15Kg Ctn Ex Large, Greens",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1415"
-  },
+  "_id": "628785c569ca1eacec5b1415",
   "unit": "15Kg Ctn Large, Greens",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1416"
-  },
+  "_id": "628785c569ca1eacec5b1416",
   "unit": "15Kg Ctn Medium, Greens",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1417"
-  },
+  "_id": "628785c569ca1eacec5b1417",
   "unit": "SL Tray",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1418"
-  },
+  "_id": "628785c569ca1eacec5b1418",
   "unit": "100g",
   "weight": 0.1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1419"
-  },
+  "_id": "628785c569ca1eacec5b1419",
   "unit": "125g",
   "weight": 0.125
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b141a"
-  },
+  "_id": "628785c569ca1eacec5b141a",
   "unit": "150g",
   "weight": 0.15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b141b"
-  },
+  "_id": "628785c569ca1eacec5b141b",
   "unit": "170g",
   "weight": 0.17
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b141c"
-  },
+  "_id": "628785c569ca1eacec5b141c",
   "unit": "175g",
   "weight": 0.175
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b141d"
-  },
+  "_id": "628785c569ca1eacec5b141d",
   "unit": "200g",
   "weight": 0.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b141e"
-  },
+  "_id": "628785c569ca1eacec5b141e",
   "unit": "225g",
   "weight": 0.225
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b141f"
-  },
+  "_id": "628785c569ca1eacec5b141f",
   "unit": "250g",
   "weight": 0.25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1420"
-  },
+  "_id": "628785c569ca1eacec5b1420",
   "unit": "275g",
   "weight": 0.275
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1421"
-  },
+  "_id": "628785c569ca1eacec5b1421",
   "unit": "300g",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1422"
-  },
+  "_id": "628785c569ca1eacec5b1422",
   "unit": "350g",
   "weight": 0.35
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1423"
-  },
+  "_id": "628785c569ca1eacec5b1423",
   "unit": "375g",
   "weight": 0.375
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1424"
-  },
+  "_id": "628785c569ca1eacec5b1424",
   "unit": "400g",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1425"
-  },
+  "_id": "628785c569ca1eacec5b1425",
   "unit": "450g",
   "weight": 0.45
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1426"
-  },
+  "_id": "628785c569ca1eacec5b1426",
   "unit": "500g",
   "weight": 0.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1427"
-  },
+  "_id": "628785c569ca1eacec5b1427",
   "unit": "3Kg Tray",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1428"
-  },
+  "_id": "628785c569ca1eacec5b1428",
   "unit": "5Kg Tray",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1429"
-  },
+  "_id": "628785c569ca1eacec5b1429",
   "unit": "18L Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b142a"
-  },
+  "_id": "628785c569ca1eacec5b142a",
   "unit": "9L Ctn",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b142b"
-  },
+  "_id": "628785c569ca1eacec5b142b",
   "unit": "SLTray",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b142c"
-  },
+  "_id": "628785c569ca1eacec5b142c",
   "unit": "32L Ctn",
   "weight": 17
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b142d"
-  },
+  "_id": "628785c569ca1eacec5b142d",
   "unit": "30L Tray",
   "weight": 16
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b142e"
-  },
+  "_id": "628785c569ca1eacec5b142e",
   "unit": "1Kg Ctn",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b142f"
-  },
+  "_id": "628785c569ca1eacec5b142f",
   "unit": "2Kg Ctn",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1430"
-  },
+  "_id": "628785c569ca1eacec5b1430",
   "unit": "2.5Kg Ctn",
   "weight": 2.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1431"
-  },
+  "_id": "628785c569ca1eacec5b1431",
   "unit": "9Kg Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1432"
-  },
+  "_id": "628785c569ca1eacec5b1432",
   "unit": "9L Ctn",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1433"
-  },
+  "_id": "628785c569ca1eacec5b1433",
   "unit": "10Kg Tray",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1434"
-  },
+  "_id": "628785c569ca1eacec5b1434",
   "unit": "12Kg Ctn",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1435"
-  },
+  "_id": "628785c569ca1eacec5b1435",
   "unit": "20Kg Ctn",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1436"
-  },
+  "_id": "628785c569ca1eacec5b1436",
   "unit": "Ripe 10Kg Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1437"
-  },
+  "_id": "628785c569ca1eacec5b1437",
   "unit": "Ripe 12Kg Ctn",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1438"
-  },
+  "_id": "628785c569ca1eacec5b1438",
   "unit": "Ripe 20Kg Bag",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1439"
-  },
+  "_id": "628785c569ca1eacec5b1439",
   "unit": "Ripe 20Kg Ctn",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b143a"
-  },
+  "_id": "628785c569ca1eacec5b143a",
   "unit": "SL Tray",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b143b"
-  },
+  "_id": "628785c569ca1eacec5b143b",
   "unit": "18L Ctn 7Kg",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b143c"
-  },
+  "_id": "628785c569ca1eacec5b143c",
   "unit": "18L Ctn 10Kg",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b143d"
-  },
+  "_id": "628785c569ca1eacec5b143d",
   "unit": "SL Tray",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b143e"
-  },
+  "_id": "628785c569ca1eacec5b143e",
   "unit": "9L Ctn",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b143f"
-  },
+  "_id": "628785c569ca1eacec5b143f",
   "unit": "3Kg",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1440"
-  },
+  "_id": "628785c569ca1eacec5b1440",
   "unit": "DL Tray",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1441"
-  },
+  "_id": "628785c569ca1eacec5b1441",
   "unit": "CP 15Kg",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1442"
-  },
+  "_id": "628785c569ca1eacec5b1442",
   "unit": "36LCrt",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1443"
-  },
+  "_id": "628785c569ca1eacec5b1443",
   "unit": "B/Bin",
   "weight": 200
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1444"
-  },
+  "_id": "628785c569ca1eacec5b1444",
   "unit": "Punnet",
   "weight": 0.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1445"
-  },
+  "_id": "628785c569ca1eacec5b1445",
   "unit": "SL Tray",
   "weight": 3.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1446"
-  },
+  "_id": "628785c569ca1eacec5b1446",
   "unit": "32L Tray",
   "weight": 17
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1447"
-  },
+  "_id": "628785c569ca1eacec5b1447",
   "unit": "36L Tray",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1448"
-  },
+  "_id": "628785c569ca1eacec5b1448",
   "unit": "50kg Ctn",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1449"
-  },
+  "_id": "628785c569ca1eacec5b1449",
   "unit": "9L Ctn 5kg",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b144a"
-  },
+  "_id": "628785c569ca1eacec5b144a",
   "unit": "DL Tray 5Kg",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b144b"
-  },
+  "_id": "628785c569ca1eacec5b144b",
   "unit": "DL Tray 7Kg",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b144c"
-  },
+  "_id": "628785c569ca1eacec5b144c",
   "unit": "BulkPk",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b144d"
-  },
+  "_id": "628785c569ca1eacec5b144d",
   "unit": "15Kg",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b144e"
-  },
+  "_id": "628785c569ca1eacec5b144e",
   "unit": "1/2 CP 9.5Kg",
   "weight": 9.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b144f"
-  },
+  "_id": "628785c569ca1eacec5b144f",
   "unit": "22L Crt",
   "weight": 12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1450"
-  },
+  "_id": "628785c569ca1eacec5b1450",
   "unit": "18Kg Ctn",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1451"
-  },
+  "_id": "628785c569ca1eacec5b1451",
   "unit": "CP 18.5Kg",
   "weight": 18.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1452"
-  },
+  "_id": "628785c569ca1eacec5b1452",
   "unit": "CP 19Kg",
   "weight": 19
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1453"
-  },
+  "_id": "628785c569ca1eacec5b1453",
   "unit": "BulkPk 20Kg",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1454"
-  },
+  "_id": "628785c569ca1eacec5b1454",
   "unit": "SL Tray 3.5Kg",
   "weight": 3.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1455"
-  },
+  "_id": "628785c569ca1eacec5b1455",
   "unit": "9L Ctn 4Kg",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1456"
-  },
+  "_id": "628785c569ca1eacec5b1456",
   "unit": "250g",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1457"
-  },
+  "_id": "628785c569ca1eacec5b1457",
   "unit": "2kg Ctn",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1458"
-  },
+  "_id": "628785c569ca1eacec5b1458",
   "unit": "SL Tray 4Kg",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1459"
-  },
+  "_id": "628785c569ca1eacec5b1459",
   "unit": "15L Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b145a"
-  },
+  "_id": "628785c569ca1eacec5b145a",
   "unit": "1/2 Bin 120Kg",
   "weight": 120
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b145b"
-  },
+  "_id": "628785c569ca1eacec5b145b",
   "unit": "B/Bin 150Kg",
   "weight": 150
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b145c"
-  },
+  "_id": "628785c569ca1eacec5b145c",
   "unit": "9L Ctn 6Kg",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b145d"
-  },
+  "_id": "628785c569ca1eacec5b145d",
   "unit": "SL Tray 7Kg",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b145e"
-  },
+  "_id": "628785c569ca1eacec5b145e",
   "unit": "SL Tray 8Kg",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b145f"
-  },
+  "_id": "628785c569ca1eacec5b145f",
   "unit": "14Kg Ctn",
   "weight": 14
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1460"
-  },
+  "_id": "628785c569ca1eacec5b1460",
   "unit": "27L Ctn 15Kg",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1461"
-  },
+  "_id": "628785c569ca1eacec5b1461",
   "unit": "17Kg Ctn",
   "weight": 17
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1462"
-  },
+  "_id": "628785c569ca1eacec5b1462",
   "unit": "32L Ctn 18Kg",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1463"
-  },
+  "_id": "628785c569ca1eacec5b1463",
   "unit": "850g",
   "weight": 0.85
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1464"
-  },
+  "_id": "628785c569ca1eacec5b1464",
   "unit": "SL Tray",
   "weight": 2.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1465"
-  },
+  "_id": "628785c569ca1eacec5b1465",
   "unit": "16kg Ctn",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1466"
-  },
+  "_id": "628785c569ca1eacec5b1466",
   "unit": "SL Tray",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1467"
-  },
+  "_id": "628785c569ca1eacec5b1467",
   "unit": "DL tray",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1468"
-  },
+  "_id": "628785c569ca1eacec5b1468",
   "unit": "4Kg Tray",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1469"
-  },
+  "_id": "628785c569ca1eacec5b1469",
   "unit": "8Kg Tray",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b146a"
-  },
+  "_id": "628785c569ca1eacec5b146a",
   "unit": "22L Ctn",
   "weight": 12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b146b"
-  },
+  "_id": "628785c569ca1eacec5b146b",
   "unit": "2.25Kg",
   "weight": 2.25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b146c"
-  },
+  "_id": "628785c569ca1eacec5b146c",
   "unit": "2.5Kg",
   "weight": 2.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b146d"
-  },
+  "_id": "628785c569ca1eacec5b146d",
   "unit": "1/2 CP",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b146e"
-  },
+  "_id": "628785c569ca1eacec5b146e",
   "unit": "CP",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b146f"
-  },
+  "_id": "628785c569ca1eacec5b146f",
   "unit": "36L Crt 20Kg",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1470"
-  },
+  "_id": "628785c569ca1eacec5b1470",
   "unit": "36L Crt 25Kg",
   "weight": 25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1471"
-  },
+  "_id": "628785c569ca1eacec5b1471",
   "unit": "B/Bin 200Kg",
   "weight": 200
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1472"
-  },
+  "_id": "628785c569ca1eacec5b1472",
   "unit": "380Kg",
   "weight": 380
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1473"
-  },
+  "_id": "628785c569ca1eacec5b1473",
   "unit": "Bunch",
   "weight": 0.12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1474"
-  },
+  "_id": "628785c569ca1eacec5b1474",
   "unit": "Per Unit",
   "weight": 0.075
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1475"
-  },
+  "_id": "628785c569ca1eacec5b1475",
   "unit": "SL Tray",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1476"
-  },
+  "_id": "628785c569ca1eacec5b1476",
   "unit": "9L Ctn",
   "weight": 2.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1477"
-  },
+  "_id": "628785c569ca1eacec5b1477",
   "unit": "18L Ctn",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1478"
-  },
+  "_id": "628785c569ca1eacec5b1478",
   "unit": "22L Ctn",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1479"
-  },
+  "_id": "628785c569ca1eacec5b1479",
   "unit": "26L Ctn",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b147a"
-  },
+  "_id": "628785c569ca1eacec5b147a",
   "unit": "18L Ctn",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b147b"
-  },
+  "_id": "628785c569ca1eacec5b147b",
   "unit": "22L Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b147c"
-  },
+  "_id": "628785c569ca1eacec5b147c",
   "unit": "30L Ctn",
   "weight": 14
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b147d"
-  },
+  "_id": "628785c569ca1eacec5b147d",
   "unit": "32L Ctn",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b147e"
-  },
+  "_id": "628785c569ca1eacec5b147e",
   "unit": "15L Ctn 15Kg",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b147f"
-  },
+  "_id": "628785c569ca1eacec5b147f",
   "unit": "AP Ctn",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1480"
-  },
+  "_id": "628785c569ca1eacec5b1480",
   "unit": "Carton",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1481"
-  },
+  "_id": "628785c569ca1eacec5b1481",
   "unit": "10L Ctn",
   "weight": 5.55
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1482"
-  },
+  "_id": "628785c569ca1eacec5b1482",
   "unit": "AP Ctn",
   "weight": 16
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1483"
-  },
+  "_id": "628785c569ca1eacec5b1483",
   "unit": "1/2 Bin",
   "weight": 75
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1484"
-  },
+  "_id": "628785c569ca1eacec5b1484",
   "unit": "B/Bin",
   "weight": 150
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1485"
-  },
+  "_id": "628785c569ca1eacec5b1485",
   "unit": "50Kg Ctn",
   "weight": 50
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1486"
-  },
+  "_id": "628785c569ca1eacec5b1486",
   "unit": "Per Unit",
   "weight": 1.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1487"
-  },
+  "_id": "628785c569ca1eacec5b1487",
   "unit": "SL Tray",
   "weight": 16
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1488"
-  },
+  "_id": "628785c569ca1eacec5b1488",
   "unit": "DL Tray",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1489"
-  },
+  "_id": "628785c569ca1eacec5b1489",
   "unit": "Carton",
   "weight": 22
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b148a"
-  },
+  "_id": "628785c569ca1eacec5b148a",
   "unit": "1/2 Bin",
   "weight": 100
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b148b"
-  },
+  "_id": "628785c569ca1eacec5b148b",
   "unit": "30L Ctn",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b148c"
-  },
+  "_id": "628785c569ca1eacec5b148c",
   "unit": "Carton",
   "weight": 12
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b148d"
-  },
+  "_id": "628785c569ca1eacec5b148d",
   "unit": "1Kg",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b148e"
-  },
+  "_id": "628785c569ca1eacec5b148e",
   "unit": "10L Ctn",
   "weight": 5.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b148f"
-  },
+  "_id": "628785c569ca1eacec5b148f",
   "unit": "7Kg Tray",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1490"
-  },
+  "_id": "628785c569ca1eacec5b1490",
   "unit": "30L Ctn",
   "weight": 16
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1491"
-  },
+  "_id": "628785c569ca1eacec5b1491",
   "unit": "CP 15Kg",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1492"
-  },
+  "_id": "628785c569ca1eacec5b1492",
   "unit": "18L Ctn",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1493"
-  },
+  "_id": "628785c569ca1eacec5b1493",
   "unit": "465g",
   "weight": 0.465
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1494"
-  },
+  "_id": "628785c569ca1eacec5b1494",
   "unit": "2Kg Tray",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1495"
-  },
+  "_id": "628785c569ca1eacec5b1495",
   "unit": "9L Ctn",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1496"
-  },
+  "_id": "628785c569ca1eacec5b1496",
   "unit": "18L Ctn",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1497"
-  },
+  "_id": "628785c569ca1eacec5b1497",
   "unit": "6Kg Ctn",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1498"
-  },
+  "_id": "628785c569ca1eacec5b1498",
   "unit": "32L Ctn",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1499"
-  },
+  "_id": "628785c569ca1eacec5b1499",
   "unit": "36L Crt",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b149a"
-  },
+  "_id": "628785c569ca1eacec5b149a",
   "unit": "16kg Ctn",
   "weight": 16
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b149b"
-  },
+  "_id": "628785c569ca1eacec5b149b",
   "unit": "4Kg Tray",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b149c"
-  },
+  "_id": "628785c569ca1eacec5b149c",
   "unit": "1/2 CP",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b149d"
-  },
+  "_id": "628785c569ca1eacec5b149d",
   "unit": "CP",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b149e"
-  },
+  "_id": "628785c569ca1eacec5b149e",
   "unit": "3.5Kg Tray",
   "weight": 3.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b149f"
-  },
+  "_id": "628785c569ca1eacec5b149f",
   "unit": "3Kg Ctn",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a0"
-  },
+  "_id": "628785c569ca1eacec5b14a0",
   "unit": "250gLP",
   "weight": 0.25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a1"
-  },
+  "_id": "628785c569ca1eacec5b14a1",
   "unit": "4KgCtn",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a2"
-  },
+  "_id": "628785c569ca1eacec5b14a2",
   "unit": "5Kg",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a3"
-  },
+  "_id": "628785c569ca1eacec5b14a3",
   "unit": "8Kg",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a4"
-  },
+  "_id": "628785c569ca1eacec5b14a4",
   "unit": "10Kg",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a5"
-  },
+  "_id": "628785c569ca1eacec5b14a5",
   "unit": "Carton",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a6"
-  },
+  "_id": "628785c569ca1eacec5b14a6",
   "unit": "2kg Ctn",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a7"
-  },
+  "_id": "628785c569ca1eacec5b14a7",
   "unit": "Bunch",
   "weight": 0.07
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a8"
-  },
+  "_id": "628785c569ca1eacec5b14a8",
   "unit": "Bunch",
   "weight": 0.03
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14a9"
-  },
+  "_id": "628785c569ca1eacec5b14a9",
   "unit": "Bunch",
   "weight": 0.09
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14aa"
-  },
+  "_id": "628785c569ca1eacec5b14aa",
   "unit": "Bunch",
   "weight": 0.06
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ab"
-  },
+  "_id": "628785c569ca1eacec5b14ab",
   "unit": "Bunch",
   "weight": 0.115
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ac"
-  },
+  "_id": "628785c569ca1eacec5b14ac",
   "unit": "Bunch",
   "weight": 0.08
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ad"
-  },
+  "_id": "628785c569ca1eacec5b14ad",
   "unit": "10g",
   "weight": 0.01
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ae"
-  },
+  "_id": "628785c569ca1eacec5b14ae",
   "unit": "Bunch",
   "weight": 0.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14af"
-  },
+  "_id": "628785c569ca1eacec5b14af",
   "unit": "Bunch",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b0"
-  },
+  "_id": "628785c569ca1eacec5b14b0",
   "unit": "Each",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b1"
-  },
+  "_id": "628785c569ca1eacec5b14b1",
   "unit": "Bunch",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b2"
-  },
+  "_id": "628785c569ca1eacec5b14b2",
   "unit": "Carton",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b3"
-  },
+  "_id": "628785c569ca1eacec5b14b3",
   "unit": "Carton",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b4"
-  },
+  "_id": "628785c569ca1eacec5b14b4",
   "unit": "7Kg Ctn",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b5"
-  },
+  "_id": "628785c569ca1eacec5b14b5",
   "unit": "10 Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b6"
-  },
+  "_id": "628785c569ca1eacec5b14b6",
   "unit": "10g",
   "weight": 0.01
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b7"
-  },
+  "_id": "628785c569ca1eacec5b14b7",
   "unit": "Bunch",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b8"
-  },
+  "_id": "628785c569ca1eacec5b14b8",
   "unit": "Bunch",
   "weight": 1.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14b9"
-  },
+  "_id": "628785c569ca1eacec5b14b9",
   "unit": "5Kg Bag",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ba"
-  },
+  "_id": "628785c569ca1eacec5b14ba",
   "unit": "10Kg Bag",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14bb"
-  },
+  "_id": "628785c569ca1eacec5b14bb",
   "unit": "15Kg Dec",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14bc"
-  },
+  "_id": "628785c569ca1eacec5b14bc",
   "unit": "20Kg Bag",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14bd"
-  },
+  "_id": "628785c569ca1eacec5b14bd",
   "unit": "Baby Bunch",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14be"
-  },
+  "_id": "628785c569ca1eacec5b14be",
   "unit": "Baby 3Kg Dec",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14bf"
-  },
+  "_id": "628785c569ca1eacec5b14bf",
   "unit": "Baby Golden Bunch",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c0"
-  },
+  "_id": "628785c569ca1eacec5b14c0",
   "unit": "Bitter Melons 18L Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c1"
-  },
+  "_id": "628785c569ca1eacec5b14c1",
   "unit": "Bunch",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c2"
-  },
+  "_id": "628785c569ca1eacec5b14c2",
   "unit": "4Kg IPk",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c3"
-  },
+  "_id": "628785c569ca1eacec5b14c3",
   "unit": "5KgIPk",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c4"
-  },
+  "_id": "628785c569ca1eacec5b14c4",
   "unit": "8KgIPk",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c5"
-  },
+  "_id": "628785c569ca1eacec5b14c5",
   "unit": "Gourmet Carton",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c6"
-  },
+  "_id": "628785c569ca1eacec5b14c6",
   "unit": "Baby Bunch",
   "weight": 0
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c7"
-  },
+  "_id": "628785c569ca1eacec5b14c7",
   "unit": "Bunch",
   "weight": 0.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c8"
-  },
+  "_id": "628785c569ca1eacec5b14c8",
   "unit": "2.4Kg IPk",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14c9"
-  },
+  "_id": "628785c569ca1eacec5b14c9",
   "unit": "7KgIPk",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ca"
-  },
+  "_id": "628785c569ca1eacec5b14ca",
   "unit": "10Kg IPk",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14cb"
-  },
+  "_id": "628785c569ca1eacec5b14cb",
   "unit": "Bin 100Kg",
   "weight": 100
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14cc"
-  },
+  "_id": "628785c569ca1eacec5b14cc",
   "unit": "2.5Kg IPk",
   "weight": 2.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14cd"
-  },
+  "_id": "628785c569ca1eacec5b14cd",
   "unit": "3.6Kg",
   "weight": 3.6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ce"
-  },
+  "_id": "628785c569ca1eacec5b14ce",
   "unit": "5Kg IPk",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14cf"
-  },
+  "_id": "628785c569ca1eacec5b14cf",
   "unit": "Brussel Sprout",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d0"
-  },
+  "_id": "628785c569ca1eacec5b14d0",
   "unit": "7Kg IPk",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d1"
-  },
+  "_id": "628785c569ca1eacec5b14d1",
   "unit": "8Kg IPk",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d2"
-  },
+  "_id": "628785c569ca1eacec5b14d2",
   "unit": "Carton",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d3"
-  },
+  "_id": "628785c569ca1eacec5b14d3",
   "unit": "Baby Per Unit",
   "weight": 0.75
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d4"
-  },
+  "_id": "628785c569ca1eacec5b14d4",
   "unit": "Per Unit",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d5"
-  },
+  "_id": "628785c569ca1eacec5b14d5",
   "unit": "25Kg Bag",
   "weight": 25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d6"
-  },
+  "_id": "628785c569ca1eacec5b14d6",
   "unit": "25Kg Ctn",
   "weight": 25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d7"
-  },
+  "_id": "628785c569ca1eacec5b14d7",
   "unit": "30Kg Dec",
   "weight": 25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d8"
-  },
+  "_id": "628785c569ca1eacec5b14d8",
   "unit": "72Kg Crt",
   "weight": 25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14d9"
-  },
+  "_id": "628785c569ca1eacec5b14d9",
   "unit": "Golf Ball Bunch",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14da"
-  },
+  "_id": "628785c569ca1eacec5b14da",
   "unit": "Dutch Bunch",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14db"
-  },
+  "_id": "628785c569ca1eacec5b14db",
   "unit": "Bunch",
   "weight": 0.75
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14dc"
-  },
+  "_id": "628785c569ca1eacec5b14dc",
   "unit": "3Kg Dec",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14dd"
-  },
+  "_id": "628785c569ca1eacec5b14dd",
   "unit": "Pre Pack 20Kg Carton",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14de"
-  },
+  "_id": "628785c569ca1eacec5b14de",
   "unit": "Per Unit",
   "weight": 2.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14df"
-  },
+  "_id": "628785c569ca1eacec5b14df",
   "unit": "Baby 2Kg Ctn",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e0"
-  },
+  "_id": "628785c569ca1eacec5b14e0",
   "unit": "Baby 4Kg tray",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e1"
-  },
+  "_id": "628785c569ca1eacec5b14e1",
   "unit": "Baby Carton",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e2"
-  },
+  "_id": "628785c569ca1eacec5b14e2",
   "unit": "16Kg Tray",
   "weight": 16
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e3"
-  },
+  "_id": "628785c569ca1eacec5b14e3",
   "unit": "Carton 25kg",
   "weight": 25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e4"
-  },
+  "_id": "628785c569ca1eacec5b14e4",
   "unit": "25Kg Dec",
   "weight": 25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e5"
-  },
+  "_id": "628785c569ca1eacec5b14e5",
   "unit": "72L Crt",
   "weight": 30
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e6"
-  },
+  "_id": "628785c569ca1eacec5b14e6",
   "unit": "Celeriac",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e7"
-  },
+  "_id": "628785c569ca1eacec5b14e7",
   "unit": "Per Unit",
   "weight": 1.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e8"
-  },
+  "_id": "628785c569ca1eacec5b14e8",
   "unit": "Bunch",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14e9"
-  },
+  "_id": "628785c569ca1eacec5b14e9",
   "unit": "Bag",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ea"
-  },
+  "_id": "628785c569ca1eacec5b14ea",
   "unit": "1.5Kg",
   "weight": 1.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14eb"
-  },
+  "_id": "628785c569ca1eacec5b14eb",
   "unit": "Hot Red Strings Each",
   "weight": 2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ec"
-  },
+  "_id": "628785c569ca1eacec5b14ec",
   "unit": "27L Ctn",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ed"
-  },
+  "_id": "628785c569ca1eacec5b14ed",
   "unit": "Wombok Each",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ee"
-  },
+  "_id": "628785c569ca1eacec5b14ee",
   "unit": "Baby Wombok Carton",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ef"
-  },
+  "_id": "628785c569ca1eacec5b14ef",
   "unit": "Carton",
   "weight": 16
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f0"
-  },
+  "_id": "628785c569ca1eacec5b14f0",
   "unit": "Hairy 18L Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f1"
-  },
+  "_id": "628785c569ca1eacec5b14f1",
   "unit": "White 18L Ctn",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f2"
-  },
+  "_id": "628785c569ca1eacec5b14f2",
   "unit": "Bag",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f3"
-  },
+  "_id": "628785c569ca1eacec5b14f3",
   "unit": "32L Ctn",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f4"
-  },
+  "_id": "628785c569ca1eacec5b14f4",
   "unit": "Pre Packed Sweet 18L Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f5"
-  },
+  "_id": "628785c569ca1eacec5b14f5",
   "unit": "15Kg Bag",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f6"
-  },
+  "_id": "628785c569ca1eacec5b14f6",
   "unit": "18Kg Bag",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f7"
-  },
+  "_id": "628785c569ca1eacec5b14f7",
   "unit": "32L Ctn",
   "weight": 18
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f8"
-  },
+  "_id": "628785c569ca1eacec5b14f8",
   "unit": "500Kg Bin",
   "weight": 500
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14f9"
-  },
+  "_id": "628785c569ca1eacec5b14f9",
   "unit": "Apple Each",
   "weight": 0.25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14fa"
-  },
+  "_id": "628785c569ca1eacec5b14fa",
   "unit": "Continental Each",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14fb"
-  },
+  "_id": "628785c569ca1eacec5b14fb",
   "unit": "Green House Each",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14fc"
-  },
+  "_id": "628785c569ca1eacec5b14fc",
   "unit": "White Each",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14fd"
-  },
+  "_id": "628785c569ca1eacec5b14fd",
   "unit": "Long White Each",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14fe"
-  },
+  "_id": "628785c569ca1eacec5b14fe",
   "unit": "Green Field Each",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b14ff"
-  },
+  "_id": "628785c569ca1eacec5b14ff",
   "unit": "Continental 10L Ctn",
   "weight": 5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1500"
-  },
+  "_id": "628785c569ca1eacec5b1500",
   "unit": "Continental Bag",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1501"
-  },
+  "_id": "628785c569ca1eacec5b1501",
   "unit": "Continental 10L Ctn",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1502"
-  },
+  "_id": "628785c569ca1eacec5b1502",
   "unit": "Continental 12L Tray",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1503"
-  },
+  "_id": "628785c569ca1eacec5b1503",
   "unit": "6Kg Bag",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1504"
-  },
+  "_id": "628785c569ca1eacec5b1504",
   "unit": "Lebanese 12L Tray",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1505"
-  },
+  "_id": "628785c569ca1eacec5b1505",
   "unit": "Continental 12L Tray",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1506"
-  },
+  "_id": "628785c569ca1eacec5b1506",
   "unit": "Continental 15L Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1507"
-  },
+  "_id": "628785c569ca1eacec5b1507",
   "unit": "Green Field 27L Ctn",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1508"
-  },
+  "_id": "628785c569ca1eacec5b1508",
   "unit": "Green House 27L Ctn",
   "weight": 15
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1509"
-  },
+  "_id": "628785c569ca1eacec5b1509",
   "unit": "Purple Each",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b150a"
-  },
+  "_id": "628785c569ca1eacec5b150a",
   "unit": "Cherry 9L Ctn",
   "weight": 3.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b150b"
-  },
+  "_id": "628785c569ca1eacec5b150b",
   "unit": "Japanese 9L Ctn",
   "weight": 3.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b150c"
-  },
+  "_id": "628785c569ca1eacec5b150c",
   "unit": "Lebanese Baby 9L Ctn",
   "weight": 3.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b150d"
-  },
+  "_id": "628785c569ca1eacec5b150d",
   "unit": "White Aubergine 9L Ctn",
   "weight": 3.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b150e"
-  },
+  "_id": "628785c569ca1eacec5b150e",
   "unit": "4Kg Ctn",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b150f"
-  },
+  "_id": "628785c569ca1eacec5b150f",
   "unit": "Purple 18L Ctn",
   "weight": 6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1510"
-  },
+  "_id": "628785c569ca1eacec5b1510",
   "unit": "Continental 15L Ctn 7kg",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1511"
-  },
+  "_id": "628785c569ca1eacec5b1511",
   "unit": "Cherry 18L Ctn",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1512"
-  },
+  "_id": "628785c569ca1eacec5b1512",
   "unit": "Japanese 18L Ctn",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1513"
-  },
+  "_id": "628785c569ca1eacec5b1513",
   "unit": "Lebanese Baby 18L Ctn",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1514"
-  },
+  "_id": "628785c569ca1eacec5b1514",
   "unit": "White Aubergine 18L Ctn",
   "weight": 7
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1515"
-  },
+  "_id": "628785c569ca1eacec5b1515",
   "unit": "Continental 18L Ctn 8kg",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1516"
-  },
+  "_id": "628785c569ca1eacec5b1516",
   "unit": "Continental 27L Ctn 8kg",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1517"
-  },
+  "_id": "628785c569ca1eacec5b1517",
   "unit": "Purple 27L Ctn",
   "weight": 8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1518"
-  },
+  "_id": "628785c569ca1eacec5b1518",
   "unit": "Cherry 27L Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1519"
-  },
+  "_id": "628785c569ca1eacec5b1519",
   "unit": "Japanese 27L Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b151a"
-  },
+  "_id": "628785c569ca1eacec5b151a",
   "unit": "Lebanese Baby 27L Ctn",
   "weight": 9
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b151b"
-  },
+  "_id": "628785c569ca1eacec5b151b",
   "unit": "Endive Bunch",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b151c"
-  },
+  "_id": "628785c569ca1eacec5b151c",
   "unit": "Endive Bundle",
   "weight": 0.8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b151d"
-  },
+  "_id": "628785c569ca1eacec5b151d",
   "unit": "Endive Dec",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b151e"
-  },
+  "_id": "628785c569ca1eacec5b151e",
   "unit": "Finese 1.5Kg",
   "weight": 1.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b151f"
-  },
+  "_id": "628785c569ca1eacec5b151f",
   "unit": "Fennel Bulb Bunch",
   "weight": 0.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1520"
-  },
+  "_id": "628785c569ca1eacec5b1520",
   "unit": "Strings Each",
   "weight": 1.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1521"
-  },
+  "_id": "628785c569ca1eacec5b1521",
   "unit": "Bunch",
   "weight": 0.35
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1522"
-  },
+  "_id": "628785c569ca1eacec5b1522",
   "unit": "Bunch",
   "weight": 0.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1523"
-  },
+  "_id": "628785c569ca1eacec5b1523",
   "unit": "Kohl Rabi Bunch",
   "weight": 0.45
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1524"
-  },
+  "_id": "628785c569ca1eacec5b1524",
   "unit": "Kohl Rabi 10kg Ctn",
   "weight": 10
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1525"
-  },
+  "_id": "628785c569ca1eacec5b1525",
   "unit": "Open Variety, Rocket Bunch",
   "weight": 0.1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1526"
-  },
+  "_id": "628785c569ca1eacec5b1526",
   "unit": "Open Variety, Butter Carton",
   "weight": 2.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1527"
-  },
+  "_id": "628785c569ca1eacec5b1527",
   "unit": "Open Variety, Green Coral Carton",
   "weight": 2.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1528"
-  },
+  "_id": "628785c569ca1eacec5b1528",
   "unit": "Open Variety, Green Oak Carton",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1529"
-  },
+  "_id": "628785c569ca1eacec5b1529",
   "unit": "Open Variety, Red Oakleaf Carton",
   "weight": 4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b152a"
-  },
+  "_id": "628785c569ca1eacec5b152a",
   "unit": "Mignonette Green Carton",
   "weight": 5.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b152b"
-  },
+  "_id": "628785c569ca1eacec5b152b",
   "unit": "Raddichio Trevisio Tray",
   "weight": 1.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b152c"
-  },
+  "_id": "628785c569ca1eacec5b152c",
   "unit": "Raddichio Various Tray",
   "weight": 1.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b152d"
-  },
+  "_id": "628785c569ca1eacec5b152d",
   "unit": "Red Coral Carton",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b152e"
-  },
+  "_id": "628785c569ca1eacec5b152e",
   "unit": "Frisee Baby Endive Carton",
   "weight": 3.6
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b152f"
-  },
+  "_id": "628785c569ca1eacec5b152f",
   "unit": "Open Variety, Baby Cos Carton",
   "weight": 4.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1530"
-  },
+  "_id": "628785c569ca1eacec5b1530",
   "unit": "Open Variety, Curly Endive Carton",
   "weight": 4.2
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1531"
-  },
+  "_id": "628785c569ca1eacec5b1531",
   "unit": "Elkhorn Green Carton",
   "weight": 4.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1532"
-  },
+  "_id": "628785c569ca1eacec5b1532",
   "unit": "Frisby Carton",
   "weight": 4.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1533"
-  },
+  "_id": "628785c569ca1eacec5b1533",
   "unit": "Headed Carton",
   "weight": 4.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1534"
-  },
+  "_id": "628785c569ca1eacec5b1534",
   "unit": "Red Velvet Regency Carton",
   "weight": 4.3
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1535"
-  },
+  "_id": "628785c569ca1eacec5b1535",
   "unit": "Iceburg Carton",
   "weight": 4.8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1536"
-  },
+  "_id": "628785c569ca1eacec5b1536",
   "unit": "Mignonette Red Carton",
   "weight": 4.8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1537"
-  },
+  "_id": "628785c569ca1eacec5b1537",
   "unit": "Open Varieties Carton",
   "weight": 4.8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1538"
-  },
+  "_id": "628785c569ca1eacec5b1538",
   "unit": "Cos Romaine Carton",
   "weight": 8.1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1539"
-  },
+  "_id": "628785c569ca1eacec5b1539",
   "unit": "Frilice Carton",
   "weight": 8.1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b153a"
-  },
+  "_id": "628785c569ca1eacec5b153a",
   "unit": "Baby Cos Carton",
   "weight": 8.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b153b"
-  },
+  "_id": "628785c569ca1eacec5b153b",
   "unit": "1.5Kg Ctn",
   "weight": 1.5
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b153c"
-  },
+  "_id": "628785c569ca1eacec5b153c",
   "unit": "Pre Pack Ctn",
   "weight": 1.8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b153d"
-  },
+  "_id": "628785c569ca1eacec5b153d",
   "unit": "Green",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b153e"
-  },
+  "_id": "628785c569ca1eacec5b153e",
   "unit": "Green, Small",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b153f"
-  },
+  "_id": "628785c569ca1eacec5b153f",
   "unit": "Green, Medium",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1540"
-  },
+  "_id": "628785c569ca1eacec5b1540",
   "unit": "Green, Large",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1541"
-  },
+  "_id": "628785c569ca1eacec5b1541",
   "unit": "Red",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1542"
-  },
+  "_id": "628785c569ca1eacec5b1542",
   "unit": "Red, Small",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1543"
-  },
+  "_id": "628785c569ca1eacec5b1543",
   "unit": "Red, Medium",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1544"
-  },
+  "_id": "628785c569ca1eacec5b1544",
   "unit": "Red, Large",
   "weight": 1
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1545"
-  },
+  "_id": "628785c569ca1eacec5b1545",
   "unit": "RN Bag",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1546"
-  },
+  "_id": "628785c569ca1eacec5b1546",
   "unit": "20Kg",
   "weight": 20
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1547"
-  },
+  "_id": "628785c569ca1eacec5b1547",
   "unit": "AP Bag",
   "weight": 40
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1548"
-  },
+  "_id": "628785c569ca1eacec5b1548",
   "unit": "22L Ctn",
   "weight": 22
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1549"
-  },
+  "_id": "628785c569ca1eacec5b1549",
   "unit": "Carton",
   "weight": 36
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b154a"
-  },
+  "_id": "628785c569ca1eacec5b154a",
   "unit": "300Kg Bin",
   "weight": 300
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b154b"
-  },
+  "_id": "628785c569ca1eacec5b154b",
   "unit": "1/2 Tonne Bin",
   "weight": 500
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b154c"
-  },
+  "_id": "628785c569ca1eacec5b154c",
   "unit": "1 Tonne Bin",
   "weight": 1000
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b154d"
-  },
+  "_id": "628785c569ca1eacec5b154d",
   "unit": "Per Unit",
   "weight": 0.045
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b154e"
-  },
+  "_id": "628785c569ca1eacec5b154e",
   "unit": "Bunch",
   "weight": 0.25
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b154f"
-  },
+  "_id": "628785c569ca1eacec5b154f",
   "unit": "Bunch",
   "weight": 0.8
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1550"
-  },
+  "_id": "628785c569ca1eacec5b1550",
   "unit": "White Bunch",
   "weight": 0.4
 },{
-  "_id": {
-    "$oid": "628785c569ca1eacec5b1551"
-  },
+  "_id": "628785c569ca1eacec5b1551",
   "unit": "3Kg Ctn",
   "weight": 3
 },{
-  "_id": {
-    "$oid": "6296031efa4e931459b45a36"
-  },
+  "_id": "6296031efa4e931459b45a36",
   "unit": "Each"
 },{
-  "_id": {
-    "$oid": "629603e1fa4e931459b45a37"
-  },
+  "_id": "629603e1fa4e931459b45a37",
   "unit": "Bunch"
 },{
-  "_id": {
-    "$oid": "629603f8fa4e931459b45a38"
-  },
+  "_id": "629603f8fa4e931459b45a38",
   "unit": "Stem"
 },{
-  "_id": {
-    "$oid": "62960416fa4e931459b45a39"
-  },
+  "_id": "62960416fa4e931459b45a39",
   "unit": "Bucket"
 },{
-  "_id": {
-    "$oid": "6296042ffa4e931459b45a3a"
-  },
+  "_id": "6296042ffa4e931459b45a3a",
   "unit": "3 Pack"
 },{
-  "_id": {
-    "$oid": "62960443fa4e931459b45a3b"
-  },
+  "_id": "62960443fa4e931459b45a3b",
   "unit": "5 Pack"
 },{
-  "_id": {
-    "$oid": "62960452fa4e931459b45a3c"
-  },
+  "_id": "62960452fa4e931459b45a3c",
   "unit": "8 Pack"
 },{
-  "_id": {
-    "$oid": "6296045efa4e931459b45a3d"
-  },
+  "_id": "6296045efa4e931459b45a3d",
   "unit": "10 Pack"
 },{
-  "_id": {
-    "$oid": "6296046afa4e931459b45a3e"
-  },
+  "_id": "6296046afa4e931459b45a3e",
   "unit": "25 Pack"
 }]
