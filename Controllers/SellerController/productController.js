@@ -275,6 +275,7 @@ exports.addProductUnit = async (req, res, next) => {
       return res.status(200).json(error("Invalid unit", res.statusCode));
     }
     const isProduct = await SellerProduct.findOne({
+      seller: req.seller._id,
       category: product.category,
       variety: product.variety,
       type: product.type,

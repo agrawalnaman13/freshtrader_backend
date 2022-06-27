@@ -17,6 +17,9 @@ const {
   deleteIncompleteOrders,
   deleteUnconfirmedOrders,
 } = require("./Controllers/BuyerController/orderController");
+const {
+  updateInventory,
+} = require("./Controllers/SellerController/inventoryController");
 let server = http.createServer(app);
 mongoose
   .connect("mongodb://localhost/Freshtrader", {
@@ -32,13 +35,13 @@ mongoose
   })
   .then((con) => console.log("connected to remote database"));
 const port = 3001;
-process.env["BASE_URL"] =
-  "http://ec2-54-197-73-213.compute-1.amazonaws.com:3001";
+process.env["BASE_URL"] = "http://ec2-3-86-26-193.compute-1.amazonaws.com:3001";
 cron.schedule("0 0 * * *", async () => {
   await checkOverdueTransactions();
   await setCustomerInfo();
   await checkPlan();
   await checkOrderWeek();
+  await updateInventory();
   console.log("cron");
 });
 cron.schedule("0 * * * *", async () => {

@@ -176,6 +176,7 @@ exports.resetInventory = async (req, res) => {
         purchase: 0,
         sold: 0,
         void: 0,
+        physical_stock: 0,
       });
     }
     res
@@ -340,5 +341,36 @@ exports.printInventory = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updateInventory = async () => {
+  try {
+    const inventories = await Inventory.find({
+      consignment: { $exists: true },
+    });
+    for (const inventory of inventories) {
+      inventory.ready_to_sell = inventory.carry_over + inventory.purchase;
+      inventory.remaining =
+        inventory.ready_to_sell - inventory.sold - inventory.void;
+      if (inventory.remaining <= 0 && inventory.physical_stock <= 0) {
+        await Inventory.findByIdAndDelete(inventory._id);
+      } else {
+        const carry_over = inventory.physical_stock
+          ? inventory.physical_stock
+          : inventory.remaining;
+        await Inventory.findByIdAndUpdate(inventory._id, {
+          carry_over: carry_over,
+          purchase: 0,
+          sold: 0,
+          void: 0,
+          physical_stock: 0,
+        });
+      }
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
   }
 };

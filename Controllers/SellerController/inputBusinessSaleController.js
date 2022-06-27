@@ -202,6 +202,7 @@ exports.getProductConsignments = async (req, res, next) => {
     if (!product) {
       return res.status(200).json(error("Invalid product id", res.statusCode));
     }
+    const seller = await Wholeseller.findById(req.seller._id);
     const consignments = await Purchase.aggregate([
       {
         $match: {
@@ -213,6 +214,11 @@ exports.getProductConsignments = async (req, res, next) => {
       {
         $match: {
           "products.productId": { $eq: mongoose.Types.ObjectId(productId) },
+          $and: [
+            !seller.allow_overselling
+              ? { "products.inv_on_hand": { $gt: 0 } }
+              : {},
+          ],
         },
       },
       {
