@@ -348,22 +348,6 @@ exports.getMyProducts = async (req, res, next) => {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
           status: true,
-          $and: [
-            filterBy === 1
-              ? {
-                  suppliers: {
-                    $elemMatch: { $eq: supplierId },
-                  },
-                }
-              : {},
-            filterBy === 2
-              ? {
-                  suppliers: {
-                    $elemMatch: { $ne: supplierId },
-                  },
-                }
-              : {},
-          ],
         },
       },
       {
@@ -394,20 +378,6 @@ exports.getMyProducts = async (req, res, next) => {
       },
       { $unwind: "$units" },
       {
-        $match: {
-          $and: [
-            search
-              ? {
-                  $or: [
-                    { "type.type": { $regex: search, $options: "$i" } },
-                    { "variety.variety": { $regex: search, $options: "$i" } },
-                  ],
-                }
-              : {},
-          ],
-        },
-      },
-      {
         $addFields: {
           isAdded: {
             $filter: {
@@ -431,6 +401,30 @@ exports.getMyProducts = async (req, res, next) => {
               else: false,
             },
           },
+        },
+      },
+      {
+        $match: {
+          $and: [
+            search
+              ? {
+                  $or: [
+                    { "type.type": { $regex: search, $options: "$i" } },
+                    { "variety.variety": { $regex: search, $options: "$i" } },
+                  ],
+                }
+              : {},
+            filterBy === 1
+              ? {
+                  isAdded: true,
+                }
+              : {},
+            filterBy === 2
+              ? {
+                  isAdded: false,
+                }
+              : {},
+          ],
         },
       },
     ]);

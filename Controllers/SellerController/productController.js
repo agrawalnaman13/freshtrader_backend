@@ -327,6 +327,7 @@ exports.getMyProductUnit = async (req, res, next) => {
       return res.status(200).json(error("Invalid product id", res.statusCode));
     }
     const units = await SellerProduct.find({
+      seller: req.seller._id,
       category: product.category,
       variety: product.variety,
       type: product.type,
