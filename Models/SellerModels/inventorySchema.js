@@ -31,6 +31,14 @@ const InventorySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    remaining: {
+      type: Number,
+      default: 0,
+    },
+    physical_stock: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: {} },
   { collection: "inventory" }

@@ -99,6 +99,10 @@ const WholesellerSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    allow_overselling: {
+      type: Boolean,
+      default: false,
+    },
     status: {
       type: Boolean,
       default: true,

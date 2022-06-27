@@ -498,6 +498,7 @@ exports.getMyVarietyList = async (req, res, next) => {
     //   return res.status(200).json(error("Invalid Category", res.statusCode));
     // }
     const varieties = await SellerProduct.find({
+      seller: req.seller._id,
       category: category,
       status: true,
     }).distinct("variety");
@@ -529,6 +530,7 @@ exports.getMyProductList = async (req, res, next) => {
         .json(error("Invalid product variety", res.statusCode));
     }
     const types = await SellerProduct.find({
+      seller: req.seller._id,
       variety: variety,
       status: true,
     }).distinct("type");

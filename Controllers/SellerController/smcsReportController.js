@@ -221,7 +221,7 @@ exports.emailSMCS = async (req, res, next) => {
       emailed_on: new Date(Date.now()),
     });
     for (const transaction of transactionIds) {
-      await Transaction.findByIdAndUpdate(transaction._id, {
+      await Transaction.findByIdAndUpdate(transaction, {
         smcs_notified: true,
       });
     }

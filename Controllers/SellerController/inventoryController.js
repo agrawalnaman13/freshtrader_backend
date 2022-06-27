@@ -10,7 +10,7 @@ const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 exports.getInventory = async (req, res) => {
   try {
-    const { allow_overselling, search } = req.body;
+    const { search } = req.body;
     console.log(req.body);
     const seller = await Wholeseller.findById(req.seller._id);
     let category = [];
@@ -21,9 +21,6 @@ exports.getInventory = async (req, res) => {
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
-          // $and: [
-          //   active_consignment ? { status: "ACTIVE" } : {},
-          // ],
         },
       },
       {
@@ -97,6 +94,9 @@ exports.getInventory = async (req, res) => {
       inventory.ready_to_sell = inventory.carry_over + inventory.purchase;
       inventory.remaining =
         inventory.ready_to_sell - inventory.sold - inventory.void;
+      if (inventory.physical_stock === inventory.remaining) {
+        inventory.physical_stock = inventory.remaining;
+      }
     }
     res
       .status(200)
@@ -150,6 +150,21 @@ exports.getProductInventory = async (seller, productType) => {
     return a + b.remaining;
   }, 0);
   return remaining;
+};
+
+exports.updateOverselling = async (req, res) => {
+  try {
+    const { allow_overselling } = req.body;
+    const seller = await Wholeseller.findById(req.seller._id);
+    seller.allow_overselling = allow_overselling;
+    await seller.save();
+    res
+      .status(200)
+      .json(success("Overselling updated Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
 };
 
 exports.resetInventory = async (req, res) => {
