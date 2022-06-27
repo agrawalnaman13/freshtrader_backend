@@ -447,6 +447,30 @@ exports.processTransaction = async (req, res, next) => {
               }
             );
           }
+          const isPallets = await SellerPallets.findOne({
+            seller: req.seller._id,
+            pallets_taken: 0,
+            pallets_received: 0,
+          });
+          if (!isPallets) {
+            await SellerPallets.create({
+              seller: req.seller._id,
+              pallets_on_hand: +pallets,
+              pallets_taken: 0,
+              pallets_received: 0,
+            });
+          } else {
+            await SellerPallets.findOneAndUpdate(
+              {
+                seller: req.seller._id,
+                pallets_taken: 0,
+                pallets_received: 0,
+              },
+              {
+                pallets_on_hand: isPallets.pallets_on_hand - +pallets,
+              }
+            );
+          }
           if (orderId && refund_type !== "RETURN") {
             await Order.findByIdAndUpdate(orderId, {
               status: "COMPLETED",

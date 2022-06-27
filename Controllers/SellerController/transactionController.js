@@ -351,6 +351,23 @@ exports.deleteTransaction = async (req, res, next) => {
           pallets_taken: myPallets.pallets_taken - +transaction.pallets,
         }
       );
+      const isPallets = await SellerPallets.findOne({
+        seller: req.seller._id,
+        pallets_taken: 0,
+        pallets_received: 0,
+      });
+      if (isPallets) {
+        await SellerPallets.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            pallets_taken: 0,
+            pallets_received: 0,
+          },
+          {
+            pallets_on_hand: isPallets.pallets_on_hand + +transaction.pallets,
+          }
+        );
+      }
     }
     await Transaction.findByIdAndDelete(transactionId);
     res

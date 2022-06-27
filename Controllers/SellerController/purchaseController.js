@@ -69,6 +69,30 @@ exports.createConsignment = async (req, res, next) => {
           }
         );
       }
+      const isPallets = await SellerPallets.findOne({
+        seller: req.seller._id,
+        pallets_taken: 0,
+        pallets_received: 0,
+      });
+      if (!isPallets) {
+        await SellerPallets.create({
+          seller: req.seller._id,
+          pallets_on_hand: +consign_pallets,
+          pallets_taken: 0,
+          pallets_received: 0,
+        });
+      } else {
+        await SellerPallets.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            pallets_taken: 0,
+            pallets_received: 0,
+          },
+          {
+            pallets_on_hand: isPallets.pallets_on_hand + +consign_pallets,
+          }
+        );
+      }
     }
     res
       .status(200)
@@ -217,6 +241,31 @@ exports.changeConsignmentStatus = async (req, res, next) => {
             {
               pallets_received:
                 myPallets.pallets_received + +consignment.consign_pallets,
+            }
+          );
+        }
+        const isPallets = await SellerPallets.findOne({
+          seller: req.seller._id,
+          pallets_taken: 0,
+          pallets_received: 0,
+        });
+        if (!isPallets) {
+          await SellerPallets.create({
+            seller: req.seller._id,
+            pallets_on_hand: +consignment.consign_pallets,
+            pallets_taken: 0,
+            pallets_received: 0,
+          });
+        } else {
+          await SellerPallets.findOneAndUpdate(
+            {
+              seller: req.seller._id,
+              pallets_taken: 0,
+              pallets_received: 0,
+            },
+            {
+              pallets_on_hand:
+                isPallets.pallets_on_hand - +consignment.consign_pallets,
             }
           );
         }
