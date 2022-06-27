@@ -19,6 +19,7 @@ const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
 const moment = require("moment");
+const { getProductInventory } = require("./inventoryController");
 
 exports.getBusinesses = async (req, res, next) => {
   try {
@@ -334,6 +335,18 @@ exports.processTransaction = async (req, res, next) => {
           .json(error("Transaction id is required", res.statusCode));
       }
     }
+    const seller = await Wholeseller.findById(req.seller._id);
+    if (!seller.allow_overselling) {
+      for (const product of products) {
+        const sellerProd = await SellerProduct.findById(product.productId);
+        const inv = await getProductInventory(req.seller._id, sellerProd.type);
+        if (inv < product.quantity) {
+          return res
+            .status(200)
+            .json(error("Overselling is not allowed", res.statusCode));
+        }
+      }
+    }
     let query = {
       seller: req.seller._id,
       buyer,
@@ -508,7 +521,6 @@ exports.processTransaction = async (req, res, next) => {
           );
         }
       }
-      const seller = await Wholeseller.findById(req.seller._id);
       for (const product of products) {
         product.productId = await SellerProduct.findById(
           product.productId

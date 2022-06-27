@@ -47,9 +47,9 @@ exports.getPallets = async (req, res, next) => {
       {
         $sort:
           sortBy === 3
-            ? { total_pallets: 1 }
-            : sortBy === 4
             ? { total_pallets: -1 }
+            : sortBy === 4
+            ? { total_pallets: 1 }
             : { createdAt: 1 },
       },
     ]);
