@@ -4,7 +4,8 @@ const Transaction = require("../../Models/SellerModels/transactionSchema");
 
 exports.getEndOfDayReport = async (req, res, next) => {
   try {
-    const { date } = req.body;
+    let { date } = req.body;
+    if (!date) date = Date.now();
     const transactions = await Transaction.aggregate([
       {
         $project: {
