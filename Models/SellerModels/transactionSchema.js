@@ -41,7 +41,7 @@ const TransactionSchema = new mongoose.Schema(
     },
     salesman: {
       type: mongoose.Types.ObjectId,
-      ref: "sellerSalesman",
+      ref: "sellerStaff",
       required: true,
     },
     station: {

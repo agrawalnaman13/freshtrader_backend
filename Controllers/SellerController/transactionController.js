@@ -57,7 +57,7 @@ exports.getTransactions = async (req, res, next) => {
         $lookup: {
           localField: "salesman",
           foreignField: "_id",
-          from: "sellersalesmen",
+          from: "sellerstaffs",
           as: "salesman",
         },
       },
@@ -95,7 +95,7 @@ exports.getTransactions = async (req, res, next) => {
             : sortBy === 2
             ? { createdAt: 1 }
             : sortBy === 3
-            ? { "salesman.full_name": 1 }
+            ? { "salesman.first_name": 1 }
             : sortBy === 4
             ? { type: 1 }
             : sortBy === 5
@@ -415,7 +415,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
         $lookup: {
           localField: "salesman",
           foreignField: "_id",
-          from: "sellersalesmen",
+          from: "sellerstaffs",
           as: "salesman",
         },
       },
@@ -439,7 +439,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
       response.push({
         DATE: moment(transaction.createdAt).format("LL"),
         TIME: moment(transaction.createdAt).format("hh:mm A"),
-        SALESMEN: transaction.salesman.full_name,
+        SALESMEN: transaction.salesman.first_name,
         REF: transaction.ref,
         TYPE: transaction.type,
         BUYER: transaction.buyer.business_trading_name,

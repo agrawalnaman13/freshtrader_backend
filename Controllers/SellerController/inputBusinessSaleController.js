@@ -20,6 +20,7 @@ const path = require("path");
 const ejs = require("ejs");
 const moment = require("moment");
 const { getProductInventory } = require("./inventoryController");
+const SellerStaff = require("../../Models/SellerModels/staffSchema");
 
 exports.getBusinesses = async (req, res, next) => {
   try {
@@ -271,19 +272,20 @@ exports.processTransaction = async (req, res, next) => {
       transactionId,
     } = req.body;
     console.log(req.body);
-    if (!buyer) {
-      return res.status(200).json(error("Buyer is required", res.statusCode));
-    }
-    const buyer_data = await Buyer.findById(buyer);
-    if (!buyer_data) {
-      return res.status(200).json(error("Invalid buyer id", res.statusCode));
-    }
+    // if (!buyer) {
+    //   return res.status(200).json(error("Buyer is required", res.statusCode));
+    // }
+    let buyer_data = {};
+    if (buyer) buyer_data = await Buyer.findById(buyer);
+    // if (!buyer_data) {
+    //   return res.status(200).json(error("Invalid buyer id", res.statusCode));
+    // }
     if (!salesman) {
       return res
         .status(200)
         .json(error("Salesman is required", res.statusCode));
     }
-    const salesman_data = await SellerSalesman.findById(salesman);
+    const salesman_data = await SellerStaff.findById(salesman);
     if (!salesman_data) {
       return res.status(200).json(error("Invalid salesman id", res.statusCode));
     }

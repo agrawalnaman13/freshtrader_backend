@@ -115,7 +115,7 @@ exports.getCustomerTransactions = async (req, res, next) => {
         $lookup: {
           localField: "salesman",
           foreignField: "_id",
-          from: "sellersalesmen",
+          from: "sellerstaffs",
           as: "salesman",
         },
       },
