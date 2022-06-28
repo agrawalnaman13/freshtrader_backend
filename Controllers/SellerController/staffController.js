@@ -4,8 +4,15 @@ const { success, error } = require("../../service_response/adminApiResponse");
 
 exports.addStaff = async (req, res, next) => {
   try {
-    const { first_name, last_name, username, password, phone_number, access } =
-      req.body;
+    const {
+      first_name,
+      last_name,
+      username,
+      password,
+      phone_number,
+      access,
+      role,
+    } = req.body;
     console.log(req.body);
     if (!username) {
       return res
@@ -16,6 +23,9 @@ exports.addStaff = async (req, res, next) => {
       return res
         .status(200)
         .json(error("Please provide password", res.statusCode));
+    }
+    if (!role) {
+      return res.status(200).json(error("Please provide role", res.statusCode));
     }
     if (!access.length) {
       return res
@@ -30,6 +40,7 @@ exports.addStaff = async (req, res, next) => {
       password,
       phone_number,
       access,
+      role,
     });
     await staff.save();
     res
@@ -43,9 +54,17 @@ exports.addStaff = async (req, res, next) => {
 
 exports.getStaff = async (req, res, next) => {
   try {
-    const staffs = await SellerStaff.find({
+    const { role } = req.body;
+    let query = {
       seller: req.seller._id,
-    }).sort({ createdAt: -1 });
+    };
+    if (role) {
+      query = {
+        seller: req.seller._id,
+        role,
+      };
+    }
+    const staffs = await SellerStaff.find(query).sort({ createdAt: -1 });
     res
       .status(200)
       .json(success("Staff Fetched Successfully", { staffs }, res.statusCode));
@@ -80,6 +99,7 @@ exports.updateStaff = async (req, res, next) => {
       password,
       phone_number,
       access,
+      role,
     } = req.body;
     console.log(req.body);
     if (!staffId) {
@@ -96,6 +116,9 @@ exports.updateStaff = async (req, res, next) => {
         .status(200)
         .json(error("Please provide user name", res.statusCode));
     }
+    if (!role) {
+      return res.status(200).json(error("Please provide role", res.statusCode));
+    }
     if (!access.length) {
       return res
         .status(200)
@@ -106,6 +129,7 @@ exports.updateStaff = async (req, res, next) => {
     staff.username = username;
     staff.phone_number = phone_number;
     staff.access = access;
+    staff.role = role;
     if (password) staff.password = password;
     await staff.save();
     res
