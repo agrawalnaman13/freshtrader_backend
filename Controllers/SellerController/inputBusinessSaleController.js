@@ -436,7 +436,7 @@ exports.processTransaction = async (req, res, next) => {
             void: +voids,
           }
         );
-        if (type !== "CREDIT NOTE" || refund_type !== "VOID") {
+        if (type !== "CREDIT NOTE" || (refund_type !== "VOID" && buyer)) {
           const myPallets = await SellerPallets.findOne({
             seller: req.seller._id,
             taken_by: buyer,
@@ -491,35 +491,38 @@ exports.processTransaction = async (req, res, next) => {
             });
           }
         }
-        const customer = await SellerPartnerBuyers.findOne({
-          seller: req.seller._id,
-          buyer: buyer,
-        });
-        if (customer) {
-          customer.total += +total;
-          customer.opening += type !== "CREDIT NOTE" ? +total : 0;
-          customer.credit += type === "CREDIT NOTE" ? +total : 0;
-          customer.bought += +total;
-          customer.paid +=
-            type === "CARD" ||
-            (type === "CASH" && !cash_transaction_without_payment)
-              ? +total
-              : 0;
-          customer.closing = customer.opening - customer.paid - customer.credit;
-          await SellerPartnerBuyers.findOneAndUpdate(
-            {
-              seller: req.seller._id,
-              buyer: buyer,
-            },
-            {
-              opening: customer.opening,
-              total: customer.total,
-              credit: customer.credit,
-              bought: customer.bought,
-              paid: customer.paid,
-              closing: customer.closing,
-            }
-          );
+        if (buyer) {
+          const customer = await SellerPartnerBuyers.findOne({
+            seller: req.seller._id,
+            buyer: buyer,
+          });
+          if (customer) {
+            customer.total += +total;
+            customer.opening += type !== "CREDIT NOTE" ? +total : 0;
+            customer.credit += type === "CREDIT NOTE" ? +total : 0;
+            customer.bought += +total;
+            customer.paid +=
+              type === "CARD" ||
+              (type === "CASH" && !cash_transaction_without_payment)
+                ? +total
+                : 0;
+            customer.closing =
+              customer.opening - customer.paid - customer.credit;
+            await SellerPartnerBuyers.findOneAndUpdate(
+              {
+                seller: req.seller._id,
+                buyer: buyer,
+              },
+              {
+                opening: customer.opening,
+                total: customer.total,
+                credit: customer.credit,
+                bought: customer.bought,
+                paid: customer.paid,
+                closing: customer.closing,
+              }
+            );
+          }
         }
       }
       for (const product of products) {
