@@ -436,7 +436,7 @@ exports.processTransaction = async (req, res, next) => {
             void: +voids,
           }
         );
-        if (type !== "CREDIT NOTE" || (refund_type !== "VOID" && buyer)) {
+        if ((type !== "CREDIT NOTE" || refund_type !== "VOID") && buyer) {
           const myPallets = await SellerPallets.findOne({
             seller: req.seller._id,
             taken_by: buyer,
