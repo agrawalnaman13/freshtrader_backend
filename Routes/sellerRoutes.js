@@ -315,7 +315,7 @@ router.post("/getSMCSReport", tokenAuthorisation, getSMCSReport);
 router.post("/emailSMCS", tokenAuthorisation, emailSMCS);
 router.post("/getEndOfDayReport", tokenAuthorisation, getEndOfDayReport);
 router.post("/addStaff", tokenAuthorisation, addStaff);
-router.get("/getStaff", tokenAuthorisation, getStaff);
+router.post("/getStaff", tokenAuthorisation, getStaff);
 router.get("/getStaffDetail/:id", tokenAuthorisation, getStaffDetail);
 router.post("/updateStaff", tokenAuthorisation, updateStaff);
 router.post("/createSupport", tokenAuthorisation, createSupport);
