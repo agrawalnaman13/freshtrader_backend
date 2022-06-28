@@ -260,7 +260,7 @@ exports.updateAccountInformation = async (req, res, next) => {
         account_name: account_name,
         bsb: bsb,
         account: account,
-        sales_invoice_due_date: sales_invoice_due_date,
+        sales_invoice_due_date: +sales_invoice_due_date,
         csv: csv,
       }
     );

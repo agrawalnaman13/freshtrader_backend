@@ -92,6 +92,11 @@ exports.sellerSignup = async (req, res) => {
         .status(200)
         .json(error("Please provide password", res.statusCode));
     }
+    if (!req.files.length) {
+      return res
+        .status(200)
+        .json(error("Please provide profile picture", res.statusCode));
+    }
 
     const newSeller = await Wholeseller.create({
       profile_image: req.files.length
