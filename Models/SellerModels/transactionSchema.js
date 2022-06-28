@@ -32,7 +32,6 @@ const TransactionSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "buyer",
       required: false,
-      default: "",
     },
     seller: {
       type: mongoose.Types.ObjectId,
