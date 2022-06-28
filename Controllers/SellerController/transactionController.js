@@ -9,6 +9,7 @@ const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const sendMail = require("../../services/mail");
+const Buyer = require("../../Models/BuyerModels/buyerSchema");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { date, sortBy, filterBy } = req.body;
@@ -44,15 +45,6 @@ exports.getTransactions = async (req, res, next) => {
           seller: mongoose.Types.ObjectId(req.seller._id),
         },
       },
-      {
-        $lookup: {
-          localField: "buyer",
-          foreignField: "_id",
-          from: "buyers",
-          as: "buyer",
-        },
-      },
-      { $unwind: "$buyer" },
       {
         $lookup: {
           localField: "salesman",
@@ -98,10 +90,6 @@ exports.getTransactions = async (req, res, next) => {
             ? { "salesman.username": 1 }
             : sortBy === 4
             ? { type: 1 }
-            : sortBy === 5
-            ? { "buyer.business_trading_name": 1 }
-            : sortBy === 6
-            ? { "buyer.business_trading_name": -1 }
             : sortBy === 7
             ? { total: -1 }
             : sortBy === 8
@@ -110,6 +98,9 @@ exports.getTransactions = async (req, res, next) => {
       },
     ]);
     for (const transaction of transactions) {
+      if (transaction.buyer)
+        transaction.buyer = await Buyer.findById(transaction.buyer);
+      else transaction.buyer = {};
       for (const product of transaction.products) {
         product.productId = await SellerProduct.findById(product.productId)
           .populate(["variety", "type", "units"])
@@ -118,6 +109,24 @@ exports.getTransactions = async (req, res, next) => {
           .populate("supplier")
           .select(["supplier", "consign"]);
       }
+    }
+    if (sortBy === 5) {
+      transactions.sort((a, b) =>
+        a.buyer.business_trading_name > b.buyer.business_trading_name
+          ? 1
+          : b.buyer.business_trading_name > a.buyer.business_trading_name
+          ? -1
+          : 0
+      );
+    }
+    if (sortBy === 6) {
+      transactions.sort((a, b) =>
+        a.buyer.business_trading_name < b.buyer.business_trading_name
+          ? 1
+          : b.buyer.business_trading_name < a.buyer.business_trading_name
+          ? -1
+          : 0
+      );
     }
     res
       .status(200)
@@ -404,15 +413,6 @@ exports.downloadTransactionCSV = async (req, res, next) => {
       },
       {
         $lookup: {
-          localField: "buyer",
-          foreignField: "_id",
-          from: "buyers",
-          as: "buyer",
-        },
-      },
-      { $unwind: "$buyer" },
-      {
-        $lookup: {
           localField: "salesman",
           foreignField: "_id",
           from: "sellerstaffs",
@@ -421,6 +421,11 @@ exports.downloadTransactionCSV = async (req, res, next) => {
       },
       { $unwind: "$salesman" },
     ]);
+    for (const transaction of transactions) {
+      if (transaction.buyer)
+        transaction.buyer = await Buyer.findById(transaction.buyer);
+      else transaction.buyer = {};
+    }
 
     const seller = await Wholeseller.findById(req.seller._id).select("csv");
     const fields = [
