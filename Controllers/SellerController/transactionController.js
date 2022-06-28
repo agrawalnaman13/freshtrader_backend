@@ -95,7 +95,7 @@ exports.getTransactions = async (req, res, next) => {
             : sortBy === 2
             ? { createdAt: 1 }
             : sortBy === 3
-            ? { "salesman.first_name": 1 }
+            ? { "salesman.username": 1 }
             : sortBy === 4
             ? { type: 1 }
             : sortBy === 5
@@ -439,7 +439,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
       response.push({
         DATE: moment(transaction.createdAt).format("LL"),
         TIME: moment(transaction.createdAt).format("hh:mm A"),
-        SALESMEN: transaction.salesman.first_name,
+        SALESMEN: transaction.salesman.username,
         REF: transaction.ref,
         TYPE: transaction.type,
         BUYER: transaction.buyer.business_trading_name,

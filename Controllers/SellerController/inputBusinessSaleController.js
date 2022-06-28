@@ -351,7 +351,6 @@ exports.processTransaction = async (req, res, next) => {
     }
     let query = {
       seller: req.seller._id,
-      buyer,
       type,
       total,
       products,
@@ -374,7 +373,6 @@ exports.processTransaction = async (req, res, next) => {
     if (type === "CREDIT NOTE") {
       query = {
         seller: req.seller._id,
-        buyer,
         type,
         total,
         products,
@@ -389,6 +387,7 @@ exports.processTransaction = async (req, res, next) => {
     }
     if (station) query.station = station;
     if (orderId) query.orderId = orderId;
+    if (buyer) query.buyer = buyer;
     let transaction;
     if (prev_trans && transactionId) {
       transaction = await Transaction.findByIdAndUpdate(transactionId, query);
