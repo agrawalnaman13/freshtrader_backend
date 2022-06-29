@@ -560,21 +560,45 @@ exports.getMyProductList = async (req, res, next) => {
 
 exports.addMissingProduct = async (req, res, next) => {
   try {
-    const { category, variety, type } = req.body;
+    const { category, variety, type, varietyId, typeId } = req.body;
     console.log(req.body, req.files);
-    const newVariety = await ProductVariety.create({
-      variety: variety,
-      product: category,
-      added_by: req.seller._id,
-    });
-    const newType = await ProductType.create({
-      variety: newVariety._id,
-      type: type,
-      image: `${req.files[0].destination.replace("./public", "")}/${
-        req.files[0].filename
-      }`,
-      added_by: req.seller._id,
-    });
+    if (!category) {
+      return res
+        .status(200)
+        .json(error("Category is required", res.statusCode));
+    }
+    if (!variety) {
+      return res.status(200).json(error("Variety is required", res.statusCode));
+    }
+    if (!type) {
+      return res.status(200).json(error("Type is required", res.statusCode));
+    }
+    if (!req.files) {
+      return res.status(200).json(error("Image is required", res.statusCode));
+    }
+    let newVariety;
+    if (varietyId) {
+      newVariety = await ProductVariety.findById(varietyId);
+    } else {
+      newVariety = await ProductVariety.create({
+        variety: variety,
+        product: category,
+        added_by: req.seller._id,
+      });
+    }
+    let newType;
+    if (typeId) {
+      newType = await ProductType.findById(typeId);
+    } else {
+      newType = await ProductType.create({
+        variety: newVariety._id,
+        type: type,
+        image: `${req.files[0].destination.replace("./public", "")}/${
+          req.files[0].filename
+        }`,
+        added_by: req.seller._id,
+      });
+    }
     return res
       .status(200)
       .json(
