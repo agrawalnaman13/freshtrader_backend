@@ -23,13 +23,7 @@ exports.addSubscription = async (req, res) => {
 
 exports.deleteSubscription = async (req, res) => {
   try {
-    const { subscriptionId } = req.body;
-    if (!subscriptionId) {
-      return res
-        .status(200)
-        .json(error("Please provide your subscription id", res.statusCode));
-    }
-    await Subscription.findByIdAndDelete(subscriptionId);
+    await Subscription.findByIdAndDelete(req.params.id);
     res
       .status(200)
       .json(success("Subscription Deleted Successfully", {}, res.statusCode));
