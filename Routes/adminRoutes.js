@@ -49,6 +49,7 @@ const {
   getSubscriptionList,
   changeSubscriptionStatus,
   updateSubscription,
+  deleteSubscription,
 } = require("../Controllers/AdminController/subscriptionController");
 const {
   getSupport,
@@ -121,6 +122,11 @@ router.get(
   changeBuyerStatus
 );
 router.post("/addSubscription", tokenAdminAuthorisation, addSubscription);
+router.get(
+  "/deleteSubscription/:id",
+  tokenAdminAuthorisation,
+  deleteSubscription
+);
 router.post(
   "/getSubscriptionDetail",
   tokenAdminAuthorisation,

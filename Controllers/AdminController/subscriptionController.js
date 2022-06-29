@@ -20,6 +20,25 @@ exports.addSubscription = async (req, res) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.deleteSubscription = async (req, res) => {
+  try {
+    const { subscriptionId } = req.body;
+    if (!subscriptionId) {
+      return res
+        .status(200)
+        .json(error("Please provide your subscription id", res.statusCode));
+    }
+    await Subscription.findByIdAndDelete(subscriptionId);
+    res
+      .status(200)
+      .json(success("Subscription Deleted Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.getSubscriptionDetail = async (req, res) => {
   try {
     const { filterBy, subscriptionId } = req.body;
