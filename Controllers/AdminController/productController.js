@@ -258,6 +258,29 @@ exports.importDB = async (req, res, next) => {
   }
 };
 
+exports.updateProductDB = async (req, res, next) => {
+  try {
+    const producttypes = require("./producttypes.json");
+    const types = await ProductType.find();
+    for (const type of types) {
+      const product = producttypes.filter(
+        (pr) => String(type._id) === String(pr._id)
+      );
+      if (product.length) {
+        await ProductType.findByIdAndUpdate(type._id, {
+          image: product[0].image,
+        });
+      }
+    }
+    return res
+      .status(200)
+      .json(success("Products updated Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.dropCollection = async (req, res, next) => {
   try {
     const db = mongoose.connection.db;
