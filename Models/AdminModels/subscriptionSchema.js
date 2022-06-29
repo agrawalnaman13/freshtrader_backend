@@ -15,7 +15,7 @@ const SubscriptionSchema = new mongoose.Schema(
       required: true,
     },
     plan_features: {
-      type: String,
+      type: Array,
       required: true,
     },
     status: {
