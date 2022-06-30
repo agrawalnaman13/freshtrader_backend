@@ -41,6 +41,7 @@ const {
 } = require("../Controllers/SellerController/orderController");
 const {
   updateTransactions,
+  getTransactionDetail,
 } = require("../Controllers/SellerController/transactionController");
 const tokenAuthorisationBuyer = require("../middleware/tokenBuyerAuth");
 
@@ -66,6 +67,11 @@ router.post("/changeOrderStatus", tokenAuthorisationBuyer, changeOrderStatus);
 router.post("/reorderProduct", tokenAuthorisationBuyer, reorderProduct);
 router.get("/getOrderCount", tokenAuthorisationBuyer, getOrderCount);
 router.post("/getTransactions", tokenAuthorisationBuyer, getTransactions);
+router.get(
+  "/getTransactionDetail/:id",
+  tokenAuthorisationBuyer,
+  getTransactionDetail
+);
 router.post(
   "/downloadTransactionCSV",
   tokenAuthorisationBuyer,

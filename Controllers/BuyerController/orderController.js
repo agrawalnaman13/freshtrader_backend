@@ -44,6 +44,12 @@ exports.getSellers = async (req, res, next) => {
           isSameMarket: true,
         },
       },
+      {
+        $sort:
+          sortBy === 1
+            ? { "seller.business_trading_name": 1 }
+            : { "seller.business_trading_name": -1 },
+      },
     ]);
     let list = [];
     for (const seller of sellers) {
@@ -235,11 +241,34 @@ exports.addToCart = async (req, res, next) => {
 exports.getMyCart = async (req, res, next) => {
   try {
     const { sortBy } = req.body;
-    const cart = await Cart.find({
-      buyer: req.buyer._id,
-    })
-      .populate("seller")
-      .select("-seller.password");
+    const cart = await Cart.aggregate([
+      {
+        $match: {
+          buyer: mongoose.Types.ObjectId(req.buyer._id),
+        },
+      },
+      {
+        $lookup: {
+          localField: "seller",
+          foreignField: "_id",
+          from: "wholesellers",
+          as: "seller",
+        },
+      },
+      { $unwind: "$seller" },
+      {
+        $sort:
+          sortBy === 1
+            ? { createdAt: -1 }
+            : sortBy === 2
+            ? { createdAt: 1 }
+            : sortBy === 3
+            ? { "seller.business_trading_name": 1 }
+            : sortBy === 4
+            ? { "seller.business_trading_name": 1 }
+            : { createdAt: -1 },
+      },
+    ]);
     res
       .status(200)
       .json(success("Cart fetched successfully", { cart }, res.statusCode));
@@ -373,13 +402,36 @@ exports.orderProduct = async (req, res, next) => {
 
 exports.getOrders = async (req, res, next) => {
   try {
-    const { status } = req.body;
-    const order = await Order.find({
-      buyer: req.buyer._id,
-      status: status,
-    })
-      .populate("seller")
-      .select("-seller.password");
+    const { status, sortBy } = req.body;
+    const order = await Order.aggregate([
+      {
+        $match: {
+          buyer: mongoose.Types.ObjectId(req.buyer._id),
+          status: status,
+        },
+      },
+      {
+        $lookup: {
+          localField: "seller",
+          foreignField: "_id",
+          from: "wholesellers",
+          as: "seller",
+        },
+      },
+      { $unwind: "$seller" },
+      {
+        $sort:
+          sortBy === 1
+            ? { createdAt: -1 }
+            : sortBy === 2
+            ? { createdAt: 1 }
+            : sortBy === 3
+            ? { "seller.business_trading_name": 1 }
+            : sortBy === 4
+            ? { "seller.business_trading_name": 1 }
+            : { createdAt: -1 },
+      },
+    ]);
     res
       .status(200)
       .json(success("Order fetched successfully", { order }, res.statusCode));

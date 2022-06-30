@@ -75,37 +75,25 @@ exports.getTransactions = async (req, res, next) => {
           ],
         },
       },
-      // {
-      //   $sort:
-      //     sortBy === 1
-      //       ? { createdAt: -1 }
-      //       : sortBy === 2
-      //       ? { createdAt: 1 }
-      //       : sortBy === 3
-      //       ? { "salesman.full_name": 1 }
-      //       : sortBy === 4
-      //       ? { type: 1 }
-      //       : sortBy === 5
-      //       ? { "buyer.business_trading_name": 1 }
-      //       : sortBy === 6
-      //       ? { "buyer.business_trading_name": -1 }
-      //       : sortBy === 7
-      //       ? { total: -1 }
-      //       : sortBy === 8
-      //       ? { total: 1 }
-      //       : { createdAt: -1 },
-      // },
+      {
+        $sort:
+          sortBy === 1
+            ? { createdAt: -1 }
+            : sortBy === 2
+            ? { createdAt: 1 }
+            : sortBy === 3
+            ? { type: 1 }
+            : sortBy === 4
+            ? { "seller.business_trading_name": 1 }
+            : sortBy === 5
+            ? { "seller.business_trading_name": -1 }
+            : sortBy === 6
+            ? { total: -1 }
+            : sortBy === 7
+            ? { total: 1 }
+            : { createdAt: -1 },
+      },
     ]);
-    for (const transaction of transactions) {
-      for (const product of transaction.products) {
-        product.productId = await SellerProduct.findById(product.productId)
-          .populate(["variety", "type", "units"])
-          .select(["variety", "type", "units"]);
-        product.consignment = await Purchase.findById(product.consignment)
-          .populate("supplier")
-          .select(["supplier", "consign"]);
-      }
-    }
     res
       .status(200)
       .json(

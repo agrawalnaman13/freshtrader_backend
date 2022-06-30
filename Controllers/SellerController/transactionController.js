@@ -191,6 +191,9 @@ exports.getTransactionDetail = async (req, res, next) => {
       product.productId = await SellerProduct.findById(product.productId)
         .populate(["variety", "type", "units"])
         .select(["variety", "type", "units"]);
+      product.consignment = await Purchase.findById(product.consignment)
+        .populate("supplier")
+        .select(["supplier"]);
     }
     if (
       transaction.type === "INVOICE" ||
