@@ -53,10 +53,10 @@ router.get(
   tokenAuthorisationBuyer,
   updateAccountInformation
 );
-router.get("/getSellers", tokenAuthorisationBuyer, getSellers);
+router.post("/getSellers", tokenAuthorisationBuyer, getSellers);
 router.post("/getSellersProducts", tokenAuthorisationBuyer, getSellersProducts);
 router.post("/addToCart", tokenAuthorisationBuyer, addToCart);
-router.get("/getMyCart", tokenAuthorisationBuyer, getMyCart);
+router.post("/getMyCart", tokenAuthorisationBuyer, getMyCart);
 router.get("/getCartDetails/:id", tokenAuthorisationBuyer, getCartDetails);
 router.get("/deleteFromCart/:id", tokenAuthorisationBuyer, deleteFromCart);
 router.post("/orderProduct", tokenAuthorisationBuyer, orderProduct);

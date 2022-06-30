@@ -8,6 +8,7 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
 const moment = require("moment");
 exports.getSellers = async (req, res, next) => {
+  const { sortBy } = req.body;
   try {
     const sellers = await SellerPartnerBuyers.aggregate([
       {
@@ -128,7 +129,6 @@ exports.getSellersProducts = async (req, res, next) => {
             search
               ? { "variety.variety": { $regex: search, $options: "$i" } }
               : {},
-            // { suppliers: { $elemArray: { $regex: search, $options: "$i" } } },
           ],
         },
       },
@@ -234,6 +234,7 @@ exports.addToCart = async (req, res, next) => {
 
 exports.getMyCart = async (req, res, next) => {
   try {
+    const { sortBy } = req.body;
     const cart = await Cart.find({
       buyer: req.buyer._id,
     })
