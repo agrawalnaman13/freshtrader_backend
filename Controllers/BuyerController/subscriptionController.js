@@ -27,6 +27,7 @@ exports.buyPlan = async (req, res, next) => {
       plan: planId,
       valid_till: till,
     });
+    await Buyer.findByIdAndUpdate(req.buyer._id, { plan: planId });
     res
       .status(200)
       .json(success("Plan Purchased Successfully", {}, res.statusCode));
