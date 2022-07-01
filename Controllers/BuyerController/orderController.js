@@ -331,8 +331,7 @@ exports.orderProduct = async (req, res, next) => {
           .json(
             error("You can't send more than 5 orders in a week", res.statusCode)
           );
-    }
-    if (buyer.plan.plan_name === "Free") {
+    } else if (buyer.plan.plan_name === "Free") {
       if (buyer.order_count === 5)
         return res
           .status(200)
@@ -483,8 +482,7 @@ exports.reorderProduct = async (req, res, next) => {
           .json(
             error("You can't send more than 5 orders in a week", res.statusCode)
           );
-    }
-    if (buyer.plan.plan_name === "Free") {
+    } else if (buyer.plan.plan_name === "Free") {
       return res
         .status(200)
         .json(
