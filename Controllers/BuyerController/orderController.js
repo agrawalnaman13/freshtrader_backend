@@ -323,7 +323,7 @@ exports.orderProduct = async (req, res, next) => {
     const { seller, product, pick_up_date, pick_up_time, notes, payment } =
       req.body;
     console.log(req.body);
-    const buyer = await Buyer.findById(req.params.id).populate("plan");
+    const buyer = await Buyer.findById(req.buyer._id).populate("plan");
     if (buyer.plan.plan_name === "Free") {
       if (buyer.order_count === 5)
         return res
@@ -467,7 +467,7 @@ exports.reorderProduct = async (req, res, next) => {
   try {
     const { orderId, pick_up_date, pick_up_time, notes, payment } = req.body;
     console.log(req.body);
-    const buyer = await Buyer.findById(req.params.id).populate("plan");
+    const buyer = await Buyer.findById(req.buyer._id).populate("plan");
     if (buyer.plan.plan_name === "Free") {
       return res
         .status(200)
