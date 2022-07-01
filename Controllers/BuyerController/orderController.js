@@ -476,12 +476,11 @@ exports.reorderProduct = async (req, res, next) => {
     console.log(req.body);
     const buyer = await Buyer.findById(req.buyer._id).populate("plan");
     if (!buyer.plan) {
-      if (buyer.order_count === 5)
-        return res
-          .status(200)
-          .json(
-            error("You can't send more than 5 orders in a week", res.statusCode)
-          );
+      return res
+        .status(200)
+        .json(
+          error("Please purchase Subscription plan to reorder", res.statusCode)
+        );
     } else if (buyer.plan.plan_name === "Free") {
       return res
         .status(200)

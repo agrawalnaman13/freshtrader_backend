@@ -38,9 +38,10 @@ exports.buyPlan = async (req, res, next) => {
 
 exports.getMyPlan = async (req, res, next) => {
   try {
+    const buyer = await Buyer.findById(req.buyer._id);
     const plan = await SubscriptionHistory.findOne({
       buyer: req.buyer._id,
-      valid_till: { $gt: new Date(Date.now()) },
+      plan: buyer.plan,
     }).populate("plan");
     res
       .status(200)

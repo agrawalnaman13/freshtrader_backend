@@ -326,11 +326,17 @@ exports.deleteTransaction = async (req, res, next) => {
             p.sold -= product.quantity;
             p.void += product.quantity;
           }
-          p.sold_percentage = (p.sold / p.received) * 100;
-          p.total_sales = p.sold * p.average_sales_price;
+          p.sold_percentage = ((p.sold / p.received) * 100).toFixed(2);
+          p.total_sales = (p.sold * p.average_sales_price).toFixed(2);
           p.inv_on_hand = p.received - p.sold - p.void;
-          p.gross_profit = p.received * p.cost_per_unit - p.total_sales;
-          p.gross_profit_percentage = (p.gross_profit / p.total_sales) * 100;
+          p.gross_profit = (
+            p.received * p.cost_per_unit -
+            p.total_sales
+          ).toFixed(2);
+          p.gross_profit_percentage = (
+            (p.gross_profit / p.total_sales) *
+            100
+          ).toFixed(2);
           sold = p.sold;
           voids = p.void;
         }
