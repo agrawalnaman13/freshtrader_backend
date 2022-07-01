@@ -324,6 +324,14 @@ exports.orderProduct = async (req, res, next) => {
       req.body;
     console.log(req.body);
     const buyer = await Buyer.findById(req.buyer._id).populate("plan");
+    if (!buyer) {
+      if (buyer.order_count === 5)
+        return res
+          .status(200)
+          .json(
+            error("You can't send more than 5 orders in a week", res.statusCode)
+          );
+    }
     if (buyer.plan.plan_name === "Free") {
       if (buyer.order_count === 5)
         return res
@@ -468,6 +476,14 @@ exports.reorderProduct = async (req, res, next) => {
     const { orderId, pick_up_date, pick_up_time, notes, payment } = req.body;
     console.log(req.body);
     const buyer = await Buyer.findById(req.buyer._id).populate("plan");
+    if (!buyer) {
+      if (buyer.order_count === 5)
+        return res
+          .status(200)
+          .json(
+            error("You can't send more than 5 orders in a week", res.statusCode)
+          );
+    }
     if (buyer.plan.plan_name === "Free") {
       return res
         .status(200)
