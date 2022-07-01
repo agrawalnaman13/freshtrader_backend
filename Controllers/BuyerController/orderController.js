@@ -324,31 +324,31 @@ exports.orderProduct = async (req, res, next) => {
       req.body;
     console.log(req.body);
     const buyer = await Buyer.findById(req.buyer._id).populate("plan");
-    if (!buyer.plan) {
-      if (buyer.order_count === 5)
-        return res
-          .status(200)
-          .json(
-            error("You can't send more than 5 orders in a week", res.statusCode)
-          );
-    } else if (buyer.plan.plan_name === "Free") {
-      if (buyer.order_count === 5)
-        return res
-          .status(200)
-          .json(
-            error("You can't send more than 5 orders in a week", res.statusCode)
-          );
-    } else if (buyer.plan.plan_name === "Small Enterprise") {
-      if (buyer.order_count === 15)
-        return res
-          .status(200)
-          .json(
-            error(
-              "You can't send more than 15 orders in a week",
-              res.statusCode
-            )
-          );
-    }
+    // if (!buyer.plan) {
+    //   if (buyer.order_count === 5)
+    //     return res
+    //       .status(200)
+    //       .json(
+    //         error("You can't send more than 5 orders in a week", res.statusCode)
+    //       );
+    // } else if (buyer.plan.plan_name === "Free") {
+    //   if (buyer.order_count === 5)
+    //     return res
+    //       .status(200)
+    //       .json(
+    //         error("You can't send more than 5 orders in a week", res.statusCode)
+    //       );
+    // } else if (buyer.plan.plan_name === "Small Enterprise") {
+    //   if (buyer.order_count === 15)
+    //     return res
+    //       .status(200)
+    //       .json(
+    //         error(
+    //           "You can't send more than 15 orders in a week",
+    //           res.statusCode
+    //         )
+    //       );
+    // }
     if (!seller) {
       return res
         .status(200)
