@@ -49,7 +49,7 @@ const BuyerSchema = new mongoose.Schema(
     },
     plan: {
       type: mongoose.Types.ObjectId,
-      ref: "subscriptions",
+      ref: "subscription",
     },
     csv: {
       type: String,

@@ -472,7 +472,7 @@ exports.getOrderDetails = async (req, res, next) => {
 
 exports.reorderProduct = async (req, res, next) => {
   try {
-    const { orderId, pick_up_date, pick_up_time, notes, payment } = req.body;
+    const { orderId, pick_up_date, pick_up_time } = req.body;
     console.log(req.body);
     const buyer = await Buyer.findById(req.buyer._id).populate("plan");
     if (!buyer.plan) {
@@ -507,16 +507,6 @@ exports.reorderProduct = async (req, res, next) => {
         .status(200)
         .json(error("Please provide pickup time", res.statusCode));
     }
-    if (!notes) {
-      return res
-        .status(200)
-        .json(error("Please provide notes", res.statusCode));
-    }
-    if (!payment) {
-      return res
-        .status(200)
-        .json(error("Please provide payment mode", res.statusCode));
-    }
     const partner = await SellerPartnerBuyers.findOne({
       seller: order.seller,
       buyer: req.buyer._id,
@@ -548,8 +538,8 @@ exports.reorderProduct = async (req, res, next) => {
       product: orderedProducts,
       pick_up_date: new Date(pick_up_date),
       pick_up_time,
-      notes,
-      payment,
+      notes: order.notes,
+      payment: order.payment,
     });
     res
       .status(200)
