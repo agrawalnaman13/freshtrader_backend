@@ -101,12 +101,12 @@ exports.getSMCSReport = async (req, res, next) => {
       year: year ? year : currentDate.getFullYear(),
     });
     if (download) {
-      console.log(__dirname);
       const dirPath = path.join(
         __dirname.replace("SellerController", "templates"),
         "/smcs_report.html"
       );
       const template = fs.readFileSync(dirPath, "utf8");
+      console.log(template);
       var data = {
         css: `${process.env.BASE_URL}/css/style.css`,
         logo: `${process.env.BASE_URL}/logo.png`,
@@ -114,6 +114,7 @@ exports.getSMCSReport = async (req, res, next) => {
       };
       var html = ejs.render(template, { data: data });
       var options = { format: "Letter" };
+      console.log(`./public/sellers/${req.seller._id}/smcs_report.pdf`);
       pdf
         .create(html, options)
         .toFile(
