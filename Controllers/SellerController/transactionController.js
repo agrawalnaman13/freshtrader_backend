@@ -342,17 +342,28 @@ exports.deleteTransaction = async (req, res, next) => {
         }
         return p;
       });
-      await Inventory.findOneAndUpdate(
-        {
-          seller: req.seller._id,
-          productId: product.productId,
-          consignment: product.consignment,
-        },
-        {
-          sold: +sold,
-          void: +voids,
-        }
-      );
+      const inv = await Inventory.findOne({
+        seller: req.seller._id,
+        productId: product.productId,
+        consignment: product.consignment,
+      });
+      if (inv) {
+        await Inventory.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            productId: product.productId,
+            consignment: product.consignment,
+          },
+          {
+            total_sold: +sold,
+            sold:
+              transaction.type === "CREDIT NOTE"
+                ? +inv.sold - +product.quantity
+                : +inv.sold + +product.quantity,
+            void: +voids,
+          }
+        );
+      }
       await consignment.save();
     }
     if (type === 1) {

@@ -27,6 +27,10 @@ const InventorySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    total_sold: {
+      type: Number,
+      default: 0,
+    },
     void: {
       type: Number,
       default: 0,

@@ -91,12 +91,10 @@ exports.getInventory = async (req, res) => {
         inventory.consignment = await Purchase.findById(inventory.consignment)
           .populate("supplier")
           .select(["supplier", "consign"]);
-      inventory.ready_to_sell = inventory.carry_over + inventory.purchase;
+      // inventory.ready_to_sell = inventory.carry_over + inventory.purchase;
       inventory.remaining =
-        inventory.ready_to_sell - inventory.sold - inventory.void;
-      if (inventory.physical_stock === inventory.remaining) {
-        inventory.physical_stock = inventory.remaining;
-      }
+        inventory.purchase - inventory.sold - inventory.void;
+      inventory.total_sold = inventory.total_sold ? inventory.total_sold : 0;
     }
     res
       .status(200)
@@ -172,10 +170,7 @@ exports.resetInventory = async (req, res) => {
     const inventories = await Inventory.find({ seller: req.seller._id });
     for (const inventory of inventories) {
       await Inventory.findByIdAndUpdate(inventory._id, {
-        carry_over: 0,
-        purchase: 0,
         sold: 0,
-        void: 0,
         physical_stock: 0,
       });
     }
@@ -193,12 +188,48 @@ exports.resetCarryOver = async (req, res) => {
     const inventories = await Inventory.find({ seller: req.seller._id });
     for (const inventory of inventories) {
       await Inventory.findByIdAndUpdate(inventory._id, {
-        carry_over: 0,
+        carry_over: inventory.physical_stock
+          ? inventory.physical_stock
+          : inventory.remaining,
       });
     }
     res
       .status(200)
       .json(success("Carry Over Reset Successful", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.resetSoldToday = async (req, res) => {
+  try {
+    const inventories = await Inventory.find({ seller: req.seller._id });
+    for (const inventory of inventories) {
+      await Inventory.findByIdAndUpdate(inventory._id, {
+        sold: 0,
+      });
+    }
+    res
+      .status(200)
+      .json(success("Today's Sales Reset Successful", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.resetPhysicalStock = async (req, res) => {
+  try {
+    const inventories = await Inventory.find({ seller: req.seller._id });
+    for (const inventory of inventories) {
+      await Inventory.findByIdAndUpdate(inventory._id, {
+        physical_stock: 0,
+      });
+    }
+    res
+      .status(200)
+      .json(success("Physical Stock Reset Successful", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
@@ -350,23 +381,19 @@ exports.updateInventory = async () => {
       consignment: { $exists: true },
     });
     for (const inventory of inventories) {
-      inventory.ready_to_sell = inventory.carry_over + inventory.purchase;
       inventory.remaining =
-        inventory.ready_to_sell - inventory.sold - inventory.void;
-      if (inventory.remaining <= 0 && inventory.physical_stock <= 0) {
-        await Inventory.findByIdAndDelete(inventory._id);
-      } else {
-        const carry_over = inventory.physical_stock
-          ? inventory.physical_stock
-          : inventory.remaining;
-        await Inventory.findByIdAndUpdate(inventory._id, {
-          carry_over: carry_over,
-          purchase: 0,
-          sold: 0,
-          void: 0,
-          physical_stock: 0,
-        });
-      }
+        inventory.purchased - inventory.total_sold - inventory.void;
+      // if (inventory.remaining <= 0 && inventory.physical_stock <= 0) {
+      //   await Inventory.findByIdAndDelete(inventory._id);
+      // } else {
+      const carry_over = inventory.physical_stock
+        ? inventory.physical_stock
+        : inventory.remaining;
+      await Inventory.findByIdAndUpdate(inventory._id, {
+        carry_over: carry_over,
+        sold: 0,
+      });
+      //}
     }
     return;
   } catch (err) {

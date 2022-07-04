@@ -44,8 +44,6 @@ exports.createConsignment = async (req, res, next) => {
           productId: product.productId,
           consignment: consignment._id,
           purchase: +product.received,
-          sold: product.sold ? +product.sold : 0,
-          void: product.void ? +product.void : 0,
         });
       }
       const myPallets = await SellerPallets.findOne({
@@ -219,8 +217,6 @@ exports.changeConsignmentStatus = async (req, res, next) => {
           productId: product.productId,
           consignment: consignment._id,
           purchase: +product.received,
-          sold: +product.sold,
-          void: +product.void,
         });
         const myPallets = await SellerPallets.findOne({
           seller: req.seller._id,

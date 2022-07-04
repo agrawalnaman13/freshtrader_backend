@@ -431,17 +431,28 @@ exports.processTransaction = async (req, res, next) => {
           return p;
         });
         await consignment.save();
-        await Inventory.findOneAndUpdate(
-          {
-            seller: req.seller._id,
-            productId: product.productId,
-            consignment: product.consignment,
-          },
-          {
-            sold: +sold,
-            void: +voids,
-          }
-        );
+        const inv = await Inventory.findOne({
+          seller: req.seller._id,
+          productId: product.productId,
+          consignment: product.consignment,
+        });
+        if (inv) {
+          await Inventory.findOneAndUpdate(
+            {
+              seller: req.seller._id,
+              productId: product.productId,
+              consignment: product.consignment,
+            },
+            {
+              total_sold: +sold,
+              sold:
+                transaction.type === "CREDIT NOTE"
+                  ? +inv.sold - +product.quantity
+                  : +inv.sold + +product.quantity,
+              void: +voids,
+            }
+          );
+        }
         if ((type !== "CREDIT NOTE" || refund_type !== "VOID") && buyer) {
           const myPallets = await SellerPallets.findOne({
             seller: req.seller._id,
@@ -691,19 +702,30 @@ exports.undoTransaction = async (req, res, next) => {
         return p;
       });
       await consignment.save();
-      await Inventory.findOneAndUpdate(
-        {
-          seller: req.seller._id,
-          productId: product.productId,
-          consignment: product.consignment,
-        },
-        {
-          sold: +sold,
-          void: +voids,
-        }
-      );
+      const inv = await Inventory.findOne({
+        seller: req.seller._id,
+        productId: product.productId,
+        consignment: product.consignment,
+      });
+      if (inv) {
+        await Inventory.findOneAndUpdate(
+          {
+            seller: req.seller._id,
+            productId: product.productId,
+            consignment: product.consignment,
+          },
+          {
+            total_sold: +sold,
+            sold:
+              transaction.type === "CREDIT NOTE"
+                ? +inv.sold + +product.quantity
+                : +inv.sold - +product.quantity,
+            void: +voids,
+          }
+        );
+      }
       if (
-        ttransaction.ype !== "CREDIT NOTE" ||
+        transaction.type !== "CREDIT NOTE" ||
         transaction.refund_type !== "VOID"
       ) {
         const myPallets = await SellerPallets.findOne({
