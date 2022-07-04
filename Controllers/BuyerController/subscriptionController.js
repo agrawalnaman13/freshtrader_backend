@@ -53,6 +53,20 @@ exports.getMyPlan = async (req, res, next) => {
   }
 };
 
+exports.getPlans = async (req, res, next) => {
+  try {
+    const plans = await Subscription.find({
+      plan_name: { $ne: "Free" },
+    });
+    res
+      .status(200)
+      .json(success("Plan Fetched Successfully", { plans }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
 exports.checkPlan = async () => {
   try {
     const plans = await SubscriptionHistory.find({

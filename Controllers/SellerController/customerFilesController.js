@@ -32,12 +32,11 @@ exports.setCustomerInfo = async () => {
   try {
     const partners = await SellerPartnerBuyers.find({ status: true });
     for (const partner of partners) {
-      partner.opening = +partner.total - +partner.credit;
+      partner.opening = +partner.closing;
       partner.total = 0;
       partner.bought = 0;
       partner.credit = 0;
       partner.paid = 0;
-      partner.closing = partner.opening;
       const overdues = await Transaction.find({
         status: "OVERDUE",
         buyer: partner.buyer,
@@ -49,7 +48,6 @@ exports.setCustomerInfo = async () => {
         credit: partner.credit,
         bought: partner.bought,
         paid: partner.paid,
-        closing: partner.closing,
         overdue: overdues.length ? true : false,
       });
     }

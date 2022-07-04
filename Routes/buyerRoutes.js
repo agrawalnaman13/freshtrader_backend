@@ -27,6 +27,7 @@ const {
 const {
   buyPlan,
   getMyPlan,
+  getPlans,
 } = require("../Controllers/BuyerController/subscriptionController");
 const {
   getSupport,
@@ -90,6 +91,7 @@ router.get(
   getOrderNotification
 );
 router.post("/buyPlan", tokenAuthorisationBuyer, buyPlan);
+router.get("/getPlans", tokenAuthorisationBuyer, getPlans);
 router.get("/getMyPlan", tokenAuthorisationBuyer, getMyPlan);
 router.get("/getSupport", tokenAuthorisationBuyer, getSupport);
 router.get("/getBalance", tokenAuthorisationBuyer, getBalance);

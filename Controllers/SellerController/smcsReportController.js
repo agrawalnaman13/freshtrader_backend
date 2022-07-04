@@ -192,6 +192,7 @@ exports.emailSMCS = async (req, res, next) => {
       },
       { $unwind: "$buyer" },
     ]);
+    console.log(__dirname);
     const dirPath = path.join(
       __dirname.replace("SellerController", "templates"),
       "/smcs_report.html"

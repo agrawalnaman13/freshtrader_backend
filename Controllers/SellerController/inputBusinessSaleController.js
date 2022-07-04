@@ -216,11 +216,11 @@ exports.getProductConsignments = async (req, res, next) => {
       {
         $match: {
           "products.productId": { $eq: mongoose.Types.ObjectId(productId) },
-          // $and: [
-          //   !seller.allow_overselling
-          //     ? { "products.inv_on_hand": { $gt: 0 } }
-          //     : {},
-          // ],
+          $and: [
+            !seller.allow_overselling
+              ? { "products.inv_on_hand": { $gt: 0 } }
+              : {},
+          ],
         },
       },
       {
