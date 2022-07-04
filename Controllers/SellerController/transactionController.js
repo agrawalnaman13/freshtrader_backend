@@ -12,7 +12,7 @@ const sendMail = require("../../services/mail");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
 exports.getTransactions = async (req, res, next) => {
   try {
-    const { date, sortBy, filterBy } = req.body;
+    const { from, till, sortBy, filterBy } = req.body;
     console.log(req.body);
     const transactions = await Transaction.aggregate([
       {
@@ -57,12 +57,21 @@ exports.getTransactions = async (req, res, next) => {
       {
         $match: {
           $and: [
-            date
+            from
               ? {
                   $and: [
-                    { year: new Date(date).getFullYear() },
-                    { month: new Date(date).getMonth() + 1 },
-                    { day: new Date(date).getDate() },
+                    { year: { $gte: new Date(from).getFullYear() } },
+                    { month: { $gte: new Date(from).getMonth() + 1 } },
+                    { day: { $gte: new Date(from).getDate() } },
+                  ],
+                }
+              : {},
+            till
+              ? {
+                  $and: [
+                    { year: { $lte: new Date(till).getFullYear() } },
+                    { month: { $lte: new Date(till).getMonth() + 1 } },
+                    { day: { $lte: new Date(till).getDate() } },
                   ],
                 }
               : {},

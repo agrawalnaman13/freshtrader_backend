@@ -8,6 +8,8 @@ const Unit = require("../../Models/AdminModels/unitSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
 const { getProductInventory } = require("./inventoryController");
+const Transaction = require("../../Models/SellerModels/transactionSchema");
+const Order = require("../../Models/BuyerModels/orderSchema");
 exports.addSellerProduct = async (req, res, next) => {
   try {
     const { category, variety, type, add_gst } = req.body;
@@ -307,6 +309,82 @@ exports.addProductUnit = async (req, res, next) => {
     return res
       .status(200)
       .json(success("Product unit added successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.removeProductUnit = async (req, res, next) => {
+  try {
+    const { productId, units } = req.body;
+    console.log(req.body);
+    if (!productId) {
+      return res
+        .status(200)
+        .json(error("product id is required", res.statusCode));
+    }
+    const product = await SellerProduct.findById(productId);
+    if (!product) {
+      return res.status(200).json(error("Invalid product id", res.statusCode));
+    }
+    if (!units) {
+      return res.status(200).json(error("unit is required", res.statusCode));
+    }
+    const unit = await Unit.findById(units);
+    if (!unit) {
+      return res.status(200).json(error("Invalid unit", res.statusCode));
+    }
+    const isProduct = await SellerProduct.findOne({
+      seller: req.seller._id,
+      category: product.category,
+      variety: product.variety,
+      type: product.type,
+      units: units,
+    });
+    if (isProduct) {
+      await Inventory.findOneAndDelete({
+        seller: req.seller._id,
+        productId: isProduct._id,
+      });
+      const consignments = await Purchase.find();
+      for (const consignment of consignments) {
+        consignment.products = consignment.products.filter(
+          (pr) => String(pr.productId) !== String(isProduct._id)
+        );
+        await Purchase.findByIdAndUpdate(consignment._id, {
+          products: consignment.products,
+        });
+      }
+      const transactions = await Transaction.find();
+      for (const transaction of transactions) {
+        transaction.products = transaction.products.filter(
+          (pr) => String(pr.productId) !== String(isProduct._id)
+        );
+        await Transaction.findByIdAndUpdate(transaction._id, {
+          products: transaction.products,
+        });
+      }
+      const orders = await Order.find();
+      for (const order of orders) {
+        order.product = order.product.filter(
+          (pr) => String(pr.productId) !== String(isProduct._id)
+        );
+        await Order.findByIdAndUpdate(order._id, {
+          product: order.product,
+        });
+      }
+      await SellerProduct.findOneAndDelete({
+        seller: req.seller._id,
+        category: product.category,
+        variety: product.variety,
+        type: product.type,
+        units: units,
+      });
+    }
+    return res
+      .status(200)
+      .json(success("Unit deleted successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

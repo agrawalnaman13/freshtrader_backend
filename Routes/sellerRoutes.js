@@ -84,6 +84,7 @@ const {
   getMyProductUnit,
   addMissingProduct,
   undoSellerProduct,
+  removeProductUnit,
 } = require("../Controllers/SellerController/productController");
 const {
   createConsignment,
@@ -165,6 +166,7 @@ router.post("/updateSellerProduct", tokenAuthorisation, updateSellerProduct);
 router.post("/deleteSellerProduct", tokenAuthorisation, deleteSellerProduct);
 router.post("/addProductSupplier", tokenAuthorisation, addProductSupplier);
 router.post("/addProductUnit", tokenAuthorisation, addProductUnit);
+router.post("/removeProductUnit", tokenAuthorisation, removeProductUnit);
 router.post("/searchSellerProduct", tokenAuthorisation, searchSellerProduct);
 router.post("/updateProfile", tokenAuthorisation, updateProfile);
 router.post("/updateSellerPassword", tokenAuthorisation, updateSellerPassword);

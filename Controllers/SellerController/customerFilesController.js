@@ -60,7 +60,7 @@ exports.setCustomerInfo = async () => {
 
 exports.getCustomerTransactions = async (req, res, next) => {
   try {
-    const { buyerId, date, sortBy, filterBy } = req.body;
+    const { buyerId, from, till, sortBy, filterBy } = req.body;
     console.log(req.body);
     if (!buyerId) {
       return res.status(200).json(error("Buyer is required", res.statusCode));
@@ -126,12 +126,21 @@ exports.getCustomerTransactions = async (req, res, next) => {
       {
         $match: {
           $and: [
-            date
+            from
               ? {
                   $and: [
-                    { year: new Date(date).getFullYear() },
-                    { month: new Date(date).getMonth() + 1 },
-                    { day: new Date(date).getDate() },
+                    { year: { $gte: new Date(from).getFullYear() } },
+                    { month: { $gte: new Date(from).getMonth() + 1 } },
+                    { day: { $gte: new Date(from).getDate() } },
+                  ],
+                }
+              : {},
+            till
+              ? {
+                  $and: [
+                    { year: { $lte: new Date(till).getFullYear() } },
+                    { month: { $lte: new Date(till).getMonth() + 1 } },
+                    { day: { $lte: new Date(till).getDate() } },
                   ],
                 }
               : {},
