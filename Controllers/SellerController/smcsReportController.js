@@ -101,7 +101,7 @@ exports.getSMCSReport = async (req, res, next) => {
       year: year ? year : currentDate.getFullYear(),
     });
     if (download) {
-      // await sendMail("agrawalnaman49@gmail.com", "Freshtraders", "Hello");
+      console.log(__dirname);
       const dirPath = path.join(
         __dirname.replace("SellerController", "templates"),
         "/smcs_report.html"
@@ -192,7 +192,6 @@ exports.emailSMCS = async (req, res, next) => {
       },
       { $unwind: "$buyer" },
     ]);
-    console.log(__dirname);
     const dirPath = path.join(
       __dirname.replace("SellerController", "templates"),
       "/smcs_report.html"
