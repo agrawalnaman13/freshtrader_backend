@@ -114,7 +114,7 @@ exports.getLayout = async (req, res, next) => {
         category,
         variety,
       });
-      varietyData.status = status.status;
+      if (varietyData) varietyData.status = status.status;
       const typeIds = await SellerProduct.find({
         seller: req.seller._id,
         category,
@@ -123,13 +123,17 @@ exports.getLayout = async (req, res, next) => {
       let types = [];
       for (let type of typeIds) {
         const typeData = await ProductType.findById(type).lean();
-        typeData.inv = await getProductInventory(req.seller._id, type);
-        types.push(typeData);
+        if (typeData) {
+          typeData.inv = await getProductInventory(req.seller._id, type);
+          types.push(typeData);
+        }
       }
-      products.push({
-        variety: varietyData,
-        types: types,
-      });
+      if (varietyData) {
+        products.push({
+          variety: varietyData,
+          types: types,
+        });
+      }
     }
     const categories = await SellerPOSLayout.findOne({
       seller: req.seller._id,

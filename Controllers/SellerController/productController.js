@@ -584,7 +584,8 @@ exports.getMyVarietyList = async (req, res, next) => {
     }).distinct("variety");
     let varietyList = [];
     for (const variety of varieties) {
-      varietyList.push(await ProductVariety.findById(variety));
+      const v = await ProductVariety.findById(variety);
+      if (v) varietyList.push(v);
     }
     res
       .status(200)
@@ -617,13 +618,15 @@ exports.getMyProductList = async (req, res, next) => {
     let typeList = [];
     for (const type of types) {
       const typeData = await ProductType.findById(type).lean();
-      typeData.inv = await getProductInventory(req.seller._id, type);
-      typeData.productId = (
-        await SellerProduct.findOne({ type }).populate("units").sort({
-          "units.weight": 1,
-        })
-      )._id;
-      typeList.push(typeData);
+      if (typeData) {
+        typeData.inv = await getProductInventory(req.seller._id, type);
+        typeData.productId = (
+          await SellerProduct.findOne({ type }).populate("units").sort({
+            "units.weight": 1,
+          })
+        )._id;
+        typeList.push(typeData);
+      }
     }
     res
       .status(200)
