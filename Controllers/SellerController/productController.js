@@ -110,6 +110,7 @@ exports.getSellerProduct = async (req, res, next) => {
           ],
         },
       },
+      { $sort: { "units.weight": 1 } },
     ]);
     let list = [];
     if (active_consignment) {
@@ -343,10 +344,13 @@ exports.removeProductUnit = async (req, res, next) => {
       units: units,
     });
     if (isProduct) {
-      await Inventory.findOneAndDelete({
+      const inventories = await Inventory.find({
         seller: req.seller._id,
         productId: isProduct._id,
       });
+      for (const inventory of inventories) {
+        await Inventory.findByIdAndDelete(inventory._id);
+      }
       const consignments = await Purchase.find();
       for (const consignment of consignments) {
         consignment.products = consignment.products.filter(
@@ -414,7 +418,13 @@ exports.getMyProductUnit = async (req, res, next) => {
     })
       .select(["units", "price", "type", "variety"])
       .populate(["units", "type", "variety"]);
-
+    units.sort((a, b) =>
+      a.units.weight > b.units.weight
+        ? 1
+        : b.units.weight > a.units.weight
+        ? -1
+        : 0
+    );
     return res
       .status(200)
       .json(
@@ -440,6 +450,40 @@ exports.deleteSellerProduct = async (req, res, next) => {
       return res.status(200).json(error("Invalid product id", res.statusCode));
     }
     await SellerProduct.findByIdAndRemove(productId);
+    const inventories = await Inventory.find({
+      seller: req.seller._id,
+      productId: productId,
+    });
+    for (const inventory of inventories) {
+      await Inventory.findByIdAndDelete(inventory._id);
+    }
+    const consignments = await Purchase.find();
+    for (const consignment of consignments) {
+      consignment.products = consignment.products.filter(
+        (pr) => String(pr.productId) !== String(productId)
+      );
+      await Purchase.findByIdAndUpdate(consignment._id, {
+        products: consignment.products,
+      });
+    }
+    const transactions = await Transaction.find();
+    for (const transaction of transactions) {
+      transaction.products = transaction.products.filter(
+        (pr) => String(pr.productId) !== String(productId)
+      );
+      await Transaction.findByIdAndUpdate(transaction._id, {
+        products: transaction.products,
+      });
+    }
+    const orders = await Order.find();
+    for (const order of orders) {
+      order.product = order.product.filter(
+        (pr) => String(pr.productId) !== String(productId)
+      );
+      await Order.findByIdAndUpdate(order._id, {
+        product: order.product,
+      });
+    }
     return res
       .status(200)
       .json(success("Product deleted successfully", {}, res.statusCode));
