@@ -378,13 +378,25 @@ exports.removeProductUnit = async (req, res, next) => {
           product: order.product,
         });
       }
-      await SellerProduct.findOneAndDelete({
+      const isLast = await SellerProduct.find({
         seller: req.seller._id,
         category: product.category,
         variety: product.variety,
         type: product.type,
-        units: units,
       });
+      if (isLast.length === 1) {
+        await SellerProduct.findByIdAndUpdate(isLast[0]._id, {
+          units: "",
+        });
+      } else {
+        await SellerProduct.findOneAndDelete({
+          seller: req.seller._id,
+          category: product.category,
+          variety: product.variety,
+          type: product.type,
+          units: units,
+        });
+      }
     }
     return res
       .status(200)

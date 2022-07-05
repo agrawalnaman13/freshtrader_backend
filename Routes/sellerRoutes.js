@@ -38,6 +38,8 @@ const {
   updateOverselling,
   resetSoldToday,
   resetPhysicalStock,
+  adjustInventory,
+  undoInventory,
 } = require("../Controllers/SellerController/inventoryController");
 const {
   getOrders,
@@ -241,6 +243,8 @@ router.get("/resetCarryOver", tokenAuthorisation, resetCarryOver);
 router.get("/resetSoldToday", tokenAuthorisation, resetSoldToday);
 router.get("/resetPhysicalStock", tokenAuthorisation, resetPhysicalStock);
 router.post("/adjustCarryOver", tokenAuthorisation, adjustCarryOver);
+router.post("/adjustInventory", tokenAuthorisation, adjustInventory);
+router.post("/undoInventory", tokenAuthorisation, undoInventory);
 router.post("/printInventory", tokenAuthorisation, printInventory);
 router.post("/getBusinesses", tokenAuthorisation, getBusinesses);
 router.get("/getBusinessDetail/:id", tokenAuthorisation, getBusinessDetail);

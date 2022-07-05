@@ -202,38 +202,38 @@ exports.importDB = async (req, res, next) => {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       const dbo = db.db("Freshtrader");
-      // let units = require("./units.json");
-      // units = units.map((item) => {
-      //   item._id = mongoose.Types.ObjectId(item._id);
-      //   return item;
-      // });
-      // dbo.collection("units").insertMany(units, function (err, res) {
-      //   if (err) throw err;
-      //   console.log("Number of documents inserted: " + res.insertedCount);
-      // });
-      // let productvarieties = require("./productvarieties.json");
-      // productvarieties = productvarieties.map((item) => {
-      //   item._id = mongoose.Types.ObjectId(item._id);
-      //   return item;
-      // });
-      // dbo
-      //   .collection("productvarieties")
-      //   .insertMany(productvarieties, function (err, res) {
-      //     if (err) throw err;
-      //     console.log("Number of documents inserted: " + res.insertedCount);
-      //   });
-      // let producttypes = require("./producttypes.json");
-      // producttypes = producttypes.map((item) => {
-      //   item._id = mongoose.Types.ObjectId(item._id);
-      //   item.variety = mongoose.Types.ObjectId(item.variety);
-      //   return item;
-      // });
-      // dbo
-      //   .collection("producttypes")
-      //   .insertMany(producttypes, function (err, res) {
-      //     if (err) throw err;
-      //     console.log("Number of documents inserted: " + res.insertedCount);
-      //   });
+      let units = require("./units.json");
+      units = units.map((item) => {
+        item._id = mongoose.Types.ObjectId(item._id);
+        return item;
+      });
+      dbo.collection("units").insertMany(units, function (err, res) {
+        if (err) throw err;
+        console.log("Number of documents inserted: " + res.insertedCount);
+      });
+      let productvarieties = require("./productvarieties.json");
+      productvarieties = productvarieties.map((item) => {
+        item._id = mongoose.Types.ObjectId(item._id);
+        return item;
+      });
+      dbo
+        .collection("productvarieties")
+        .insertMany(productvarieties, function (err, res) {
+          if (err) throw err;
+          console.log("Number of documents inserted: " + res.insertedCount);
+        });
+      let producttypes = require("./producttypes.json");
+      producttypes = producttypes.map((item) => {
+        item._id = mongoose.Types.ObjectId(item._id);
+        item.variety = mongoose.Types.ObjectId(item.variety);
+        return item;
+      });
+      dbo
+        .collection("producttypes")
+        .insertMany(producttypes, function (err, res) {
+          if (err) throw err;
+          console.log("Number of documents inserted: " + res.insertedCount);
+        });
       let productunits = require("./productunits.json");
       productunits = productunits.map((item) => {
         item._id = mongoose.Types.ObjectId(item._id);

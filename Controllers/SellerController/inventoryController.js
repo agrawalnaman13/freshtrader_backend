@@ -238,24 +238,134 @@ exports.resetPhysicalStock = async (req, res) => {
 
 exports.adjustCarryOver = async (req, res) => {
   try {
-    const { carry_over, inventoryId } = req.body;
+    const { inventoryIds } = req.body;
+    if (!inventoryIds.length) {
+      return res
+        .status(200)
+        .json(error("Inventory id is required", res.statusCode));
+    }
+    for (const inventory of inventoryIds) {
+      await Inventory.findByIdAndUpdate(inventory._id, {
+        carry_over: +inventory.carry_over,
+      });
+    }
+    res
+      .status(200)
+      .json(success("Carry Over Changed Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.adjustInventory = async (req, res) => {
+  try {
+    const { inventoryId, physical_stock, purchase, total_sold, voids } =
+      req.body;
     if (!inventoryId) {
       return res
         .status(200)
         .json(error("Inventory id is required", res.statusCode));
     }
-    const inventory_data = await Inventory.findById(inventoryId);
-    if (!inventory_data) {
+    const inventory = await Inventory.findById(inventoryId);
+    if (!inventory) {
       return res
         .status(200)
         .json(error("Invalid inventory id", res.statusCode));
     }
     await Inventory.findByIdAndUpdate(inventoryId, {
-      carry_over: carry_over,
+      physical_stock: +physical_stock,
+      purchase: +purchase,
+      total_sold: +total_sold,
+      void: +voids,
     });
+    if (
+      inventory.purchase !== +purchase ||
+      inventory.total_sold !== +total_sold ||
+      inventory.void !== +voids
+    ) {
+      const consignment = await Purchase.findById(inventory.consignment);
+      consignment.products = consignment.products.map((p) => {
+        if (String(p.productId) === String(inventory.productId)) {
+          p.received = +purchase;
+          p.sold = +total_sold;
+          p.void = +voids;
+          p.total_cost = (p.received * p.cost_per_unit).toFixed(2);
+          p.sold_percentage = ((p.sold / p.received) * 100).toFixed(2);
+          p.total_sales = (p.sold * p.average_sales_price).toFixed(2);
+          p.inv_on_hand = (p.received - p.sold - p.void).toFixed(2);
+          p.gross_profit = (
+            p.received * p.cost_per_unit -
+            p.total_sales
+          ).toFixed(2);
+          p.gross_profit_percentage = (
+            (p.gross_profit / p.total_sales) *
+            100
+          ).toFixed(2);
+        }
+        return p;
+      });
+      await consignment.save();
+    }
     res
       .status(200)
-      .json(success("Carry Over Changed Successfully", {}, res.statusCode));
+      .json(success("Inventory Updated Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.undoInventory = async (req, res) => {
+  try {
+    const { inventoryIds } = req.body;
+    console.log(req.body);
+    if (!inventoryIds.length) {
+      return res
+        .status(200)
+        .json(error("Inventory id is required", res.statusCode));
+    }
+    for (const inventoryId of inventoryIds) {
+      const inventory = await Inventory.findById(inventoryId._id);
+      await Inventory.findByIdAndUpdate(inventory._id, {
+        physical_stock: +inventoryId.physical_stock,
+        purchase: +inventoryId.purchase,
+        total_sold: +inventoryId.total_sold,
+        void: +inventoryId.voids,
+        carry_over: +inventoryId.carry_over,
+      });
+      if (
+        inventory.purchase !== +inventoryId.purchase ||
+        inventory.total_sold !== +inventoryId.total_sold ||
+        inventory.void !== +inventoryId.voids
+      ) {
+        const consignment = await Purchase.findById(inventory.consignment);
+        consignment.products = consignment.products.map((p) => {
+          if (String(p.productId) === String(inventory.productId)) {
+            p.received = +inventoryId.purchase;
+            p.sold = +inventoryId.total_sold;
+            p.void = +inventoryId.voids;
+            p.total_cost = (p.received * p.cost_per_unit).toFixed(2);
+            p.sold_percentage = ((p.sold / p.received) * 100).toFixed(2);
+            p.total_sales = (p.sold * p.average_sales_price).toFixed(2);
+            p.inv_on_hand = (p.received - p.sold - p.void).toFixed(2);
+            p.gross_profit = (
+              p.received * p.cost_per_unit -
+              p.total_sales
+            ).toFixed(2);
+            p.gross_profit_percentage = (
+              (p.gross_profit / p.total_sales) *
+              100
+            ).toFixed(2);
+          }
+          return p;
+        });
+        await consignment.save();
+      }
+    }
+    res
+      .status(200)
+      .json(success("Inventory Updated Successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
