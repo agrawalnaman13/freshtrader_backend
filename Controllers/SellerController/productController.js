@@ -209,7 +209,7 @@ exports.undoSellerProduct = async (req, res, next) => {
           _id: product._id,
           seller: product.seller,
           variety: product.variety,
-          category: category,
+          category: product.category,
           type: product.type,
           price: product.price,
           add_gst: product.add_gst,
@@ -218,8 +218,6 @@ exports.undoSellerProduct = async (req, res, next) => {
           grades: product.grades,
           units: product.units,
           suppliers: product.suppliers,
-          price: product.price,
-          inventory_code: product.inventory_code,
         });
       }
     }
@@ -384,17 +382,20 @@ exports.removeProductUnit = async (req, res, next) => {
         variety: product.variety,
         type: product.type,
       });
+      await SellerProduct.findOneAndDelete({
+        seller: req.seller._id,
+        category: product.category,
+        variety: product.variety,
+        type: product.type,
+        units: units,
+      });
       if (isLast.length === 1) {
-        await SellerProduct.findByIdAndUpdate(isLast[0]._id, {
-          units: "",
-        });
-      } else {
-        await SellerProduct.findOneAndDelete({
-          seller: req.seller._id,
-          category: product.category,
-          variety: product.variety,
-          type: product.type,
-          units: units,
+        await SellerProduct.create({
+          _id: isLast[0]._id,
+          seller: isLast[0].seller,
+          variety: isLast[0].variety,
+          category: isLast[0].category,
+          type: isLast[0].type,
         });
       }
     }
