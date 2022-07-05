@@ -51,6 +51,7 @@ const SellerProductSchema = new mongoose.Schema(
     units: {
       type: mongoose.Types.ObjectId,
       ref: "unit",
+      default: "",
     },
     status: {
       type: Boolean,
