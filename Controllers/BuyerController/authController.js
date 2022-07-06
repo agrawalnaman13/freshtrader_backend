@@ -148,6 +148,7 @@ exports.login = async (req, res, next) => {
     return res.status(200).json(error("Invalid Email", res.statusCode));
   try {
     const ourBuyer = await Buyer.findOne({ email }).select("+password");
+    await ourBuyer.save();
     if (!ourBuyer) {
       return res.status(200).json(error("Invalid email", res.statusCode));
     }
