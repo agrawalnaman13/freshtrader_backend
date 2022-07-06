@@ -367,8 +367,8 @@ exports.deleteTransaction = async (req, res, next) => {
             total_sold: +sold,
             sold:
               transaction.type === "CREDIT NOTE"
-                ? +inv.sold - +product.quantity
-                : +inv.sold + +product.quantity,
+                ? (+inv.sold - +product.quantity).toFixed(2)
+                : (+inv.sold + +product.quantity).toFixed(2),
             void: +voids,
           }
         );
