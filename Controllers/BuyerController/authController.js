@@ -83,6 +83,7 @@ exports.signup = async (req, res, next) => {
           market: market,
         }
       );
+      await ourBuyer.save();
     } else {
       ourBuyer = await Buyer.create({
         business_trading_name: business_trading_name,
@@ -92,6 +93,7 @@ exports.signup = async (req, res, next) => {
         is_smcs: is_smcs,
         market: market,
       });
+      await ourBuyer.save();
     }
     let date = moment.utc();
     date = moment(date).format("MM-DD-YYYY");
@@ -113,10 +115,16 @@ exports.signup = async (req, res, next) => {
     await ourBuyer.save();
     const sellers = await Wholeseller.find();
     for (const seller of sellers) {
-      await SellerPartnerBuyers.create({
+      const partner = await SellerPartnerBuyers.findOne({
         seller: seller._id,
         buyer: ourBuyer._id,
       });
+      if (!partner) {
+        await SellerPartnerBuyers.create({
+          seller: seller._id,
+          buyer: ourBuyer._id,
+        });
+      }
     }
     const token = await ourBuyer.generateAuthToken();
     res
@@ -148,8 +156,6 @@ exports.login = async (req, res, next) => {
     return res.status(200).json(error("Invalid Email", res.statusCode));
   try {
     const ourBuyer = await Buyer.findOne({ email }).select("+password");
-    ourBuyer.password = password;
-    await ourBuyer.save();
     if (!ourBuyer) {
       return res.status(200).json(error("Invalid email", res.statusCode));
     }
