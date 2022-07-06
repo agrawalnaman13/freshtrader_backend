@@ -258,3 +258,173 @@ exports.updateAccountInformation = async (req, res, next) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  console.log(req.body);
+  if (!email) {
+    return res.status(200).json(error("Please provide email", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  try {
+    const buyer = await Buyer.findOne({ email });
+    if (!buyer) {
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
+    }
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    await Buyer.findOneAndUpdate({ email }, { otp: otp });
+    res.status(200).json(success(otp, { otp }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.verifyOTP = async (req, res, next) => {
+  const { email, otp } = req.body;
+  console.log(req.body);
+  if (!email) {
+    return res.status(200).json(error("Please provide email", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  if (!otp) {
+    return res.status(200).json(error("Please provide otp", res.statusCode));
+  }
+  try {
+    const buyer = await Buyer.findOne({ email });
+    if (!buyer) {
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
+    }
+    if (buyer.otp !== +otp) {
+      return res.status(200).json(error("Invalid OTP", res.statusCode));
+    }
+    await Buyer.findOneAndUpdate({ email }, { otp: "" });
+    res.status(200).json(success("OTP Verified", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updatePassword = async (req, res, next) => {
+  const { email, password } = req.body;
+  console.log(req.body);
+  if (!email || !password) {
+    return res
+      .status(200)
+      .json(error("Please provide both email and password", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  try {
+    const buyer = await Buyer.findOne({ email }).select("+password");
+    if (!buyer) {
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
+    }
+    buyer.password = password;
+    await buyer.save();
+    res
+      .status(200)
+      .json(
+        success("Password Updated Successfully", { seller }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changePassword = async (req, res, next) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    console.log(req.body);
+    if (!oldPassword) {
+      return res
+        .status(200)
+        .json(error("Please provide old password", res.statusCode));
+    }
+    if (!newPassword) {
+      return res
+        .status(200)
+        .json(error("Please provide new password", res.statusCode));
+    }
+    const buyer = await Buyer.findById(req.buyer._id).select("+password");
+    if (!(await buyer.correctPassword(oldPassword, buyer.password))) {
+      return res
+        .status(200)
+        .json(error("Invalid old Password", res.statusCode));
+    }
+    buyer.password = newPassword;
+    await buyer.save();
+    res
+      .status(200)
+      .json(
+        success("Password Updated Successfully", { admin }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const { business_trading_name, phone_number, is_smcs, market } = req.body;
+    console.log(req.body);
+    if (!business_trading_name) {
+      return res
+        .status(200)
+        .json(error("Please provide business trading name", res.statusCode));
+    }
+    if (!phone_number) {
+      return res
+        .status(200)
+        .json(error("Please provide phone number", res.statusCode));
+    }
+    if (is_smcs === undefined || is_smcs === "") {
+      return res
+        .status(200)
+        .json(error("Is this business part of SMCS?", res.statusCode));
+    }
+    if (!market) {
+      return res
+        .status(200)
+        .json(error("Please provide your market", res.statusCode));
+    }
+    if (
+      !["Sydney Produce and Growers Market", "Sydney Flower Market"].includes(
+        market
+      )
+    ) {
+      return res.status(200).json(error("Invalid market", res.statusCode));
+    }
+
+    const ourBuyer = await Buyer.findByIdAndUpdate(req.buyer._id, {
+      business_trading_name: business_trading_name,
+      phone_number: phone_number,
+      is_smcs: is_smcs,
+      market: market,
+    });
+
+    res
+      .status(200)
+      .json(
+        success(
+          "Profile updated successfully",
+          { buyer: ourBuyer },
+          res.statusCode
+        )
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};

@@ -49,6 +49,9 @@ const WholesellerSchema = new mongoose.Schema(
       required: true,
       select: false,
     },
+    otp: {
+      type: Number,
+    },
     account_name: {
       type: String,
     },

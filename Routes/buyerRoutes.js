@@ -5,6 +5,11 @@ const {
   login,
   getBuyerData,
   updateAccountInformation,
+  forgotPassword,
+  verifyOTP,
+  updatePassword,
+  changePassword,
+  updateProfile,
 } = require("../Controllers/BuyerController/authController");
 const {
   orderProduct,
@@ -49,12 +54,17 @@ const tokenAuthorisationBuyer = require("../middleware/tokenBuyerAuth");
 const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
+router.post("/forgotPassword", forgotPassword);
+router.post("/verifyOTP", verifyOTP);
+router.post("/updatePassword", updatePassword);
 router.get("/getBuyerData", tokenAuthorisationBuyer, getBuyerData);
 router.get(
   "/updateAccountInformation",
   tokenAuthorisationBuyer,
   updateAccountInformation
 );
+router.post("/changePassword", tokenAuthorisationBuyer, changePassword);
+router.post("/updateProfile", tokenAuthorisationBuyer, updateProfile);
 router.post("/getSellers", tokenAuthorisationBuyer, getSellers);
 router.post("/getSellersProducts", tokenAuthorisationBuyer, getSellersProducts);
 router.post("/addToCart", tokenAuthorisationBuyer, addToCart);

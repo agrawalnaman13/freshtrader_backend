@@ -11,6 +11,9 @@ const {
   updateSellerPassword,
   getSellerData,
   updateOrderSetting,
+  forgotPassword,
+  verifyOTP,
+  updatePassword,
 } = require("../Controllers/SellerController/authController");
 const {
   getCustomerInfo,
@@ -154,6 +157,9 @@ const {
 const tokenAuthorisation = require("../middleware/tokenAuth");
 const router = express.Router();
 router.post("/login", login);
+router.post("/forgotPassword", forgotPassword);
+router.post("/verifyOTP", verifyOTP);
+router.post("/updatePassword", updatePassword);
 router.post("/addSellerProduct", tokenAuthorisation, addSellerProduct);
 router.post("/undoSellerProduct", tokenAuthorisation, undoSellerProduct);
 router.post(

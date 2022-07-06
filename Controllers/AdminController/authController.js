@@ -58,7 +58,9 @@ exports.login = async (req, res, next) => {
   try {
     const admin = await Admin.findOne({ email }).select("+password");
     if (!admin) {
-      return res.status(200).json(error("Invalid email", res.statusCode));
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
     }
     if (!(await admin.correctPassword(password, admin.password))) {
       return res.status(200).json(error("Invalid Password", res.statusCode));
@@ -102,7 +104,9 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     const admin = await Admin.findOne({ email });
     if (!admin) {
-      return res.status(200).json(error("Invalid email", res.statusCode));
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
     }
     const otp = Math.floor(1000 + Math.random() * 9000);
     await Admin.findOneAndUpdate({ email }, { otp: otp });
@@ -127,7 +131,9 @@ exports.verifyOTP = async (req, res, next) => {
   try {
     const admin = await Admin.findOne({ email });
     if (!admin) {
-      return res.status(200).json(error("Invalid email", res.statusCode));
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
     }
     if (admin.otp !== +otp) {
       return res.status(200).json(error("Invalid OTP", res.statusCode));
@@ -153,7 +159,9 @@ exports.updatePassword = async (req, res, next) => {
   try {
     const admin = await Admin.findOne({ email }).select("+password");
     if (!admin) {
-      return res.status(200).json(error("Invalid email", res.statusCode));
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
     }
     admin.password = password;
     await admin.save();

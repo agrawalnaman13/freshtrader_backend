@@ -383,12 +383,94 @@ exports.checkABN = (abn) => {
     const weighting = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
     let sum = 0;
     for (var i = 0; i < String(abn).length; i++) {
-      console.log(String(abn)[i]);
       sum += +String(abn)[i] * weighting[i];
     }
     if (sum % 89 === 0) return true;
     else return false;
   } catch (err) {
     console.log(err);
+  }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  console.log(req.body);
+  if (!email) {
+    return res.status(200).json(error("Please provide email", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  try {
+    const seller = await Wholeseller.findOne({ email });
+    if (!seller) {
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
+    }
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    await Wholeseller.findOneAndUpdate({ email }, { otp: otp });
+    res.status(200).json(success(otp, { otp }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.verifyOTP = async (req, res, next) => {
+  const { email, otp } = req.body;
+  console.log(req.body);
+  if (!email) {
+    return res.status(200).json(error("Please provide email", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  if (!otp) {
+    return res.status(200).json(error("Please provide otp", res.statusCode));
+  }
+  try {
+    const seller = await Wholeseller.findOne({ email });
+    if (!seller) {
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
+    }
+    if (seller.otp !== +otp) {
+      return res.status(200).json(error("Invalid OTP", res.statusCode));
+    }
+    await Wholeseller.findOneAndUpdate({ email }, { otp: "" });
+    res.status(200).json(success("OTP Verified", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.updatePassword = async (req, res, next) => {
+  const { email, password } = req.body;
+  console.log(req.body);
+  if (!email || !password) {
+    return res
+      .status(200)
+      .json(error("Please provide both email and password", res.statusCode));
+  }
+  if (!validator.isEmail(email))
+    return res.status(200).json(error("Invalid Email", res.statusCode));
+  try {
+    const seller = await Wholeseller.findOne({ email }).select("+password");
+    if (!seller) {
+      return res
+        .status(200)
+        .json(error("Email is not registered", res.statusCode));
+    }
+    seller.password = password;
+    await seller.save();
+    res
+      .status(200)
+      .json(
+        success("Password Updated Successfully", { seller }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
   }
 };
