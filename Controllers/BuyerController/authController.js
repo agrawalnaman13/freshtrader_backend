@@ -77,7 +77,6 @@ exports.signup = async (req, res, next) => {
         },
         {
           business_trading_name: business_trading_name,
-          email: email,
           password: password,
           phone_number: phone_number,
           is_smcs: is_smcs,
@@ -157,6 +156,7 @@ exports.login = async (req, res, next) => {
         .status(200)
         .json(error("You are not authorized to log in", res.statusCode));
     }
+    console.log(ourBuyer.password);
     if (!(await ourBuyer.correctPassword(password, ourBuyer.password))) {
       return res.status(200).json(error("Invalid Password", res.statusCode));
     }
