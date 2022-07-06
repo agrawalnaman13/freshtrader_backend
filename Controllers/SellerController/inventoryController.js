@@ -492,7 +492,7 @@ exports.updateInventory = async () => {
     });
     for (const inventory of inventories) {
       inventory.remaining =
-        inventory.purchased - inventory.total_sold - inventory.void;
+        inventory.purchase - inventory.total_sold - inventory.void;
       // if (inventory.remaining <= 0 && inventory.physical_stock <= 0) {
       //   await Inventory.findByIdAndDelete(inventory._id);
       // } else {

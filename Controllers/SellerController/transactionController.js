@@ -339,8 +339,8 @@ exports.deleteTransaction = async (req, res, next) => {
           p.total_sales = (p.sold * p.average_sales_price).toFixed(2);
           p.inv_on_hand = (p.received - p.sold - p.void).toFixed(2);
           p.gross_profit = (
-            p.received * p.cost_per_unit -
-            p.total_sales
+            p.total_sales -
+            p.received * p.cost_per_unit
           ).toFixed(2);
           p.gross_profit_percentage = (
             (p.gross_profit / p.total_sales) *
