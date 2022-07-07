@@ -648,7 +648,7 @@ exports.deleteIncompleteOrders = async () => {
   try {
     const date = moment(new Date(Date.now()), "DD-MM-YYYY").subtract(2, "days");
     const carts = await Cart.find({
-      createdAt: { $lte: date },
+      createdAt: { $lte: new Date(date) },
     });
     for (const cart of carts) {
       await Cart.findByIdAndDelete(cart._id);
@@ -665,7 +665,7 @@ exports.deleteUnconfirmedOrders = async () => {
     const date = moment(new Date(Date.now()), "DD-MM-YYYY").subtract(2, "days");
     const orders = await Order.find({
       status: "PENDING",
-      updatedAt: { $lte: date },
+      updatedAt: { $lte: new Date(date) },
     });
     for (const order of orders) {
       await Order.findByIdAndDelete(order._id);

@@ -108,8 +108,9 @@ exports.getSMCSReport = async (req, res, next) => {
       const template = fs.readFileSync(dirPath, "utf8");
       var data = {
         css: `${process.env.BASE_URL}/css/style.css`,
-        logo: `${process.env.BASE_URL}/logo.png`,
         list: report,
+        total: total,
+        smcs_code: smcs_code,
       };
       var html = ejs.render(template, { data: data });
       var options = { format: "Letter" };
