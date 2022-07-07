@@ -541,6 +541,8 @@ exports.reorderProduct = async (req, res, next) => {
       notes: order.notes,
       payment: order.payment,
     });
+    buyer.order_count = (buyer.order_count ? buyer.order_count : 0) + 1;
+    await buyer.save();
     res
       .status(200)
       .json(success("Order sent successfully", {}, res.statusCode));
@@ -567,12 +569,22 @@ exports.getOrderCount = async (req, res, next) => {
     const cartCount = await Cart.find({
       buyer: req.buyer._id,
     }).countDocuments();
+    const pastOrderCount = await Order.find({
+      buyer: req.buyer._id,
+      status: "COMPLETED",
+    }).countDocuments();
     res
       .status(200)
       .json(
         success(
           "Order count fetched successfully",
-          { sentOrderCount, counterOrderCount, confirmedOrderCount, cartCount },
+          {
+            sentOrderCount,
+            counterOrderCount,
+            confirmedOrderCount,
+            cartCount,
+            pastOrderCount,
+          },
           res.statusCode
         )
       );
