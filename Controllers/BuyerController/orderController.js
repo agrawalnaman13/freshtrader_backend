@@ -146,7 +146,11 @@ exports.getSellersProducts = async (req, res, next) => {
     res
       .status(200)
       .json(
-        success("Products fetched successfully", { products }, res.statusCode)
+        success(
+          "Products fetched successfully",
+          { products, seller: sellerData },
+          res.statusCode
+        )
       );
   } catch (err) {
     console.log(err);
@@ -573,21 +577,19 @@ exports.getOrderCount = async (req, res, next) => {
       buyer: req.buyer._id,
       status: "COMPLETED",
     }).countDocuments();
-    res
-      .status(200)
-      .json(
-        success(
-          "Order count fetched successfully",
-          {
-            sentOrderCount,
-            counterOrderCount,
-            confirmedOrderCount,
-            cartCount,
-            pastOrderCount,
-          },
-          res.statusCode
-        )
-      );
+    res.status(200).json(
+      success(
+        "Order count fetched successfully",
+        {
+          sentOrderCount,
+          counterOrderCount,
+          confirmedOrderCount,
+          cartCount,
+          pastOrderCount,
+        },
+        res.statusCode
+      )
+    );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
