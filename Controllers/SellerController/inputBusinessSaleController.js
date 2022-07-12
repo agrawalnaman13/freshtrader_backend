@@ -26,11 +26,11 @@ exports.getBusinesses = async (req, res, next) => {
   try {
     const { search, smcs } = req.body;
     console.log(req.body);
-    if (!search) {
-      return res
-        .status(200)
-        .json(error("Please provide search key", res.statusCode));
-    }
+    // if (!search) {
+    //   return res
+    //     .status(200)
+    //     .json(error("Please provide search key", res.statusCode));
+    // }
     const regexp = new RegExp("^" + search);
     const buyers = await SellerPartnerBuyers.aggregate([
       {
@@ -51,7 +51,7 @@ exports.getBusinesses = async (req, res, next) => {
       {
         $match: {
           $and: [
-            { "buyer.business_trading_name": regexp },
+            search ? { "buyer.business_trading_name": regexp } : {},
             smcs === true ? { "buyer.is_smcs": true } : {},
             smcs === false ? { "buyer.is_smcs": false } : {},
           ],
