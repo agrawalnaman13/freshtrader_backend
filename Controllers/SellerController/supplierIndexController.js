@@ -5,6 +5,7 @@ const SellerSupplier = require("../../Models/SellerModels/sellerSuppliersSchema"
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const { checkABN } = require("./authController");
+const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 exports.addSupplier = async (req, res, next) => {
   try {
     const {
@@ -267,6 +268,11 @@ exports.getSuppliersProduct = async (req, res, next) => {
     if (!supplier) {
       return res.status(200).json(error("Invalid supplier Id", res.statusCode));
     }
+    const seller = await Wholeseller.findById(req.seller._id);
+    let category = [];
+    if (seller.market === "Sydney Produce and Growers Market")
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+    else category = ["Flowers", "Foliage"];
     const products = await SellerProduct.aggregate([
       {
         $match: {
@@ -306,6 +312,7 @@ exports.getSuppliersProduct = async (req, res, next) => {
       { $unwind: "$units" },
       {
         $match: {
+          "variety.product": { $in: category },
           $and: [
             search
               ? {
@@ -343,6 +350,11 @@ exports.getMyProducts = async (req, res, next) => {
     if (!supplier) {
       return res.status(200).json(error("Invalid supplier Id", res.statusCode));
     }
+    const seller = await Wholeseller.findById(req.seller._id);
+    let category = [];
+    if (seller.market === "Sydney Produce and Growers Market")
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+    else category = ["Flowers", "Foliage"];
     const products = await SellerProduct.aggregate([
       {
         $match: {
@@ -405,6 +417,7 @@ exports.getMyProducts = async (req, res, next) => {
       },
       {
         $match: {
+          "variety.product": { $in: category },
           $and: [
             search
               ? {
