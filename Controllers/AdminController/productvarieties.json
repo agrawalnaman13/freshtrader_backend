@@ -1,145 +1,2082 @@
-[{
+[
+  {
+    "_id": "6287892369ca1eacec5b1558",
+    "product": "Fruits",
+    "variety": "Apple"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1559",
+    "product": "Fruits",
+    "variety": "Apricot"
+  },
+  {
+    "_id": "6287892369ca1eacec5b155a",
+    "product": "Fruits",
+    "variety": "Avocado"
+  },
+  {
+    "_id": "6287892369ca1eacec5b155b",
+    "product": "Fruits",
+    "variety": "Babacos"
+  },
+  {
+    "_id": "6287892369ca1eacec5b155c",
+    "product": "Fruits",
+    "variety": "Banana"
+  },
+  {
+    "_id": "6287892369ca1eacec5b155d",
+    "product": "Fruits",
+    "variety": "Banana Bells"
+  },
+  {
+    "_id": "6287892369ca1eacec5b155e",
+    "product": "Fruits",
+    "variety": "Berry"
+  },
+  {
+    "_id": "6287892369ca1eacec5b155f",
+    "product": "Fruits",
+    "variety": "Breadfruit"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1560",
+    "product": "Fruits",
+    "variety": "Carambola Starfruit"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1561",
+    "product": "Fruits",
+    "variety": "Casaba Melon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1562",
+    "product": "Fruits",
+    "variety": "Cherry"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1563",
+    "product": "Fruits",
+    "variety": "Coconut"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1564",
+    "product": "Fruits",
+    "variety": "Crab Apples"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1565",
+    "product": "Fruits",
+    "variety": "Cumquats"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1566",
+    "product": "Fruits",
+    "variety": "Currants"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1567",
+    "product": "Fruits",
+    "variety": "Custard Apple"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1568",
+    "product": "Fruits",
+    "variety": "Dates"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1569",
+    "product": "Fruits",
+    "variety": "Durian"
+  },
+  {
+    "_id": "6287892369ca1eacec5b156a",
+    "product": "Fruits",
+    "variety": "Feijoa"
+  },
+  {
+    "_id": "6287892369ca1eacec5b156b",
+    "product": "Fruits",
+    "variety": "Fig"
+  },
+  {
+    "_id": "6287892369ca1eacec5b156c",
+    "product": "Fruits",
+    "variety": "Granadillas"
+  },
+  {
+    "_id": "6287892369ca1eacec5b156d",
+    "product": "Fruits",
+    "variety": "Grape"
+  },
+  {
+    "_id": "6287892369ca1eacec5b156e",
+    "product": "Fruits",
+    "variety": "Grapefruit"
+  },
+  {
+    "_id": "6287892369ca1eacec5b156f",
+    "product": "Fruits",
+    "variety": "Grumichamas"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1570",
+    "product": "Fruits",
+    "variety": "Guava"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1571",
+    "product": "Fruits",
+    "variety": "Hami Melon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1572",
+    "product": "Fruits",
+    "variety": "Honeydew Melon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1573",
+    "product": "Fruits",
+    "variety": "Horned Melon (Kiwano)"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1574",
+    "product": "Fruits",
+    "variety": "Jackfruit"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1575",
+    "product": "Fruits",
+    "variety": "Kiwi Fruit"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1576",
+    "product": "Fruits",
+    "variety": "Langsat"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1577",
+    "product": "Fruits",
+    "variety": "Lemon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1578",
+    "product": "Fruits",
+    "variety": "Lemonade"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1579",
+    "product": "Fruits",
+    "variety": "Lime"
+  },
+  {
+    "_id": "6287892369ca1eacec5b157a",
+    "product": "Fruits",
+    "variety": "Longan"
+  },
+  {
+    "_id": "6287892369ca1eacec5b157b",
+    "product": "Fruits",
+    "variety": "Loquat"
+  },
+  {
+    "_id": "6287892369ca1eacec5b157c",
+    "product": "Fruits",
+    "variety": "Lychee"
+  },
+  {
+    "_id": "6287892369ca1eacec5b157d",
+    "product": "Fruits",
+    "variety": "Mamey Sapote"
+  },
+  {
+    "_id": "6287892369ca1eacec5b157e",
+    "product": "Fruits",
+    "variety": "Mandarin"
+  },
+  {
+    "_id": "6287892369ca1eacec5b157f",
+    "product": "Fruits",
+    "variety": "Mango"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1580",
+    "product": "Fruits",
+    "variety": "Mangosteen"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1581",
+    "product": "Fruits",
+    "variety": "Matisia"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1582",
+    "product": "Fruits",
+    "variety": "Monstera"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1583",
+    "product": "Fruits",
+    "variety": "Musk Melon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1584",
+    "product": "Fruits",
+    "variety": "Nashi"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1585",
+    "product": "Fruits",
+    "variety": "Nectarine"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1586",
+    "product": "Fruits",
+    "variety": "Nuts"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1587",
+    "product": "Fruits",
+    "variety": "Olive"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1588",
+    "product": "Fruits",
+    "variety": "Orange"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1589",
+    "product": "Fruits",
+    "variety": "Pandanus Leaves"
+  },
+  {
+    "_id": "6287892369ca1eacec5b158a",
+    "product": "Fruits",
+    "variety": "Passionfruit"
+  },
+  {
+    "_id": "6287892369ca1eacec5b158b",
+    "product": "Fruits",
+    "variety": "Pawpaw"
+  },
+  {
+    "_id": "6287892369ca1eacec5b158c",
+    "product": "Fruits",
+    "variety": "Peach"
+  },
+  {
+    "_id": "6287892369ca1eacec5b158d",
+    "product": "Fruits",
+    "variety": "Peachcot"
+  },
+  {
+    "_id": "6287892369ca1eacec5b158e",
+    "product": "Fruits",
+    "variety": "Peacherines"
+  },
+  {
+    "_id": "6287892369ca1eacec5b158f",
+    "product": "Fruits",
+    "variety": "Pear"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1590",
+    "product": "Fruits",
+    "variety": "Pepino"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1591",
+    "product": "Fruits",
+    "variety": "Persimmo"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1592",
+    "product": "Fruits",
+    "variety": "Pie Melon (Figleaf gourd)"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1593",
+    "product": "Fruits",
+    "variety": "Pineapple"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1594",
+    "product": "Fruits",
+    "variety": "Pitaya"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1595",
+    "product": "Fruits",
+    "variety": "Pitaya (Dragon Fruit)"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1596",
+    "product": "Fruits",
+    "variety": "Plantain"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1597",
+    "product": "Fruits",
+    "variety": "Plumcots"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1598",
+    "product": "Fruits",
+    "variety": "Plum"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1599",
+    "product": "Fruits",
+    "variety": "Plum Plout"
+  },
+  {
+    "_id": "6287892369ca1eacec5b159a",
+    "product": "Fruits",
+    "variety": "Pomegranate"
+  },
+  {
+    "_id": "6287892369ca1eacec5b159b",
+    "product": "Fruits",
+    "variety": "Pomelo"
+  },
+  {
+    "_id": "6287892369ca1eacec5b159c",
+    "product": "Fruits",
+    "variety": "Prickly Pear"
+  },
+  {
+    "_id": "6287892369ca1eacec5b159d",
+    "product": "Fruits",
+    "variety": "Quandong"
+  },
+  {
+    "_id": "6287892369ca1eacec5b159e",
+    "product": "Fruits",
+    "variety": "Quince"
+  },
+  {
+    "_id": "6287892369ca1eacec5b159f",
+    "product": "Fruits",
+    "variety": "Rambutan"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a0",
+    "product": "Fruits",
+    "variety": "Rockmelon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a1",
+    "product": "Fruits",
+    "variety": "Rollinias"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a2",
+    "product": "Fruits",
+    "variety": "Rosella"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a3",
+    "product": "Fruits",
+    "variety": "Santols"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a4",
+    "product": "Fruits",
+    "variety": "Sapodilla"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a5",
+    "product": "Fruits",
+    "variety": "Sapote"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a6",
+    "product": "Fruits",
+    "variety": "Soursop"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a7",
+    "product": "Fruits",
+    "variety": "Star Apple"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a8",
+    "product": "Fruits",
+    "variety": "Tamarillo"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15a9",
+    "product": "Fruits",
+    "variety": "Tangello"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15aa",
+    "product": "Fruits",
+    "variety": "Tangerine"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ab",
+    "product": "Fruits",
+    "variety": "Tomatillos"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ac",
+    "product": "Fruits",
+    "variety": "Tomato"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ad",
+    "product": "Fruits",
+    "variety": "Toronchis"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ae",
+    "product": "Fruits",
+    "variety": "Wampis"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15af",
+    "product": "Fruits",
+    "variety": "Watermelon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b0",
+    "product": "Fruits",
+    "variety": "Wax Jumbu"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b1",
+    "product": "Vegetables",
+    "variety": "Arrowroot"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b2",
+    "product": "Vegetables",
+    "variety": "Artichoke"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b3",
+    "product": "Vegetables",
+    "variety": "Asparagus"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b4",
+    "product": "Vegetables",
+    "variety": "Babaco"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b5",
+    "product": "Vegetables",
+    "variety": "Baby Broccoli"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b6",
+    "product": "Vegetables",
+    "variety": "Bamboo Shoots"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b7",
+    "product": "Vegetables",
+    "variety": "Banana Bells"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b8",
+    "product": "Vegetables",
+    "variety": "Banana Leaves"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15b9",
+    "product": "Vegetables",
+    "variety": "Bean"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ba",
+    "product": "Vegetables",
+    "variety": "Bean Salad Sprout"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15bb",
+    "product": "Vegetables",
+    "variety": "Beetroot"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15bc",
+    "product": "Vegetables",
+    "variety": "Bitter Melons"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15bd",
+    "product": "Vegetables",
+    "variety": "Broccoflower"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15be",
+    "product": "Vegetables",
+    "variety": "Broccoli"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15bf",
+    "product": "Vegetables",
+    "variety": "Broccoli Raab (Rapini)"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c0",
+    "product": "Vegetables",
+    "variety": "Broccolini"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c1",
+    "product": "Vegetables",
+    "variety": "Brussel Sprout"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c2",
+    "product": "Vegetables",
+    "variety": "Cabbage"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c3",
+    "product": "Vegetables",
+    "variety": "Capsicum"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c4",
+    "product": "Vegetables",
+    "variety": "Cardoon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c5",
+    "product": "Vegetables",
+    "variety": "Carrot"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c6",
+    "product": "Vegetables",
+    "variety": "Cassava"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c7",
+    "product": "Vegetables",
+    "variety": "Cauliflower"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c8",
+    "product": "Vegetables",
+    "variety": "Celeriac"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15c9",
+    "product": "Vegetables",
+    "variety": "Celery"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ca",
+    "product": "Vegetables",
+    "variety": "Chard"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15cb",
+    "product": "Vegetables",
+    "variety": "Cherry Eggplant"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15cc",
+    "product": "Vegetables",
+    "variety": "Chick Peas"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15cd",
+    "product": "Vegetables",
+    "variety": "Chicory"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ce",
+    "product": "Vegetables",
+    "variety": "Chilli"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15cf",
+    "product": "Vegetables",
+    "variety": "Chinese Cabbages"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d0",
+    "product": "Vegetables",
+    "variety": "Chinese Melon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d1",
+    "product": "Vegetables",
+    "variety": "Chinese Melons"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d2",
+    "product": "Vegetables",
+    "variety": "Chinese Vegetable"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d3",
+    "product": "Vegetables",
+    "variety": "Chinese Vegetables"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d4",
+    "product": "Vegetables",
+    "variety": "Choko"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d5",
+    "product": "Vegetables",
+    "variety": "Cloves"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d6",
+    "product": "Vegetables",
+    "variety": "Corn"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d7",
+    "product": "Vegetables",
+    "variety": "Courgette"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d8",
+    "product": "Vegetables",
+    "variety": "Cucumber"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15d9",
+    "product": "Vegetables",
+    "variety": "Edible Flowers"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15da",
+    "product": "Vegetables",
+    "variety": "Eggplant"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15db",
+    "product": "Vegetables",
+    "variety": "Endive"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15dc",
+    "product": "Vegetables",
+    "variety": "Fennel"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15dd",
+    "product": "Vegetables",
+    "variety": "Fu Qua"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15de",
+    "product": "Vegetables",
+    "variety": "Garlic"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15df",
+    "product": "Vegetables",
+    "variety": "Garlic Shoots"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e0",
+    "product": "Vegetables",
+    "variety": "Ginger"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e1",
+    "product": "Vegetables",
+    "variety": "Gourd"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e2",
+    "product": "Vegetables",
+    "variety": "Jerusalem Artichoke"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e3",
+    "product": "Vegetables",
+    "variety": "Jicama"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e4",
+    "product": "Vegetables",
+    "variety": "Kale"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e5",
+    "product": "Vegetables",
+    "variety": "Kohl Rabi"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e6",
+    "product": "Vegetables",
+    "variety": "Leek"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e7",
+    "product": "Vegetables",
+    "variety": "Lettuce"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e8",
+    "product": "Vegetables",
+    "variety": "Lime Leaves"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15e9",
+    "product": "Vegetables",
+    "variety": "Lotus Root"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ea",
+    "product": "Vegetables",
+    "variety": "Luffas"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15eb",
+    "product": "Vegetables",
+    "variety": "Marrow"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ec",
+    "product": "Vegetables",
+    "variety": "Mizuna"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ed",
+    "product": "Vegetables",
+    "variety": "Mushroom"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ee",
+    "product": "Vegetables",
+    "variety": "Okra"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ef",
+    "product": "Vegetables",
+    "variety": "Onion"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f0",
+    "product": "Vegetables",
+    "variety": "Parsnip"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f1",
+    "product": "Vegetables",
+    "variety": "Peas"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f2",
+    "product": "Vegetables",
+    "variety": "Potato"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f3",
+    "product": "Vegetables",
+    "variety": "Pumpkin"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f4",
+    "product": "Vegetables",
+    "variety": "Radish"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f5",
+    "product": "Vegetables",
+    "variety": "Rhubarb"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f6",
+    "product": "Vegetables",
+    "variety": "Salad Mix"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f7",
+    "product": "Vegetables",
+    "variety": "Shallots"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f8",
+    "product": "Vegetables",
+    "variety": "Silverbeet"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15f9",
+    "product": "Vegetables",
+    "variety": "Spinach"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15fa",
+    "product": "Vegetables",
+    "variety": "Spring Onions"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15fb",
+    "product": "Vegetables",
+    "variety": "Sprouts"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15fc",
+    "product": "Vegetables",
+    "variety": "Squash"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15fd",
+    "product": "Vegetables",
+    "variety": "Swede"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15fe",
+    "product": "Vegetables",
+    "variety": "Sweet Potato"
+  },
+  {
+    "_id": "6287892369ca1eacec5b15ff",
+    "product": "Vegetables",
+    "variety": "Tamarind Pod"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1600",
+    "product": "Vegetables",
+    "variety": "Taro"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1601",
+    "product": "Vegetables",
+    "variety": "Turmeric"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1602",
+    "product": "Vegetables",
+    "variety": "Turnip"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1603",
+    "product": "Vegetables",
+    "variety": "Watercress"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1604",
+    "product": "Vegetables",
+    "variety": "Wax Jumbu"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1605",
+    "product": "Vegetables",
+    "variety": "White Radish (Daikon)"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1606",
+    "product": "Vegetables",
+    "variety": "Winged Bean"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1607",
+    "product": "Vegetables",
+    "variety": "Wintermelon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1608",
+    "product": "Vegetables",
+    "variety": "Witlof"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1609",
+    "product": "Vegetables",
+    "variety": "Yam"
+  },
+  {
+    "_id": "6287892369ca1eacec5b160a",
+    "product": "Vegetables",
+    "variety": "Yambeans"
+  },
+  {
+    "_id": "6287892369ca1eacec5b160b",
+    "product": "Vegetables",
+    "variety": "Zucchini"
+  },
+  {
+    "_id": "6287892369ca1eacec5b160c",
+    "product": "Herbs",
+    "variety": "Anise"
+  },
+  {
+    "_id": "6287892369ca1eacec5b160d",
+    "product": "Herbs",
+    "variety": "Basil Green"
+  },
+  {
+    "_id": "6287892369ca1eacec5b160e",
+    "product": "Herbs",
+    "variety": "Basil Purple"
+  },
+  {
+    "_id": "6287892369ca1eacec5b160f",
+    "product": "Herbs",
+    "variety": "Basil Thai"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1610",
+    "product": "Herbs",
+    "variety": "Bay Leaf"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1611",
+    "product": "Herbs",
+    "variety": "Burnet Salad"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1612",
+    "product": "Herbs",
+    "variety": "Chervil"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1613",
+    "product": "Herbs",
+    "variety": "Chives"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1614",
+    "product": "Herbs",
+    "variety": "Chives Garlic"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1615",
+    "product": "Herbs",
+    "variety": "Coriander"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1616",
+    "product": "Herbs",
+    "variety": "Culantro"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1617",
+    "product": "Herbs",
+    "variety": "Curry Leaves"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1618",
+    "product": "Herbs",
+    "variety": "Dill"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1619",
+    "product": "Herbs",
+    "variety": "Epazote"
+  },
+  {
+    "_id": "6287892369ca1eacec5b161a",
+    "product": "Herbs",
+    "variety": "Fennel"
+  },
+  {
+    "_id": "6287892369ca1eacec5b161b",
+    "product": "Herbs",
+    "variety": "Galangal"
+  },
+  {
+    "_id": "6287892369ca1eacec5b161c",
+    "product": "Herbs",
+    "variety": "Horse Radish"
+  },
+  {
+    "_id": "6287892369ca1eacec5b161d",
+    "product": "Herbs",
+    "variety": "Horse Radish Young Root"
+  },
+  {
+    "_id": "6287892369ca1eacec5b161e",
+    "product": "Herbs",
+    "variety": "Kaffir Lime Leaves"
+  },
+  {
+    "_id": "6287892369ca1eacec5b161f",
+    "product": "Herbs",
+    "variety": "Lemon Myrtle"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1620",
+    "product": "Herbs",
+    "variety": "Lemon Verbeana"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1621",
+    "product": "Herbs",
+    "variety": "Lemongrass"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1622",
+    "product": "Herbs",
+    "variety": "Lovage"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1623",
+    "product": "Herbs",
+    "variety": "Marjoram"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1624",
+    "product": "Herbs",
+    "variety": "Mint"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1625",
+    "product": "Herbs",
+    "variety": "Mint Round"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1626",
+    "product": "Herbs",
+    "variety": "Mint Thai"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1627",
+    "product": "Herbs",
+    "variety": "Oregano"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1628",
+    "product": "Herbs",
+    "variety": "Parsley Continental"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1629",
+    "product": "Herbs",
+    "variety": "Parsley Curled"
+  },
+  {
+    "_id": "6287892369ca1eacec5b162a",
+    "product": "Herbs",
+    "variety": "Rosemary"
+  },
+  {
+    "_id": "6287892369ca1eacec5b162b",
+    "product": "Herbs",
+    "variety": "Saffron"
+  },
+  {
+    "_id": "6287892369ca1eacec5b162c",
+    "product": "Herbs",
+    "variety": "Sage"
+  },
+  {
+    "_id": "6287892369ca1eacec5b162d",
+    "product": "Herbs",
+    "variety": "Savory"
+  },
+  {
+    "_id": "6287892369ca1eacec5b162e",
+    "product": "Herbs",
+    "variety": "Sorrel"
+  },
+  {
+    "_id": "6287892369ca1eacec5b162f",
+    "product": "Herbs",
+    "variety": "Sorrel"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1630",
+    "product": "Herbs",
+    "variety": "Tarragon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1631",
+    "product": "Herbs",
+    "variety": "Thyme"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1632",
+    "product": "Herbs",
+    "variety": "Thyme Lemon"
+  },
+  {
+    "_id": "6287892369ca1eacec5b1633",
+    "product": "Herbs",
+    "variety": "Tumeric"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a41",
+    "variety": "Agapanthus (Lily of the Nile)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a42",
+    "variety": "Ageratum (Floss Flower)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a43",
+    "variety": "Allium (Drumsticks)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a44",
+    "variety": "Alstroemeria (Peruvian lily)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a45",
+    "variety": "Amaranthus (Love lies bleeding)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a46",
+    "variety": "Anemone (Poppy anemone)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a47",
+    "variety": "Anthurium (Flamingo)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a48",
+    "variety": "Aster (Easter Daisy)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a49",
+    "variety": "Backhousia (Lemon myrtle)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a4a",
+    "variety": "Banksia Species",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a4b",
+    "variety": "Beaufortia (Beaufortia sparsa)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a4c",
+    "variety": "Belladonna lily (Amaryllis)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a4d",
+    "variety": "Berzelia (Button bush)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a4e",
+    "variety": "Blushing bride",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a4f",
+    "variety": "Boronia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a50",
+    "variety": "Bouvardia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a51",
+    "variety": "Bracteantha & Helipterum",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a52",
+    "variety": "Brunia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a53",
+    "variety": "Calendula",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a54",
+    "variety": "Calla lily & Arum Lily",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a55",
+    "variety": "Candytuft",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a56",
+    "variety": "Carnation (Sim, Standard, Spray)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a57",
+    "variety": "Cattleya orchid",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a58",
+    "variety": "Celosia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a59",
+    "variety": "China Aster",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a5a",
+    "variety": "Chincherinchee (Star of Bethlehem)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a5b",
+    "variety": "Christmas bells",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a5c",
+    "variety": "Christmas bush",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a5d",
+    "variety": "Chrysanthemum",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a5e",
+    "variety": "Cornflower (Blue buttons)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a5f",
+    "variety": "Cosmos",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a60",
+    "variety": "Cyclamen",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a61",
+    "variety": "Cymbidium orchid",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a62",
+    "variety": "Daffodil (e.g. ‘Erlicheer’)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a63",
+    "variety": "Dahlia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a64",
+    "variety": "Daphne",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a65",
+    "variety": "Delphinium",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a66",
+    "variety": "Dendrobium orchid",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a67",
+    "variety": "Echinacea",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a68",
+    "variety": "Erica",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a69",
+    "variety": "Eriostemon",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a6a",
+    "variety": "Eryngium",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a6b",
+    "variety": "Eucalyptus (flowering gum)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a6c",
+    "variety": "Eucalyptus buds (Eucalyptus spp)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a6d",
+    "variety": "Eucalyptus nuts*—Eucalyptus spp. and hybrids",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a6e",
+    "variety": "Eucomis",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a6f",
+    "variety": "Flannel flower",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a70",
+    "variety": "Frangipani",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a71",
+    "variety": "Freesia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a72",
+    "variety": "Gardenia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a73",
+    "variety": "Geleznowia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a74",
+    "variety": "Gerbera",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a75",
+    "variety": "Ginger (incl. Red ginger)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a76",
+    "variety": "Gladioli",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a77",
+    "variety": "Gloriosa lily",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a78",
+    "variety": "Golden Morrison (Feather flowers)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a79",
+    "variety": "Grevillea",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a7a",
+    "variety": "Gymea lily",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a7b",
+    "variety": "Gypsophila, Baby’s breath",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a7c",
+    "variety": "Heliconia, Crab or Lobster claw",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a7d",
+    "variety": "Helleborus, Lenten rose",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a7e",
+    "variety": "Hyacinth",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a7f",
+    "variety": "Hydrangea",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a80",
+    "variety": "Hypericum",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a81",
+    "variety": "Iris, Dutch iris",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a82",
+    "variety": "Kale, Ornamental kale,",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a83",
+    "variety": "Kangaroo paw",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a84",
+    "variety": "Lavender",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a85",
+    "variety": "Leucadendron",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a86",
+    "variety": "Leucospermum",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a87",
+    "variety": "Liatris",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a88",
+    "variety": "Lilac",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a89",
+    "variety": "Lilium",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a8a",
+    "variety": "Lily of the valley",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a8b",
+    "variety": "Lisianthus",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a8c",
+    "variety": "Lotus",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a8d",
+    "variety": "Marigold",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a8e",
+    "variety": "Molucca balm",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a8f",
+    "variety": "Nerine",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a90",
+    "variety": "Nut top",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a91",
+    "variety": "Oncidium orchid",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a92",
+    "variety": "Peony",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a93",
+    "variety": "Phalaenopsis",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a94",
+    "variety": "Phylica (Featherhead)",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a95",
+    "variety": "Pieris",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a96",
+    "variety": "Pineapple",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a97",
+    "variety": "Poppy",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a98",
+    "variety": "Protea",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a99",
+    "variety": "Ptilotus",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a9a",
+    "variety": "Qualup bells",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a9b",
+    "variety": "Ranunculus",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a9c",
+    "variety": "Riceflower",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a9d",
+    "variety": "Rose",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a9e",
+    "variety": "Scholtzia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45a9f",
+    "variety": "Siam or Thai tulip",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa0",
+    "variety": "Slipper orchid",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa1",
+    "variety": "Snapdragon",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa2",
+    "variety": "Snowball tree",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa3",
+    "variety": "Solidago",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa4",
+    "variety": "South Australian daisy",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa5",
+    "variety": "Spider orchid",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa6",
+    "variety": "Statice",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa7",
+    "variety": "Stephanotis",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa8",
+    "variety": "Stock",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aa9",
+    "variety": "Strelitzia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aaa",
+    "variety": "Sunflower",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aab",
+    "variety": "Sweet pea",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aac",
+    "variety": "Tea tree",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aad",
+    "variety": "Tetragona nuts—E. ×tetragona",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aae",
+    "variety": "Thryptomene",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aaf",
+    "variety": "Tuberose",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab0",
+    "variety": "Tulip",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab1",
+    "variety": "Vanda or Aranda orchid",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab2",
+    "variety": "Violet",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab3",
+    "variety": "Waratah",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab4",
+    "variety": "Wattle",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab5",
+    "variety": "Waxflower",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab6",
+    "variety": "Zinnia",
+    "product": "Flowers"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab7",
+    "variety": "After Dark",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab8",
+    "variety": "Aspidistra (Cast iron plant)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ab9",
+    "variety": "Barker Bush",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aba",
+    "variety": "Camellia",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45abb",
+    "variety": "Cherry laure",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45abc",
+    "variety": "Cordyline (TI)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45abd",
+    "variety": "Croton",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45abe",
+    "variety": "Deer Antlers",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45abf",
+    "variety": "Dingo fern",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac0",
+    "variety": "Doryanthes (Gymea lily)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac1",
+    "variety": "Dracaena",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac2",
+    "variety": "Eucalyptus",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac3",
+    "variety": "Eucalyptus buds (Eucalyptus spp)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac4",
+    "variety": "Eucalyptus nuts",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac5",
+    "variety": "Emu Grass",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac6",
+    "variety": "Fatsia",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac7",
+    "variety": "Flexi grass",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac8",
+    "variety": "Geebung",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ac9",
+    "variety": "Goanna claw",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45aca",
+    "variety": "Grevillea Foilage",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45acb",
+    "variety": "Helleborus",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45acc",
+    "variety": "Ivy",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45acd",
+    "variety": "Koala fern",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ace",
+    "variety": "Leather fern",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45acf",
+    "variety": "Leucadendron",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad0",
+    "variety": "Lotus pods and leaves",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad1",
+    "variety": "Magnolia (Little Gem)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad2",
+    "variety": "Monstera (Swiss cheese plant)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad3",
+    "variety": "Nandina (Sacred bamboo)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad4",
+    "variety": "Native holly foliage",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad5",
+    "variety": "North Queensland tropical foliage",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad6",
+    "variety": "Puzzle sticks",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad7",
+    "variety": "Rhapis palm (Lady palm)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad8",
+    "variety": "Saviour grass",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ad9",
+    "variety": "Sea star fern (Coral fern)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ada",
+    "variety": "Spear grass (Steel grass)",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45adb",
+    "variety": "Umbrella fern",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45adc",
+    "variety": "Viburnum",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45add",
+    "variety": "Wattle",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ade",
+    "variety": "Wooly bush",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45adf",
+    "variety": "Xanadu",
+    "product": "Foliage"
+  },
+  {
+    "_id": "62960c12fa4e931459b45ae0",
+    "variety": "Zigzag wattle",
+    "product": "Foliage"
+  },
+  {
     "_id": "62ce5c74181556445ba20702",
     "product": "Buddleia",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20703",
     "product": "Campanula (Bellflower)",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20704",
     "product": "Cotton Bush",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20705",
     "product": "Daisy",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20706",
     "product": "Dusty Miller",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20707",
     "product": "Fern",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20708",
     "product": "Foxglove",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20709",
     "product": "Galpini",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2070a",
     "product": "Geraldton Wax",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2070b",
     "product": "Godetia",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2070c",
     "product": "Hypericum Berry",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2070d",
     "product": "Irish Bell",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2070e",
     "product": "Kalachoe",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2070f",
     "product": "Kunzea",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20710",
     "product": "Lambs Tail",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20711",
     "product": "Matricaria",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20712",
     "product": "Misty",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20713",
     "product": "Mixed Bunches",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20714",
     "product": "Morrison",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20715",
     "product": "Native Bunches",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20716",
     "product": "Other Orchids",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20717",
     "product": "Peppercorn",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20718",
     "product": "Poppypods",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20719",
     "product": "Queen Anne Lace",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2071a",
     "product": "Red-Hot Poker",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2071b",
     "product": "Rhododendron",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2071c",
     "product": "Scabiosa",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2071d",
     "product": "Sea Holly",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2071e",
     "product": "Sedum",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba2071f",
     "product": "Smoke Bush",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20720",
     "product": "Snow Berries",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20721",
     "product": "Solidaster",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20722",
     "product": "Sorghum",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20723",
     "product": "Sweet William",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20724",
     "product": "Veronica",
     "variety": "Flowers"
-  },{
+  },
+  {
     "_id": "62ce5c74181556445ba20725",
     "product": "Wheat",
     "variety": "Flowers"
-  }]
+  }
+]
