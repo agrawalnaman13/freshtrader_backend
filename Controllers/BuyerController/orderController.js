@@ -372,6 +372,9 @@ exports.orderProduct = async (req, res, next) => {
         .status(200)
         .json(error("Please provide pickup date", res.statusCode));
     }
+    if (new Date(pick_up_date) <= new Date(Date.now())) {
+      return res.status(200).json(error("Invalid pickup date", res.statusCode));
+    }
     if (!pick_up_time) {
       return res
         .status(200)
@@ -505,6 +508,9 @@ exports.reorderProduct = async (req, res, next) => {
       return res
         .status(200)
         .json(error("Please provide pickup date", res.statusCode));
+    }
+    if (new Date(pick_up_date) <= new Date(Date.now())) {
+      return res.status(200).json(error("Invalid pickup date", res.statusCode));
     }
     if (!pick_up_time) {
       return res

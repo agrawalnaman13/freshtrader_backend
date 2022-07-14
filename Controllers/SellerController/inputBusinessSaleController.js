@@ -301,7 +301,11 @@ exports.processTransaction = async (req, res, next) => {
         .status(200)
         .json(error("Transaction type is required", res.statusCode));
     }
-    if (!["CASH", "CARD", "INVOICE", "DRAFT", "CREDIT NOTE"].includes(type)) {
+    if (
+      !["CASH", "CARD", "INVOICE", "DRAFT INVOICE", "CREDIT NOTE"].includes(
+        type
+      )
+    ) {
       return res
         .status(200)
         .json(error("Invalid transaction type", res.statusCode));

@@ -53,7 +53,7 @@ const TransactionSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["CASH", "CARD", "INVOICE", "DRAFT", "CREDIT NOTE"],
+      enum: ["CASH", "CARD", "INVOICE", "DRAFT INVOICE", "CREDIT NOTE"],
       required: true,
     },
     total: {
