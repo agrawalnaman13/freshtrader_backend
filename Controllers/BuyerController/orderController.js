@@ -90,7 +90,6 @@ exports.getSellersProducts = async (req, res, next) => {
     let category = [];
     if (sellerData.market === "Sydney Produce and Growers Market") {
       category = ["Fruits", "Herbs", "Vegetables", "Others"];
-      query.push({ $unwind: "$grades" });
     } else category = ["Flowers", "Foliage"];
     let query = [
       {
