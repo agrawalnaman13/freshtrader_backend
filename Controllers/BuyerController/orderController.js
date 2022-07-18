@@ -482,6 +482,7 @@ exports.reorderProduct = async (req, res, next) => {
     const { orderId, pick_up_date, pick_up_time } = req.body;
     console.log(req.body);
     const buyer = await Buyer.findById(req.buyer._id).populate("plan");
+    console.log(buyer)
     if (!buyer.plan) {
       return res
         .status(200)
