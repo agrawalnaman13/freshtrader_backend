@@ -87,6 +87,11 @@ exports.getSellersProducts = async (req, res, next) => {
     if (!sellerData) {
       return res.status(200).json(error("Invalid seller id", res.statusCode));
     }
+    let category = [];
+    if (sellerData.market === "Sydney Produce and Growers Market") {
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+      query.push({ $unwind: "$grades" });
+    } else category = ["Flowers", "Foliage"];
     let query = [
       {
         $match: {
@@ -138,11 +143,8 @@ exports.getSellersProducts = async (req, res, next) => {
           sortBy === 1 ? { "variety.variety": 1 } : { "variety.variety": -1 },
       },
     ];
-    let category = [];
-    if (sellerData.market === "Sydney Produce and Growers Market") {
-      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+    if (sellerData.market === "Sydney Produce and Growers Market")
       query.push({ $unwind: "$grades" });
-    } else category = ["Flowers", "Foliage"];
     const products = await SellerProduct.aggregate(query);
     res
       .status(200)
