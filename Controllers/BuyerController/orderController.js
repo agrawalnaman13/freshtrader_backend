@@ -87,11 +87,7 @@ exports.getSellersProducts = async (req, res, next) => {
     if (!sellerData) {
       return res.status(200).json(error("Invalid seller id", res.statusCode));
     }
-    let category = [];
-    if (sellerData.market === "Sydney Produce and Growers Market")
-      category = ["Fruits", "Herbs", "Vegetables", "Others"];
-    else category = ["Flowers", "Foliage"];
-    const products = await SellerProduct.aggregate([
+    let query = [
       {
         $match: {
           seller: mongoose.Types.ObjectId(seller),
@@ -127,7 +123,6 @@ exports.getSellersProducts = async (req, res, next) => {
         },
       },
       { $unwind: "$units" },
-      { $unwind: "$grades" },
       {
         $match: {
           $or: [
@@ -142,7 +137,13 @@ exports.getSellersProducts = async (req, res, next) => {
         $sort:
           sortBy === 1 ? { "variety.variety": 1 } : { "variety.variety": -1 },
       },
-    ]);
+    ];
+    let category = [];
+    if (sellerData.market === "Sydney Produce and Growers Market") {
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+      query.push({ $unwind: "$grades" });
+    } else category = ["Flowers", "Foliage"];
+    const products = await SellerProduct.aggregate(query);
     res
       .status(200)
       .json(
@@ -482,7 +483,7 @@ exports.reorderProduct = async (req, res, next) => {
     const { orderId, pick_up_date, pick_up_time } = req.body;
     console.log(req.body);
     const buyer = await Buyer.findById(req.buyer._id).populate("plan");
-    console.log(buyer)
+    console.log(buyer);
     if (!buyer.plan) {
       return res
         .status(200)
