@@ -55,9 +55,7 @@ exports.getMyPlan = async (req, res, next) => {
 
 exports.getPlans = async (req, res, next) => {
   try {
-    const plans = await Subscription.find({
-      plan_name: { $ne: "Free" },
-    });
+    const plans = await Subscription.find();
     res
       .status(200)
       .json(success("Plan Fetched Successfully", { plans }, res.statusCode));
