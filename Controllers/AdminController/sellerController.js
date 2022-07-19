@@ -37,6 +37,14 @@ exports.sellerSignup = async (req, res) => {
     }
     if (!validator.isEmail(email))
       return res.status(200).json(error("Invalid Email", res.statusCode));
+    const seller = await Wholeseller.findOne({
+      email: email,
+    });
+    if (seller) {
+      return res
+        .status(200)
+        .json(error("Email is already registered", res.statusCode));
+    }
     if (!abn) {
       return res.status(200).json(error("Please provide abn", res.statusCode));
     }

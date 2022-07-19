@@ -139,7 +139,7 @@ exports.getSellersProducts = async (req, res, next) => {
       },
       {
         $sort:
-          sortBy === 1 ? { "variety.variety": 1 } : { "variety.variety": -1 },
+          sortBy === 2 ? { "variety.variety": -1 } : { "variety.variety": 1 },
       },
     ];
     if (sellerData.market === "Sydney Produce and Growers Market")

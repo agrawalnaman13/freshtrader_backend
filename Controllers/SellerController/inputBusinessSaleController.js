@@ -138,6 +138,14 @@ exports.addNewBusiness = async (req, res, next) => {
           .json(error("Please provide smcs code", res.statusCode));
       }
     }
+    const buyer = await Buyer.findOne({
+      email: email,
+    });
+    if (buyer) {
+      return res
+        .status(200)
+        .json(error("Email is already registered", res.statusCode));
+    }
     const business = await Buyer.create({
       business_trading_name: business_trading_name,
       abn: abn,
