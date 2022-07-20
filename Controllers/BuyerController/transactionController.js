@@ -40,6 +40,7 @@ exports.getTransactions = async (req, res, next) => {
       {
         $match: {
           buyer: mongoose.Types.ObjectId(req.buyer._id),
+          type: { $ne: "DRAFT INVOICE" },
         },
       },
       {

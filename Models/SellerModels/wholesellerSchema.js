@@ -69,6 +69,21 @@ const WholesellerSchema = new mongoose.Schema(
       enum: ["Xero", "MYOB", "Saasu", "Quickbooks", ""],
       default: "",
     },
+    invoice_account_code: {
+      type: String,
+    },
+    smcs_invoice_account_code: {
+      type: String,
+    },
+    cash_account_code: {
+      type: String,
+    },
+    card_account_code: {
+      type: String,
+    },
+    credit_total_account_code: {
+      type: String,
+    },
     thermal_receipt_invoice_logo: {
       type: String,
     },

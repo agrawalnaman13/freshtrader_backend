@@ -227,8 +227,18 @@ exports.updateSellerPassword = async (req, res, next) => {
 
 exports.updateAccountInformation = async (req, res, next) => {
   try {
-    const { account_name, bsb, account, sales_invoice_due_date, csv } =
-      req.body;
+    const {
+      account_name,
+      bsb,
+      account,
+      sales_invoice_due_date,
+      csv,
+      smcs_invoice_account_code,
+      invoice_account_code,
+      cash_account_code,
+      card_account_code,
+      credit_note_account_code,
+    } = req.body;
     console.log(req.body);
     if (!account_name) {
       return res
@@ -262,6 +272,11 @@ exports.updateAccountInformation = async (req, res, next) => {
         account: account,
         sales_invoice_due_date: +sales_invoice_due_date,
         csv: csv,
+        smcs_invoice_account_code: smcs_invoice_account_code,
+        invoice_account_code: invoice_account_code,
+        cash_account_code: cash_account_code,
+        card_account_code: card_account_code,
+        credit_note_account_code: credit_note_account_code,
       }
     );
 

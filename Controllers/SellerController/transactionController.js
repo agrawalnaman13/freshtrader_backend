@@ -286,11 +286,15 @@ exports.changeAllTransactionStatus = async (req, res, next) => {
     }
     for (const transactionId of transactionIds) {
       const transaction = await Transaction.findById(transactionId);
-      await Transaction.findByIdAndUpdate(transactionId, {
-        status: status,
-        payment_received:
-          status === "PAID" ? transaction.total : transaction.payment_received,
-      });
+      if (transaction.type !== "DRAFT INVOICE") {
+        await Transaction.findByIdAndUpdate(transactionId, {
+          status: status,
+          payment_received:
+            status === "PAID"
+              ? transaction.total
+              : transaction.payment_received,
+        });
+      }
     }
     res
       .status(200)
@@ -546,10 +550,12 @@ exports.emailAllTransactionsToBuyers = async (req, res, next) => {
     }
     for (const transactionId of transactionIds) {
       const transaction = await Transaction.findById(transactionId);
-      await Transaction.findByIdAndUpdate(transactionId, {
-        is_emailed: true,
-      });
-      await sendMail(transaction.buyer.email, "Freshtraders", "");
+      if (transaction.type !== "DRAFT INVOICE") {
+        await Transaction.findByIdAndUpdate(transactionId, {
+          is_emailed: true,
+        });
+        await sendMail(transaction.buyer.email, "Freshtraders", "");
+      }
     }
     res
       .status(200)

@@ -296,7 +296,7 @@ exports.changeConsignmentStatus = async (req, res, next) => {
 
 exports.getConsignments = async (req, res, next) => {
   try {
-    const { sortBy, filterBy, date, search } = req.body;
+    const { sortBy, filterBy, from, till, search } = req.body;
     console.log(req.body);
     const consignments = await Purchase.aggregate([
       {
@@ -355,12 +355,21 @@ exports.getConsignments = async (req, res, next) => {
             filterBy === 4 ? { status: "AWAITING DELIVERY" } : {},
             filterBy === 5 ? { documents: "COMPLETE" } : {},
             filterBy === 6 ? { documents: "MISSING" } : {},
-            date
+            from
               ? {
                   $and: [
-                    { year: new Date(date).getFullYear() },
-                    { month: new Date(date).getMonth() + 1 },
-                    { day: new Date(date).getDate() },
+                    { year: { $gte: new Date(from).getFullYear() } },
+                    { month: { $gte: new Date(from).getMonth() + 1 } },
+                    { day: { $gte: new Date(from).getDate() } },
+                  ],
+                }
+              : {},
+            till
+              ? {
+                  $and: [
+                    { year: { $lte: new Date(till).getFullYear() } },
+                    { month: { $lte: new Date(till).getMonth() + 1 } },
+                    { day: { $lte: new Date(till).getDate() } },
                   ],
                 }
               : {},
