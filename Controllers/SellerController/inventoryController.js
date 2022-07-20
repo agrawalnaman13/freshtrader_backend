@@ -10,7 +10,7 @@ const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 exports.getInventory = async (req, res) => {
   try {
-    const { search } = req.body;
+    const { search, active_consignment } = req.body;
     console.log(req.body);
     const seller = await Wholeseller.findById(req.seller._id);
     let category = [];
@@ -86,22 +86,41 @@ exports.getInventory = async (req, res) => {
       },
       { $sort: { "productId.variety.product": 1 } },
     ]);
+    let list = [];
     for (const inventory of inventories) {
       if (inventory.consignment)
         inventory.consignment = await Purchase.findById(inventory.consignment)
           .populate("supplier")
-          .select(["supplier", "consign"]);
-      // inventory.ready_to_sell = inventory.carry_over + inventory.purchase;
+          .select(["supplier", "consign", "status"]);
       inventory.remaining =
         inventory.purchase - inventory.sold - inventory.void;
       inventory.total_sold = inventory.total_sold ? inventory.total_sold : 0;
+      if (active_consignment) {
+        const consignment = await Purchase.aggregate([
+          {
+            $match: {
+              seller: mongoose.Types.ObjectId(req.seller._id),
+              status: "ACTIVE",
+            },
+          },
+          { $unwind: "$products" },
+          {
+            $match: {
+              "products.productId": {
+                $eq: mongoose.Types.ObjectId(inventory.productId._id),
+              },
+            },
+          },
+        ]);
+        if (consignment.length) list.push(inventory);
+      } else list.push(inventory);
     }
     res
       .status(200)
       .json(
         success(
           "Inventory fetched Successfully",
-          { inventories },
+          { inventories: list },
           res.statusCode
         )
       );
