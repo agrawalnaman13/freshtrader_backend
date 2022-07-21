@@ -97,10 +97,10 @@ exports.payment = async (req, res, next) => {
     const { id } = req.body;
     stripe.charges.create(
       {
-        amount: 400,
-        currency: "usd",
+        amount: 200,
+        currency: "aud",
         source: id,
-        description: `Payment for Apple`,
+        description: `Subscription`,
         metadata: {
           productId: "12345",
         },
