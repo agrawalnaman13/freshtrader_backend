@@ -101,7 +101,7 @@ exports.payment = async (req, res, next) => {
         currency: "usd",
         source: id,
         description: `Payment for Apple`,
-        metadta: {
+        metadata: {
           productId: "12345",
         },
       },
