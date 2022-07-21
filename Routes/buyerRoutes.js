@@ -58,7 +58,7 @@ router.post("/forgotPassword", forgotPassword);
 router.post("/verifyOTP", verifyOTP);
 router.post("/updatePassword", updatePassword);
 router.get("/getBuyerData", tokenAuthorisationBuyer, getBuyerData);
-router.get(
+router.post(
   "/updateAccountInformation",
   tokenAuthorisationBuyer,
   updateAccountInformation
