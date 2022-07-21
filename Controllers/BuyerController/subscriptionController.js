@@ -4,6 +4,9 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const Subscription = require("../../Models/AdminModels/subscriptionSchema");
 const SubscriptionHistory = require("../../Models/BuyerModels/subscriptionHistorySchema");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
+const stripe = require("stripe")(
+  "sk_test_51KqCaeKPM89X1Av0VpuPrVIFt13lhckjxYOSVJS9DVDcUuQnk0NMkYtOzl9OndaerAKQjKw9JGbF3ojMy8CQUdki00UqITEbvX"
+);
 exports.buyPlan = async (req, res, next) => {
   try {
     const { planId } = req.body;
@@ -86,5 +89,31 @@ exports.checkPlan = async () => {
   } catch (err) {
     console.log(err);
     return;
+  }
+};
+
+exports.payment = async (req, res, next) => {
+  try {
+    stripe.charges.create(
+      {
+        amount: product.price,
+        currency: "usd",
+        source: cardToken.id,
+        description: `Payment for ${product.title}`,
+        metadta: {
+          productId: product.id,
+        },
+      },
+      function (err, charge) {
+        if (err) {
+          res.status(200).json(error("Failed", res.statusCode));
+        } else {
+          res.status(200).json(success("Failed", {}, res.statusCode));
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
   }
 };
