@@ -349,12 +349,6 @@ exports.getConsignments = async (req, res, next) => {
       {
         $match: {
           $and: [
-            filterBy === 1 ? { status: "ACTIVE" } : {},
-            filterBy === 2 ? { status: "ON HOLD" } : {},
-            filterBy === 3 ? { status: "COMPLETE" } : {},
-            filterBy === 4 ? { status: "AWAITING DELIVERY" } : {},
-            filterBy === 5 ? { documents: "COMPLETE" } : {},
-            filterBy === 6 ? { documents: "MISSING" } : {},
             from
               ? {
                   $and: [
@@ -373,6 +367,12 @@ exports.getConsignments = async (req, res, next) => {
                   ],
                 }
               : {},
+            filterBy === 1 ? { status: "ACTIVE" } : {},
+            filterBy === 2 ? { status: "ON HOLD" } : {},
+            filterBy === 3 ? { status: "COMPLETE" } : {},
+            filterBy === 4 ? { status: "AWAITING DELIVERY" } : {},
+            filterBy === 5 ? { documents: "COMPLETE" } : {},
+            filterBy === 6 ? { documents: "MISSING" } : {},
             search
               ? {
                   $or: [

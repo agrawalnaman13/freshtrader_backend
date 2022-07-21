@@ -81,7 +81,7 @@ const WholesellerSchema = new mongoose.Schema(
     card_account_code: {
       type: String,
     },
-    credit_total_account_code: {
+    credit_note_account_code: {
       type: String,
     },
     thermal_receipt_invoice_logo: {
