@@ -33,6 +33,7 @@ const {
   buyPlan,
   getMyPlan,
   getPlans,
+  payment,
 } = require("../Controllers/BuyerController/subscriptionController");
 const {
   getSupport,
@@ -105,4 +106,5 @@ router.get("/getPlans", tokenAuthorisationBuyer, getPlans);
 router.get("/getMyPlan", tokenAuthorisationBuyer, getMyPlan);
 router.get("/getSupport", tokenAuthorisationBuyer, getSupport);
 router.get("/getBalance", tokenAuthorisationBuyer, getBalance);
+router.post("/payment", tokenAuthorisationBuyer, payment);
 module.exports = router;

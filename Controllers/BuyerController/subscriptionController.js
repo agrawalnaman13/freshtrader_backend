@@ -94,14 +94,15 @@ exports.checkPlan = async () => {
 
 exports.payment = async (req, res, next) => {
   try {
+    const { id } = req.body;
     stripe.charges.create(
       {
-        amount: product.price,
+        amount: 1,
         currency: "usd",
-        source: cardToken.id,
-        description: `Payment for ${product.title}`,
+        source: id,
+        description: `Payment for Apple`,
         metadta: {
-          productId: product.id,
+          productId: "12345",
         },
       },
       function (err, charge) {
