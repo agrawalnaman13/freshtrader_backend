@@ -106,10 +106,12 @@ exports.payment = async (req, res, next) => {
         },
       },
       function (err, charge) {
+        console.log(charge);
         if (err) {
+          console.log(err);
           res.status(200).json(error("Failed", res.statusCode));
         } else {
-          res.status(200).json(success("Failed", {}, res.statusCode));
+          res.status(200).json(success("Success", {}, res.statusCode));
         }
       }
     );
