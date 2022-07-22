@@ -25,6 +25,7 @@ const {
   getOrderCount,
   changeOrderNotification,
   getOrderNotification,
+  checkProductAvailability,
 } = require("../Controllers/BuyerController/orderController");
 const {
   getPallets,
@@ -77,6 +78,11 @@ router.post("/getOrders", tokenAuthorisationBuyer, getOrders);
 router.get("/getOrderDetails/:id", tokenAuthorisationBuyer, getOrderDetails);
 router.post("/changeOrderStatus", tokenAuthorisationBuyer, changeOrderStatus);
 router.post("/reorderProduct", tokenAuthorisationBuyer, reorderProduct);
+router.post(
+  "/checkProductAvailability",
+  tokenAuthorisationBuyer,
+  checkProductAvailability
+);
 router.get("/getOrderCount", tokenAuthorisationBuyer, getOrderCount);
 router.post("/getTransactions", tokenAuthorisationBuyer, getTransactions);
 router.get(

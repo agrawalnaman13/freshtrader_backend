@@ -699,3 +699,30 @@ exports.deleteUnconfirmedOrders = async () => {
     return;
   }
 };
+
+exports.checkProductAvailability = async (req, res, next) => {
+  try {
+    const { orderId } = req.body;
+    console.log(req.body);
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(200).json(error("Invalid order id", res.statusCode));
+    }
+    let products = await SellerProduct.find({
+      seller: order.seller,
+      status: true,
+    }).distinct("_id");
+    products = products.map((pr) => {
+      return String(pr);
+    });
+    let availability = [];
+    for (const product of order.products) {
+      if (products.includes(product)) availability.push(true);
+      else availability.push(false);
+    }
+    res.status(200).json(success("Success", { availability }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};

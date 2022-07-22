@@ -470,7 +470,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
     ]);
     let fields = [];
     let response = [];
-    if (!seller.csv) {
+    if (seller.csv) {
       if (type === "CARD") {
         fields = [
           "TransactionType",

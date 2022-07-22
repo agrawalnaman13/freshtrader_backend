@@ -9,7 +9,7 @@ const stripe = require("stripe")(
 );
 exports.buyPlan = async (req, res, next) => {
   try {
-    const { planId } = req.body;
+    const { planId, id } = req.body;
     console.log(req.body);
     if (!planId) {
       return res
@@ -20,20 +20,55 @@ exports.buyPlan = async (req, res, next) => {
     if (!plan) {
       return res.status(200).json(error("Invalid plan id", res.statusCode));
     }
+    if (!id && plan.plan_name !== "Free") {
+      return res
+        .status(200)
+        .json(error("Please provide stripe token", res.statusCode));
+    }
     let date = moment.utc();
     date = moment(date).format("MM-DD-YYYY");
     const jDateToday = new Date(date);
     const local_date = moment(jDateToday);
     const till = moment(local_date).add(+plan.plan_duration, "months");
-    await SubscriptionHistory.create({
-      buyer: req.buyer._id,
-      plan: planId,
-      valid_till: till,
-    });
-    await Buyer.findByIdAndUpdate(req.buyer._id, { plan: planId });
-    res
-      .status(200)
-      .json(success("Plan Purchased Successfully", {}, res.statusCode));
+    if (plan.plan_name !== "Free") {
+      stripe.charges.create(
+        {
+          amount: +plan.plan_price * 100,
+          currency: "aud",
+          source: id,
+          description: `Purchased ${plan.plan_name} plan`,
+          metadata: {
+            planId: planId,
+          },
+        },
+        async function (err, charge) {
+          if (err) {
+            console.log(err);
+            res.status(200).json(error("Payment Failed", res.statusCode));
+          } else {
+            await SubscriptionHistory.create({
+              buyer: req.buyer._id,
+              plan: planId,
+              valid_till: till,
+            });
+            await Buyer.findByIdAndUpdate(req.buyer._id, { plan: planId });
+            return res
+              .status(200)
+              .json(success("Plan Purchased Successfully", {}, res.statusCode));
+          }
+        }
+      );
+    } else {
+      await SubscriptionHistory.create({
+        buyer: req.buyer._id,
+        plan: planId,
+        valid_till: till,
+      });
+      await Buyer.findByIdAndUpdate(req.buyer._id, { plan: planId });
+      return res
+        .status(200)
+        .json(success("Plan Purchased Successfully", {}, res.statusCode));
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
