@@ -742,6 +742,10 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           "FeeFixedRate",
         ];
         for (const transaction of transactions) {
+          const due_date = moment(transaction.createdAt, "DD-MM-YYYY").add(
+            +seller.sales_invoice_due_date,
+            "days"
+          );
           response.push({
             TransactionType: transaction.type,
             TransactionID_Or_InvoiceNumber: transaction.ref,
@@ -754,7 +758,10 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             POCountry: "",
             Time: moment(transaction.createdAt).format("hh:mm A"),
             Date: moment(transaction.createdAt).format("LL"),
-            DueDate: "",
+            DueDate:
+              transaction.status !== "PAID"
+                ? moment(due_date).format("LL")
+                : "",
             InventoryItemCode: "",
             Description: "",
             Quantity: transaction.products.length,
