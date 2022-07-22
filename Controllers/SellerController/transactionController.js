@@ -445,15 +445,15 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           $and: [type ? { type: type } : {}],
         },
       },
-      // {
-      //   $lookup: {
-      //     localField: "salesman",
-      //     foreignField: "_id",
-      //     from: "sellerstaffs",
-      //     as: "salesman",
-      //   },
-      // },
-      // { $unwind: "$salesman" },
+      {
+        $lookup: {
+          localField: "salesman",
+          foreignField: "_id",
+          from: "sellerstaffs",
+          as: "salesman",
+        },
+      },
+      { $unwind: "$salesman" },
     ]);
     for (const transaction of transactions) {
       if (transaction.buyer)
