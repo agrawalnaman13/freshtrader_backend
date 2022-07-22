@@ -462,6 +462,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
     }
     const seller = await Wholeseller.findById(req.seller._id).select([
       "csv",
+      "sales_invoice_due_date",
       "smcs_invoice_account_code",
       "invoice_account_code",
       "cash_account_code",
