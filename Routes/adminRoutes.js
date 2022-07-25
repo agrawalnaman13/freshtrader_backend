@@ -53,6 +53,7 @@ const {
 } = require("../Controllers/AdminController/subscriptionController");
 const {
   getSupport,
+  getSupportDetail,
 } = require("../Controllers/AdminController/supportController");
 const {
   getTransactions,
@@ -60,7 +61,6 @@ const {
 const {
   replySupport,
   deleteSupport,
-  getSupportDetail,
   changeSupportStatus,
 } = require("../Controllers/SellerController/supportController");
 const {
