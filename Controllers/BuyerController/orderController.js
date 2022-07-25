@@ -7,6 +7,9 @@ const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
 const moment = require("moment");
+const {
+  sendNotification,
+} = require("../SellerController/notificationController");
 exports.getSellers = async (req, res, next) => {
   const { sortBy } = req.body;
   try {
@@ -407,6 +410,12 @@ exports.orderProduct = async (req, res, next) => {
     });
     buyer.order_count = (buyer.order_count ? buyer.order_count : 0) + 1;
     await buyer.save();
+    if (sellerData.notify_new_order) {
+      await sendNotification("New Order", buyer.business_trading_name, {
+        orderId: String(order._id),
+        type: "New Order",
+      });
+    }
     res
       .status(200)
       .json(success("Order sent successfully", { order }, res.statusCode));
@@ -503,7 +512,7 @@ exports.reorderProduct = async (req, res, next) => {
         .status(200)
         .json(error("Please provide order id", res.statusCode));
     }
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate(["seller", "buyer"]);
     if (!order) {
       return res.status(200).json(error("Invalid order id", res.statusCode));
     }
@@ -521,7 +530,7 @@ exports.reorderProduct = async (req, res, next) => {
         .json(error("Please provide pickup time", res.statusCode));
     }
     const partner = await SellerPartnerBuyers.findOne({
-      seller: order.seller,
+      seller: order.seller._id,
       buyer: req.buyer._id,
       status: true,
     });
@@ -531,7 +540,7 @@ exports.reorderProduct = async (req, res, next) => {
         .json(error("Can't reorder product", res.statusCode));
     }
     let products = await SellerProduct.find({
-      seller: order.seller,
+      seller: order.seller._id,
       status: true,
       available_on_order_app: true,
     })
@@ -548,9 +557,9 @@ exports.reorderProduct = async (req, res, next) => {
         .status(200)
         .json(error("Product is not available", res.statusCode));
     }
-    await Order.create({
+    const newOrder = await Order.create({
       buyer: req.buyer._id,
-      seller: order.seller,
+      seller: order.seller._id,
       product: orderedProducts,
       pick_up_date: new Date(pick_up_date),
       pick_up_time,
@@ -559,9 +568,66 @@ exports.reorderProduct = async (req, res, next) => {
     });
     buyer.order_count = (buyer.order_count ? buyer.order_count : 0) + 1;
     await buyer.save();
+    if (order.seller.notify_new_order) {
+      await sendNotification("New Order", buyer.business_trading_name, {
+        orderId: String(newOrder._id),
+        type: "New Order",
+      });
+    }
     res
       .status(200)
       .json(success("Order sent successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.changeOrderStatus = async (req, res, next) => {
+  try {
+    const { orderId, status } = req.body;
+    console.log(req.body);
+    if (!orderId) {
+      return res
+        .status(200)
+        .json(error("Please provide order id", res.statusCode));
+    }
+    const order = await Order.findById(orderId).populate(["seller", "buyer"]);
+    if (!order) {
+      return res.status(200).json(error("Invalid order id", res.statusCode));
+    }
+    if (!status) {
+      return res
+        .status(200)
+        .json(error("Please provide status", res.statusCode));
+    }
+    const prevStatus = order.status;
+    order.status = status;
+    await order.save();
+    if (status === "CANCELED" && prevStatus === "COUNTER") {
+      if (order.seller.notify_declined_offer) {
+        await sendNotification(
+          "Cancel Counter",
+          order.buyer.business_trading_name,
+          {
+            orderId: String(order._id),
+            type: "Cancel Counter",
+          }
+        );
+      }
+    } else if (status === "CANCELED") {
+      if (order.seller.notify_cancel_order) {
+        await sendNotification("Cancel", order.buyer.business_trading_name, {
+          orderId: String(order._id),
+          type: "Cancel",
+        });
+      }
+    }
+    res
+      .status(200)
+      .json(
+        success("Order status changed successfully", { order }, res.statusCode)
+      );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

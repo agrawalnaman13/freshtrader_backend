@@ -26,6 +26,7 @@ const {
   changeOrderNotification,
   getOrderNotification,
   checkProductAvailability,
+  changeOrderStatus,
 } = require("../Controllers/BuyerController/orderController");
 const {
   getPallets,
@@ -44,10 +45,9 @@ const {
   downloadTransactionCSV,
   getBalance,
 } = require("../Controllers/BuyerController/transactionController");
-const { sendNotification } = require("../Controllers/SellerController/notificationController");
 const {
-  changeOrderStatus,
-} = require("../Controllers/SellerController/orderController");
+  sendNotification,
+} = require("../Controllers/SellerController/notificationController");
 const {
   updateTransactions,
   getTransactionDetail,

@@ -74,7 +74,7 @@ exports.changeOrderStatus = async (req, res, next) => {
         .status(200)
         .json(error("Please provide order id", res.statusCode));
     }
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate(["seller", "buyer"]);
     if (!order) {
       return res.status(200).json(error("Invalid order id", res.statusCode));
     }
@@ -85,6 +85,21 @@ exports.changeOrderStatus = async (req, res, next) => {
     }
     order.status = status;
     await order.save();
+    if (status === "CONFIRMED") {
+      if (order.buyer.notify_order_confirmation) {
+        await sendNotification("Confirm", order.seller.business_trading_name, {
+          orderId: String(order._id),
+          type: "Confirm",
+        });
+      }
+    } else if (status === "CANCELED") {
+      if (order.buyer.notify_order_cancelation) {
+        await sendNotification("Decline", order.seller.business_trading_name, {
+          orderId: String(order._id),
+          type: "Decline",
+        });
+      }
+    }
     res
       .status(200)
       .json(
@@ -105,7 +120,7 @@ exports.sendCounterOffer = async (req, res, next) => {
         .status(200)
         .json(error("Please provide order id", res.statusCode));
     }
-    const order = await Order.findById(orderId).populate("buyer");
+    const order = await Order.findById(orderId).populate(["buyer", "seller"]);
     if (!order) {
       return res.status(200).json(error("Invalid order id", res.statusCode));
     }
@@ -135,8 +150,11 @@ exports.sendCounterOffer = async (req, res, next) => {
     order.payment = payment;
     order.status = "COUNTER";
     await order.save();
-    if (buyer.notify_counter_order) {
-      sendNotification();
+    if (order.buyer.notify_counter_order) {
+      await sendNotification("Counter", order.seller.business_trading_name, {
+        orderId: String(order._id),
+        type: "Counter",
+      });
     }
     res
       .status(200)
