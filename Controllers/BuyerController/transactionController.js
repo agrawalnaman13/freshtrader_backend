@@ -55,21 +55,12 @@ exports.getTransactions = async (req, res, next) => {
       {
         $match: {
           $and: [
-            from
+            form
               ? {
                   $and: [
-                    { year: { $gte: new Date(date).getFullYear() } },
-                    { month: { $gte: new Date(date).getMonth() + 1 } },
-                    { day: { $gte: new Date(date).getDate() } },
-                  ],
-                }
-              : {},
-            till
-              ? {
-                  $and: [
-                    { year: { $lte: new Date(date).getFullYear() } },
-                    { month: { $lte: new Date(date).getMonth() + 1 } },
-                    { day: { $lte: new Date(date).getDate() } },
+                    { year: new Date(from).getFullYear() },
+                    { month: new Date(from).getMonth() + 1 },
+                    { day: new Date(from).getDate() },
                   ],
                 }
               : {},

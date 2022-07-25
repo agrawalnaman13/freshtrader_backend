@@ -533,7 +533,10 @@ exports.reorderProduct = async (req, res, next) => {
     let products = await SellerProduct.find({
       seller: order.seller,
       status: true,
-    }).distinct("_id");
+      available_on_order_app: true,
+    })
+      .distinct("_id")
+      .lean();
     products = products.map((pr) => {
       return String(pr);
     });
