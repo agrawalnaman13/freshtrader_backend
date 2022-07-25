@@ -35,3 +35,22 @@ exports.getSupport = async (req, res, next) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.getSupportDetail = async (req, res, next) => {
+  try {
+    const support = await Support.findById(req.params.id).lean();
+    if (!support) {
+      return res.status(200).json(error("Invalid ticket id", res.statusCode));
+    }
+    support.seller = await Wholeseller.findOne({ email: support.email });
+    support.buyer = await Buyer.findOne({ email: support.email });
+    res
+      .status(200)
+      .json(
+        success("Support Fetched Successfully", { support }, res.statusCode)
+      );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
