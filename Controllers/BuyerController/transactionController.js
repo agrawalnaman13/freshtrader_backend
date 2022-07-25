@@ -55,7 +55,7 @@ exports.getTransactions = async (req, res, next) => {
       {
         $match: {
           $and: [
-            form
+            from
               ? {
                   $and: [
                     { year: new Date(from).getFullYear() },
