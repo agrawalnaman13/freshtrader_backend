@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "freshtrader-78321",
+  "private_key_id": "a4281fbc5b45c2eb9fbf48ae9e898ff38a8b71ba",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCoLGx9yMazjNYv\nuLXVE45tVWWenqChpfM0Ij0CVEgDnd/bRf/NM13lfPMvZePNC+4kxSRDDwoXtg5c\nwzgH+9hj9GH6VjkMWDVYio9ne2B1tM80PBBiCr9o5lRNjtlNlEpR6Dpyle/5blBz\nAMFW1t1scZ4HqyvpeONHgXqzDaURbs6ACkjxjVvOp7VjclYEDAfzfsZL+2g3hKom\nCp3CjR6CMaI2gGA9tuVZ9SKfiZZFRJQy/DtszuAs0XLJFUu80BOso8F3fC6iawi1\nRNxnsyQxtxbx/ofrKR6oL+ef1Loe1kpHe8TWMSTFUHuCGpC/JQW2a3ZLxfm4wrk9\ndKVQ8GYVAgMBAAECggEAAvgRz1FzI3aA5jSLyFC+JLZWLa8UcXANC+BRDv407UUi\nMRD1/pIgOwlTkkFXISm5HUmASl2NP/3eMM5xOUwxcslbR3d1ay/4JeVVrWrnLORu\nj2LIXdVpvezdjYiBBLgohVvoG01ZW8rbPSwmdIcMuV5UbL1UcGXWzZGK/IMsCbT8\nMKQUD4MfLReVmzxyba3YU5UGUjSGjzSgOp/mJXRRt3nju0e/3YiUAnB+gC5HOFIR\n0E6mGrMREOTktGt6LSdRDvQZJ1xgsUhbt9EXvTaQvy/HzfwTFiP5hAXsUxpfpPIy\nty6pb9BGBfVkvoRR8MLS1kOEzwlv+77U+N1v3s6R6wKBgQDkQ89y+BWtUAqp3b4+\nxb6kTSruT8vPJgqTYaR5jgyDEQhquVXAR8nMJfnRLlaZrK2hSxHjHXxSp89X26LI\nV8KycXKlVDJ3wcm25gkDWG3FPTr3ZQk2fpITiRUMHLlgYoLmo5o0X06hS0V9CT6l\n1x3589E+O7VmO3UOQffRwriuowKBgQC8m3gZwQcRP8rgBufsZZwbtFuLv3q8Oogl\n4jl/haCNM059Uj3TgkogrKvnv3JeBbHq9RaofGkdcLmJiMhJgcp577wZWCPyUsWb\nCd85OR22JKOf9/1AdKcCBNIHbQmO72xzSqbnn8gL1J0RjToScNfVTmffR2Hvt/TV\nFUNbqLv75wKBgDAmHZwiuG/WcmliXL7g91Ww8V1Td6o6XAC6l/cL/5emACCC95OX\nkPl/CTMWky3XPsjHDP7bOV42B4aAzdV0rZz2UTiOiha4ydPKshwCiyUPxWBp74eP\nK0DzqXzkkjXCkdoUqHJjqDJdrkqxqIVS2v/ebkSyU5E8+XQIdj3I1SwBAoGAOAj8\nurIVtnM8hCipGRvrMHP6St+9yFSfhJncuV1rIOhgZm1bvw5TlbeXb0f646JPhN4C\nOFaWKFAIX6tKzkQIcwfd263LKECdQv3A21Bz2lyyXGGiVVcTE095Uwl7MINDtlE0\nm1ZmadVmQQOzgC0UguRDihu8JiuCSxiBJadRCnsCgYBqOAZ1NAjZBQVBgccWb3gl\ngWabq4a0oOo638Jbl2xFVuANt26c9FRu/T/HMt4LxXAdirCtdwwJRSsPdARxb9bg\n7d+9Ru8E2dVgmSvhxpn7/5U1WsK1C02NanyH19e/owsCJLj53HQbdxXUdVEU5hcC\n5347pY0ULxHi+MvuXSJgBg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-rdorb@freshtrader-78321.iam.gserviceaccount.com",
+  "client_id": "117469913840688816460",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-rdorb%40freshtrader-78321.iam.gserviceaccount.com"
+}

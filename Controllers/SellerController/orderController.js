@@ -3,6 +3,7 @@ const Order = require("../../Models/BuyerModels/orderSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
+const { sendNotification } = require("./notificationController");
 exports.getOrders = async (req, res, next) => {
   try {
     const { sortBy, status } = req.body;
@@ -104,7 +105,7 @@ exports.sendCounterOffer = async (req, res, next) => {
         .status(200)
         .json(error("Please provide order id", res.statusCode));
     }
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate("buyer");
     if (!order) {
       return res.status(200).json(error("Invalid order id", res.statusCode));
     }
@@ -134,6 +135,9 @@ exports.sendCounterOffer = async (req, res, next) => {
     order.payment = payment;
     order.status = "COUNTER";
     await order.save();
+    if (buyer.notify_counter_order) {
+      sendNotification();
+    }
     res
       .status(200)
       .json(

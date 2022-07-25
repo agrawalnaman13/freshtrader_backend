@@ -44,6 +44,7 @@ const {
   downloadTransactionCSV,
   getBalance,
 } = require("../Controllers/BuyerController/transactionController");
+const { sendNotification } = require("../Controllers/SellerController/notificationController");
 const {
   changeOrderStatus,
 } = require("../Controllers/SellerController/orderController");
@@ -113,4 +114,5 @@ router.get("/getMyPlan", tokenAuthorisationBuyer, getMyPlan);
 router.get("/getSupport", tokenAuthorisationBuyer, getSupport);
 router.get("/getBalance", tokenAuthorisationBuyer, getBalance);
 router.post("/payment", tokenAuthorisationBuyer, payment);
+router.get("/sendNotification", tokenAuthorisationBuyer, sendNotification);
 module.exports = router;
