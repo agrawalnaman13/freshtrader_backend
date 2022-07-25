@@ -718,10 +718,9 @@ exports.checkProductAvailability = async (req, res, next) => {
     products = products.map((pr) => {
       return String(pr);
     });
-    console.log(products);
     let availability = [];
     for (const product of order.product) {
-      if (products.includes(String(product))) availability.push(true);
+      if (products.includes(String(product.productId))) availability.push(true);
       else availability.push(false);
     }
     res.status(200).json(success("Success", { availability }, res.statusCode));
