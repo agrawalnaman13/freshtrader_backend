@@ -9,7 +9,7 @@ const stripe = require("stripe")(
 );
 exports.buyPlan = async (req, res, next) => {
   try {
-    const { planId, id } = req.body;
+    const { planId } = req.body;
     console.log(req.body);
     if (!planId) {
       return res
@@ -20,55 +20,20 @@ exports.buyPlan = async (req, res, next) => {
     if (!plan) {
       return res.status(200).json(error("Invalid plan id", res.statusCode));
     }
-    if (!id && plan.plan_name !== "Free") {
-      return res
-        .status(200)
-        .json(error("Please provide stripe token", res.statusCode));
-    }
     let date = moment.utc();
     date = moment(date).format("MM-DD-YYYY");
     const jDateToday = new Date(date);
     const local_date = moment(jDateToday);
     const till = moment(local_date).add(+plan.plan_duration, "months");
-    if (plan.plan_name !== "Free") {
-      stripe.charges.create(
-        {
-          amount: +plan.plan_price * 100,
-          currency: "aud",
-          source: id,
-          description: `Purchased ${plan.plan_name} plan`,
-          metadata: {
-            planId: planId,
-          },
-        },
-        async function (err, charge) {
-          if (err) {
-            console.log(err);
-            res.status(200).json(error("Payment Failed", res.statusCode));
-          } else {
-            await SubscriptionHistory.create({
-              buyer: req.buyer._id,
-              plan: planId,
-              valid_till: till,
-            });
-            await Buyer.findByIdAndUpdate(req.buyer._id, { plan: planId });
-            return res
-              .status(200)
-              .json(success("Plan Purchased Successfully", {}, res.statusCode));
-          }
-        }
-      );
-    } else {
-      await SubscriptionHistory.create({
-        buyer: req.buyer._id,
-        plan: planId,
-        valid_till: till,
-      });
-      await Buyer.findByIdAndUpdate(req.buyer._id, { plan: planId });
-      return res
-        .status(200)
-        .json(success("Plan Purchased Successfully", {}, res.statusCode));
-    }
+    await SubscriptionHistory.create({
+      buyer: req.buyer._id,
+      plan: planId,
+      valid_till: till,
+    });
+    await Buyer.findByIdAndUpdate(req.buyer._id, { plan: planId });
+    return res
+      .status(200)
+      .json(success("Plan Purchased Successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
@@ -129,27 +94,36 @@ exports.checkPlan = async () => {
 
 exports.payment = async (req, res, next) => {
   try {
-    const { id } = req.body;
-    stripe.charges.create(
-      {
-        amount: 200,
-        currency: "aud",
-        source: id,
-        description: `Subscription`,
-        metadata: {
-          productId: "12345",
+    const { planId } = req.body;
+    console.log(req.body);
+    if (!planId) {
+      return res
+        .status(200)
+        .json(error("Please provide plan id", res.statusCode));
+    }
+    const plan = await Subscription.findById(planId);
+    if (!plan) {
+      return res.status(200).json(error("Invalid plan id", res.statusCode));
+    }
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "aud",
+            product_data: {
+              name: `${plan.plan_name} Plan`,
+            },
+            unit_amount: +plan.plan_price * 100,
+          },
+          quantity: 1,
         },
-      },
-      function (err, charge) {
-        console.log(charge);
-        if (err) {
-          console.log(err);
-          res.status(200).json(error("Failed", res.statusCode));
-        } else {
-          res.status(200).json(success("Success", {}, res.statusCode));
-        }
-      }
-    );
+      ],
+      mode: "payment",
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
+    });
+    console.log(session.url);
+    res.redirect(303, session.url);
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
