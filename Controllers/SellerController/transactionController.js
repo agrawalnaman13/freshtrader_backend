@@ -29,15 +29,6 @@ exports.getTransactions = async (req, res, next) => {
           is_emailed: 1,
           status: 1,
           createdAt: 1,
-          year: {
-            $year: "$createdAt",
-          },
-          month: {
-            $month: "$createdAt",
-          },
-          day: {
-            $dayOfMonth: "$createdAt",
-          },
         },
       },
       {
@@ -57,24 +48,8 @@ exports.getTransactions = async (req, res, next) => {
       {
         $match: {
           $and: [
-            from
-              ? {
-                  $and: [
-                    { year: { $gte: new Date(from).getFullYear() } },
-                    { month: { $gte: new Date(from).getMonth() + 1 } },
-                    { day: { $gte: new Date(from).getDate() } },
-                  ],
-                }
-              : {},
-            till
-              ? {
-                  $and: [
-                    { year: { $lte: new Date(till).getFullYear() } },
-                    { month: { $lte: new Date(till).getMonth() + 1 } },
-                    { day: { $lte: new Date(till).getDate() } },
-                  ],
-                }
-              : {},
+            from ? { createdAt: { $gte: new Date(from) } } : {},
+            till ? { createdAt: { $lte: new Date(till) } } : {},
             filterBy === 1 ? { type: "CASH" } : {},
             filterBy === 2
               ? { $and: [{ is_smcs: true }, { type: "INVOICE" }] }

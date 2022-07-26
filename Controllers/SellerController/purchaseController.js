@@ -316,15 +316,6 @@ exports.getConsignments = async (req, res, next) => {
           products: 1,
           createdAt: 1,
           completion_date: 1,
-          year: {
-            $year: "$createdAt",
-          },
-          month: {
-            $month: "$createdAt",
-          },
-          day: {
-            $dayOfMonth: "$createdAt",
-          },
         },
       },
       {
