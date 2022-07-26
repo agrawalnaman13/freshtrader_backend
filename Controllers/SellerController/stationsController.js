@@ -28,7 +28,7 @@ exports.addStation = async (req, res, next) => {
 
 exports.addDevice = async (req, res, next) => {
   try {
-    const { stationId, device } = req.body;
+    const { stationId, a4_printer, thermal_printer, card_reader } = req.body;
     console.log(req.body);
     if (!stationId) {
       return res
@@ -36,12 +36,25 @@ exports.addDevice = async (req, res, next) => {
         .json(error("Please provide station", res.statusCode));
     }
     const sellerStation = await SellerStation.findById(stationId);
-    sellerStation.devices.push(device);
-    await sellerStation.save();
+    if (!sellerStation) {
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
+    }
+    const updatedSellerStation = await SellerStation.findByIdAndUpdate(
+      stationId,
+      {
+        a4_printer,
+        thermal_printer,
+        card_reader,
+      }
+    );
     res
       .status(200)
       .json(
-        success("Device Added Successfully", { sellerStation }, res.statusCode)
+        success(
+          "Device Updated Successfully",
+          { sellerStation: updatedSellerStation },
+          res.statusCode
+        )
       );
   } catch (err) {
     console.log(err);

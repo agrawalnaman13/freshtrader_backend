@@ -11,17 +11,21 @@ const SellerStationSchema = new mongoose.Schema(
       ref: "wholeseller",
       required: true,
     },
-    devices: [
-      {
-        printer_email: {
-          type: String,
-        },
-        type: {
-          type: String,
-          enum: ["Printer", "Reader"],
-        },
+    a4_printer: {
+      type: Object,
+      default: {
+        email: "",
+        local: false,
       },
-    ],
+    },
+    thermal_printer: {
+      type: Array,
+      default: [{}],
+    },
+    card_reader: {
+      type: Array,
+      default: [{}],
+    },
   },
   { timestamps: {} },
   { collection: "sellerStation" }

@@ -315,6 +315,7 @@ exports.getConsignments = async (req, res, next) => {
           purchase: 1,
           products: 1,
           createdAt: 1,
+          completion_date: 1,
           year: {
             $year: "$createdAt",
           },
@@ -349,24 +350,8 @@ exports.getConsignments = async (req, res, next) => {
       {
         $match: {
           $and: [
-            from
-              ? {
-                  $and: [
-                    { year: { $gte: new Date(from).getFullYear() } },
-                    { month: { $gte: new Date(from).getMonth() + 1 } },
-                    { day: { $gte: new Date(from).getDate() } },
-                  ],
-                }
-              : {},
-            till
-              ? {
-                  $and: [
-                    { year: { $lte: new Date(till).getFullYear() } },
-                    { month: { $lte: new Date(till).getMonth() + 1 } },
-                    { day: { $lte: new Date(till).getDate() } },
-                  ],
-                }
-              : {},
+            from ? { createdAt: { $gte: new Date(from) } } : {},
+            till ? { createdAt: { $lte: new Date(till) } } : {},
             filterBy === 1 ? { status: "ACTIVE" } : {},
             filterBy === 2 ? { status: "ON HOLD" } : {},
             filterBy === 3 ? { status: "COMPLETE" } : {},
