@@ -123,7 +123,7 @@ exports.payment = async (req, res, next) => {
       cancel_url: "http://localhost:3000/cancel",
     });
     console.log(session.url);
-    res.redirect(303, session.url);
+    res.redirect(200, session.url);
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
