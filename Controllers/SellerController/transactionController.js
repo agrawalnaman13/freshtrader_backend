@@ -745,7 +745,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
               if (product.productId.inventory_code.length) {
                 const code = product.productId.inventory_code.filter(
                   (inv) =>
-                    String(inv.supplierId) ===
+                    String(inv.supplier) ===
                     String(product.consignment.supplier)
                 );
                 if (code.length) inventory_code.push(code[0].inventory_code);
