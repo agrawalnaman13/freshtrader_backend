@@ -10,6 +10,7 @@ const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const sendMail = require("../../services/mail");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
+const { getInventoryCode } = require("./productController");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { from, till, sortBy, filterBy } = req.body;
@@ -446,6 +447,66 @@ exports.downloadTransactionCSV = async (req, res, next) => {
     ]);
     let fields = [];
     let response = [];
+    for (const transaction of transactions) {
+      const due_date = moment(transaction.createdAt, "DD-MM-YYYY").add(
+        +seller.sales_invoice_due_date,
+        "days"
+      );
+      const inventory_code = await getInventoryCode(transaction.products);
+      response.push({
+        TransactionType: transaction.type,
+        TransactionID_Or_InvoiceNumber: transaction.ref,
+        TransactionID: transaction.ref,
+        InvoiceNumber: transaction.ref,
+        CustomerName: transaction.buyer.business_trading_name,
+        SMCSCode: transaction.buyer.smcs_code,
+        EmailAddress: transaction.buyer.email,
+        POAddressLine1: transaction.buyer.address_line1,
+        POCity: transaction.buyer.city,
+        POPostalCode: transaction.buyer.postal_code,
+        POCountry: transaction.buyer.country,
+        Time: moment(transaction.createdAt).format("hh:mm A"),
+        Date: moment(transaction.createdAt).format("LL"),
+        DueDate:
+          transaction.status !== "PAID" ? moment(due_date).format("LL") : "",
+        InventoryItemCode: inventory_code.join(", "),
+        Description: transaction.delivery_note,
+        Quantity: transaction.products.length,
+        UnitAmount: "",
+        Discount: "",
+        GrossTotal:
+          transaction.type === "CREDIT NOTE"
+            ? `-$${transaction.total}`
+            : `$${transaction.total}`,
+        CardFee: "",
+        TotalTax: "",
+        NetTotal:
+          transaction.type === "CREDIT NOTE"
+            ? `-$${transaction.total}`
+            : `$${transaction.total}`,
+        AccountCode:
+          transaction.type === "CARD"
+            ? seller.card_account_code
+            : transaction.type === "CASH"
+            ? seller.cash_account_code
+            : transaction.type === "INVOICE" && transaction.is_smcs
+            ? seller.smcs_invoice_account_code
+            : transaction.type === "INVOICE"
+            ? seller.invoice_account_code
+            : seller.credit_note_account_code,
+        TaxType: "",
+        TransactionStatus: transaction.status,
+        StaffName: transaction.salesman.username,
+        CardBrand: "",
+        PaymentID: "",
+        PANSuffix: "",
+        DeviceName: "",
+        DeviceNickname: "",
+        CardEntryMethods: "",
+        CardFeePercentageRate: "",
+        FeeFixedRate: "",
+      });
+    }
     if (seller.csv) {
       if (type === "CARD") {
         fields = [
@@ -482,57 +543,6 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           "CardFeePercentageRate",
           "FeeFixedRate",
         ];
-        for (const transaction of transactions) {
-          let inventory_code = [];
-          for (const product of transaction.products) {
-            product.productId = await SellerProduct.findById(product.productId);
-            product.consignment = await Purchase.findById(product.consignment);
-            if (product.productId) {
-              if (product.productId.inventory_code.length) {
-                const code = product.productId.inventory_code.filter(
-                  (inv) =>
-                    String(inv.supplierId) ===
-                    String(product.consignment.supplier)
-                );
-                if (code.length) inventory_code.push(code[0].inventory_code);
-              }
-            }
-          }
-          response.push({
-            TransactionType: transaction.type,
-            TransactionID: transaction.ref,
-            CustomerName: transaction.buyer.business_trading_name,
-            SMCSCode: transaction.buyer.smcs_code,
-            EmailAddress: transaction.buyer.email,
-            POAddressLine1: transaction.buyer.address_line1,
-            POCity: transaction.buyer.city,
-            POPostalCode: transaction.buyer.postal_code,
-            POCountry: transaction.buyer.country,
-            Time: moment(transaction.createdAt).format("hh:mm A"),
-            Date: moment(transaction.createdAt).format("LL"),
-            InventoryItemCode: inventory_code.join(", "),
-            Description: transaction.delivery_note,
-            Quantity: transaction.products.length,
-            UnitAmount: "",
-            Discount: "",
-            GrossTotal: `$${transaction.total}`,
-            CardFee: "",
-            TotalTax: "",
-            NetTotal: `$${transaction.total}`,
-            AccountCode: seller.card_account_code,
-            TaxType: "",
-            TransactionStatus: transaction.status,
-            StaffName: transaction.salesman.username,
-            CardBrand: "",
-            PaymentID: "",
-            PANSuffix: "",
-            DeviceName: "",
-            DeviceNickname: "",
-            CardEntryMethods: "",
-            CardFeePercentageRate: "",
-            FeeFixedRate: "",
-          });
-        }
       } else if (type === "CASH") {
         fields = [
           "TransactionType",
@@ -558,32 +568,6 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           "TransactionStatus",
           "StaffName",
         ];
-        for (const transaction of transactions) {
-          response.push({
-            TransactionType: transaction.type,
-            TransactionID: transaction.ref,
-            CustomerName: transaction.buyer.business_trading_name,
-            SMCSCode: transaction.buyer.smcs_code,
-            EmailAddress: transaction.buyer.email,
-            POAddressLine1: transaction.buyer.address_line1,
-            POCity: transaction.buyer.city,
-            POPostalCode: transaction.buyer.postal_code,
-            POCountry: transaction.buyer.country,
-            Time: moment(transaction.createdAt).format("hh:mm A"),
-            Date: moment(transaction.createdAt).format("LL"),
-            InventoryItemCode: "",
-            Description: transaction.delivery_note,
-            Quantity: transaction.products.length,
-            UnitAmount: "",
-            Discount: "",
-            TotalTax: "",
-            NetTotal: `$${transaction.total}`,
-            AccountCode: seller.cash_account_code,
-            TaxType: "",
-            TransactionStatus: transaction.status,
-            StaffName: transaction.salesman.username,
-          });
-        }
       } else if (type === "INVOICE") {
         fields = [
           "TransactionType",
@@ -610,39 +594,6 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           "TransactionStatus",
           "StaffName",
         ];
-        for (const transaction of transactions) {
-          const due_date = moment(transaction.createdAt, "DD-MM-YYYY").add(
-            +seller.sales_invoice_due_date,
-            "days"
-          );
-          response.push({
-            TransactionType: transaction.type,
-            InvoiceNumber: transaction.ref,
-            CustomerName: transaction.buyer.business_trading_name,
-            SMCSCode: transaction.buyer.smcs_code,
-            EmailAddress: transaction.buyer.email,
-            POAddressLine1: transaction.buyer.address_line1,
-            POCity: transaction.buyer.city,
-            POPostalCode: transaction.buyer.postal_code,
-            POCountry: transaction.buyer.country,
-            Time: moment(transaction.createdAt).format("hh:mm A"),
-            Date: moment(transaction.createdAt).format("LL"),
-            DueDate: moment(due_date).format("LL"),
-            InventoryItemCode: "",
-            Description: transaction.delivery_note,
-            Quantity: transaction.products.length,
-            UnitAmount: "",
-            Discount: "",
-            TotalTax: "",
-            NetTotal: `$${transaction.total}`,
-            AccountCode: transaction.is_smcs
-              ? seller.smcs_invoice_account_code
-              : seller.invoice_account_code,
-            TaxType: "",
-            TransactionStatus: transaction.status,
-            StaffName: transaction.salesman.username,
-          });
-        }
       } else if (type === "CREDIT NOTE") {
         fields = [
           "TransactionType",
@@ -669,33 +620,6 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           "TransactionStatus",
           "StaffName",
         ];
-        for (const transaction of transactions) {
-          response.push({
-            TransactionType: transaction.type,
-            TransactionID: transaction.ref,
-            CustomerName: transaction.buyer.business_trading_name,
-            SMCSCode: transaction.buyer.smcs_code,
-            EmailAddress: transaction.buyer.email,
-            POAddressLine1: transaction.buyer.address_line1,
-            POCity: transaction.buyer.city,
-            POPostalCode: transaction.buyer.postal_code,
-            POCountry: transaction.buyer.country,
-            Time: moment(transaction.createdAt).format("hh:mm A"),
-            Date: moment(transaction.createdAt).format("LL"),
-            DueDate: "",
-            InventoryItemCode: "",
-            Description: transaction.delivery_note,
-            Quantity: transaction.products.length,
-            UnitAmount: "",
-            Discount: "",
-            TotalTax: "",
-            NetTotal: `-$${transaction.total}`,
-            AccountCode: seller.credit_note_account_code,
-            TaxType: "",
-            TransactionStatus: transaction.status,
-            StaffName: transaction.salesman.username,
-          });
-        }
       } else {
         fields = [
           "TransactionType",
@@ -732,80 +656,6 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           "CardFeePercentageRate",
           "FeeFixedRate",
         ];
-        for (const transaction of transactions) {
-          const due_date = moment(transaction.createdAt, "DD-MM-YYYY").add(
-            +seller.sales_invoice_due_date,
-            "days"
-          );
-          let inventory_code = [];
-          for (const product of transaction.products) {
-            product.productId = await SellerProduct.findById(product.productId);
-            product.consignment = await Purchase.findById(product.consignment);
-            if (product.productId) {
-              if (product.productId.inventory_code.length) {
-                const code = product.productId.inventory_code.filter(
-                  (inv) =>
-                    String(inv.supplier) ===
-                    String(product.consignment.supplier)
-                );
-                if (code.length) inventory_code.push(code[0].inventory_code);
-              }
-            }
-          }
-          response.push({
-            TransactionType: transaction.type,
-            TransactionID_Or_InvoiceNumber: transaction.ref,
-            CustomerName: transaction.buyer.business_trading_name,
-            SMCSCode: transaction.buyer.smcs_code,
-            EmailAddress: transaction.buyer.email,
-            POAddressLine1: transaction.buyer.address_line1,
-            POCity: transaction.buyer.city,
-            POPostalCode: transaction.buyer.postal_code,
-            POCountry: transaction.buyer.country,
-            Time: moment(transaction.createdAt).format("hh:mm A"),
-            Date: moment(transaction.createdAt).format("LL"),
-            DueDate:
-              transaction.status !== "PAID"
-                ? moment(due_date).format("LL")
-                : "",
-            InventoryItemCode: inventory_code.join(", "),
-            Description: transaction.delivery_note,
-            Quantity: transaction.products.length,
-            UnitAmount: "",
-            Discount: "",
-            GrossTotal:
-              transaction.type === "CREDIT NOTE"
-                ? `-$${transaction.total}`
-                : `$${transaction.total}`,
-            CardFee: "",
-            TotalTax: "",
-            NetTotal:
-              transaction.type === "CREDIT NOTE"
-                ? `-$${transaction.total}`
-                : `$${transaction.total}`,
-            AccountCode:
-              transaction.type === "CARD"
-                ? seller.card_account_code
-                : transaction.type === "CASH"
-                ? seller.cash_account_code
-                : transaction.type === "INVOICE" && transaction.is_smcs
-                ? seller.smcs_invoice_account_code
-                : transaction.type === "INVOICE"
-                ? seller.invoice_account_code
-                : seller.credit_note_account_code,
-            TaxType: "",
-            TransactionStatus: transaction.status,
-            StaffName: transaction.salesman.username,
-            CardBrand: "",
-            PaymentID: "",
-            PANSuffix: "",
-            DeviceName: "",
-            DeviceNickname: "",
-            CardEntryMethods: "",
-            CardFeePercentageRate: "",
-            FeeFixedRate: "",
-          });
-        }
       }
     }
 

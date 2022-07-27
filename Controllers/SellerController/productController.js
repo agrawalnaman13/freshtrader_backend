@@ -747,3 +747,20 @@ exports.addMissingProduct = async (req, res, next) => {
     res.status(400).json(error("error", res.statusCode));
   }
 };
+
+exports.getInventoryCode = async (products) => {
+  let inventory_code = [];
+  for (const product of products) {
+    product.productId = await SellerProduct.findById(product.productId);
+    product.consignment = await Purchase.findById(product.consignment);
+    if (product.productId) {
+      if (product.productId.inventory_code.length) {
+        const code = product.productId.inventory_code.filter(
+          (inv) => String(inv.supplier) === String(product.consignment.supplier)
+        );
+        if (code.length) inventory_code.push(code[0].inventory_code);
+      }
+    }
+  }
+  return inventory_code;
+};
