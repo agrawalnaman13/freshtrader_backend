@@ -33,6 +33,18 @@ const BuyerSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    city: {
+      type: String,
+      required: false,
+    },
+    postal_code: {
+      type: String,
+      required: false,
+    },
+    country: {
+      type: String,
+      required: false,
+    },
     market_seller: {
       type: Boolean,
       required: false,

@@ -483,6 +483,21 @@ exports.downloadTransactionCSV = async (req, res, next) => {
           "FeeFixedRate",
         ];
         for (const transaction of transactions) {
+          let inventory_code = [];
+          for (const product of transaction.products) {
+            product.productId = await SellerProduct.findById(product.productId);
+            product.consignment = await Purchase.findById(product.consignment);
+            if (product.productId) {
+              if (product.productId.inventory_code.length) {
+                const code = product.productId.inventory_code.filter(
+                  (inv) =>
+                    String(inv.supplierId) ===
+                    String(product.consignment.supplier)
+                );
+                if (code.length) inventory_code.push(code[0].inventory_code);
+              }
+            }
+          }
           response.push({
             TransactionType: transaction.type,
             TransactionID: transaction.ref,
@@ -490,13 +505,13 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             SMCSCode: transaction.buyer.smcs_code,
             EmailAddress: transaction.buyer.email,
             POAddressLine1: transaction.buyer.address_line1,
-            POCity: "",
-            POPostalCode: "",
-            POCountry: "",
+            POCity: transaction.buyer.city,
+            POPostalCode: transaction.buyer.postal_code,
+            POCountry: transaction.buyer.country,
             Time: moment(transaction.createdAt).format("hh:mm A"),
             Date: moment(transaction.createdAt).format("LL"),
-            InventoryItemCode: "",
-            Description: "",
+            InventoryItemCode: inventory_code.join(", "),
+            Description: transaction.delivery_note,
             Quantity: transaction.products.length,
             UnitAmount: "",
             Discount: "",
@@ -551,13 +566,13 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             SMCSCode: transaction.buyer.smcs_code,
             EmailAddress: transaction.buyer.email,
             POAddressLine1: transaction.buyer.address_line1,
-            POCity: "",
-            POPostalCode: "",
-            POCountry: "",
+            POCity: transaction.buyer.city,
+            POPostalCode: transaction.buyer.postal_code,
+            POCountry: transaction.buyer.country,
             Time: moment(transaction.createdAt).format("hh:mm A"),
             Date: moment(transaction.createdAt).format("LL"),
             InventoryItemCode: "",
-            Description: "",
+            Description: transaction.delivery_note,
             Quantity: transaction.products.length,
             UnitAmount: "",
             Discount: "",
@@ -607,14 +622,14 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             SMCSCode: transaction.buyer.smcs_code,
             EmailAddress: transaction.buyer.email,
             POAddressLine1: transaction.buyer.address_line1,
-            POCity: "",
-            POPostalCode: "",
-            POCountry: "",
+            POCity: transaction.buyer.city,
+            POPostalCode: transaction.buyer.postal_code,
+            POCountry: transaction.buyer.country,
             Time: moment(transaction.createdAt).format("hh:mm A"),
             Date: moment(transaction.createdAt).format("LL"),
             DueDate: moment(due_date).format("LL"),
             InventoryItemCode: "",
-            Description: "",
+            Description: transaction.delivery_note,
             Quantity: transaction.products.length,
             UnitAmount: "",
             Discount: "",
@@ -662,14 +677,14 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             SMCSCode: transaction.buyer.smcs_code,
             EmailAddress: transaction.buyer.email,
             POAddressLine1: transaction.buyer.address_line1,
-            POCity: "",
-            POPostalCode: "",
-            POCountry: "",
+            POCity: transaction.buyer.city,
+            POPostalCode: transaction.buyer.postal_code,
+            POCountry: transaction.buyer.country,
             Time: moment(transaction.createdAt).format("hh:mm A"),
             Date: moment(transaction.createdAt).format("LL"),
             DueDate: "",
             InventoryItemCode: "",
-            Description: "",
+            Description: transaction.delivery_note,
             Quantity: transaction.products.length,
             UnitAmount: "",
             Discount: "",
@@ -722,6 +737,21 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             +seller.sales_invoice_due_date,
             "days"
           );
+          let inventory_code = [];
+          for (const product of transaction.products) {
+            product.productId = await SellerProduct.findById(product.productId);
+            product.consignment = await Purchase.findById(product.consignment);
+            if (product.productId) {
+              if (product.productId.inventory_code.length) {
+                const code = product.productId.inventory_code.filter(
+                  (inv) =>
+                    String(inv.supplierId) ===
+                    String(product.consignment.supplier)
+                );
+                if (code.length) inventory_code.push(code[0].inventory_code);
+              }
+            }
+          }
           response.push({
             TransactionType: transaction.type,
             TransactionID_Or_InvoiceNumber: transaction.ref,
@@ -729,17 +759,17 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             SMCSCode: transaction.buyer.smcs_code,
             EmailAddress: transaction.buyer.email,
             POAddressLine1: transaction.buyer.address_line1,
-            POCity: "",
-            POPostalCode: "",
-            POCountry: "",
+            POCity: transaction.buyer.city,
+            POPostalCode: transaction.buyer.postal_code,
+            POCountry: transaction.buyer.country,
             Time: moment(transaction.createdAt).format("hh:mm A"),
             Date: moment(transaction.createdAt).format("LL"),
             DueDate:
               transaction.status !== "PAID"
                 ? moment(due_date).format("LL")
                 : "",
-            InventoryItemCode: "",
-            Description: "",
+            InventoryItemCode: inventory_code.join(", "),
+            Description: transaction.delivery_note,
             Quantity: transaction.products.length,
             UnitAmount: "",
             Discount: "",

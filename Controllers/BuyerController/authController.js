@@ -16,6 +16,10 @@ exports.signup = async (req, res, next) => {
       password,
       is_smcs,
       market,
+      address_line1,
+      city,
+      postal_code,
+      country,
     } = req.body;
     console.log(req.body);
     if (!business_trading_name) {
@@ -81,6 +85,10 @@ exports.signup = async (req, res, next) => {
           phone_number: phone_number,
           is_smcs: is_smcs,
           market: market,
+          address_line1: address_line1,
+          city: city,
+          postal_code: postal_code,
+          country: country,
         }
       );
       await ourBuyer.save();

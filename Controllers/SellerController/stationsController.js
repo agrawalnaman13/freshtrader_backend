@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const { success, error } = require("../../service_response/adminApiResponse");
 const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
-
+const crypto = require("crypto");
+const squareConnect = require("square-connect");
 exports.addStation = async (req, res, next) => {
   try {
     const { station } = req.body;
@@ -79,5 +80,41 @@ exports.getStations = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.payment = async (req, res, next) => {
+  const defaultClient = squareConnect.ApiClient.instance;
+  const oauth2 = defaultClient.authentications["oauth2"];
+  oauth2.accessToken =
+    "EAAAED9gy6OacBTBqIWQ74lrtRkyg9co2Y8FxihP5gdpkNzR6VqynvS80iBMKJFx";
+  defaultClient.basePath = "https://connect.squareupsandbox.com";
+  const request_params = req.body;
+
+  // length of idempotency_key should be less than 45
+  const idempotency_key = crypto.randomBytes(22).toString("hex");
+
+  // Charge the customer's card
+  const payments_api = new squareConnect.PaymentsApi();
+  const request_body = {
+    source_id: request_params.nonce,
+    amount_money: {
+      amount: 100, // £1.00 charge
+      currency: "USD",
+    },
+    idempotency_key: idempotency_key,
+  };
+
+  try {
+    const response = await payments_api.createPayment(request_body);
+    res.status(200).json({
+      title: "Payment Successful",
+      result: response,
+    });
+  } catch (error) {
+    res.status(500).json({
+      title: "Payment Failure",
+      result: error.response.text,
+    });
   }
 };

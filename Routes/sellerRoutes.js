@@ -119,6 +119,7 @@ const {
   addStation,
   addDevice,
   getStations,
+  payment,
 } = require("../Controllers/SellerController/stationsController");
 const {
   addSupplier,
@@ -339,4 +340,5 @@ router.post("/replySupport", tokenAuthorisation, replySupport);
 router.get("/changeSupportStatus/:id", tokenAuthorisation, changeSupportStatus);
 router.get("/getSupport", tokenAuthorisation, getSupport);
 router.get("/getSupportDetail/:id", tokenAuthorisation, getSupportDetail);
+router.post("/process-payment", payment);
 module.exports = router;

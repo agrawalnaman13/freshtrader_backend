@@ -24,6 +24,18 @@ const WholesellerSchema = new mongoose.Schema(
     address_line2: {
       type: String,
     },
+    city: {
+      type: String,
+      required: false,
+    },
+    postal_code: {
+      type: String,
+      required: false,
+    },
+    country: {
+      type: String,
+      required: false,
+    },
     phone_number: {
       type: String,
       required: true,
