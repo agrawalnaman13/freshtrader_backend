@@ -775,7 +775,7 @@ exports.getProductGST = async (products) => {
         const price = product.productId.price.filter(
           (inv) => String(inv.supplier) === String(product.consignment.supplier)
         );
-        if (price.length) gst += (price[0].price * 0.1).toFixed(2);
+        if (price.length) gst += (+price[0].price * 0.1).toFixed(2);
       }
     }
   }
