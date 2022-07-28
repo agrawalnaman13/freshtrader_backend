@@ -137,6 +137,10 @@ const WholesellerSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    deviceId: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: {} },
   { collection: "wholeseller" }

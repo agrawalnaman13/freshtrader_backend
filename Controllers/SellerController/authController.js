@@ -4,7 +4,7 @@ const { success, error } = require("../../service_response/adminApiResponse");
 const SellerPOSLayout = require("../../Models/SellerModels/posLayoutSchema");
 const SellerStaff = require("../../Models/SellerModels/staffSchema");
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, deviceId } = req.body;
   console.log(req.body);
   if (!email || !password) {
     return res
@@ -33,6 +33,8 @@ exports.login = async (req, res, next) => {
             .status(200)
             .json(error("You are not authorized to log in", res.statusCode));
         }
+        if (deviceId) seller.deviceId = deviceId;
+        await seller.save();
         const token = await seller.generateAuthToken();
         return res
           .header("x-auth-token", token)
@@ -56,33 +58,33 @@ exports.login = async (req, res, next) => {
     if (!(await ourSeller.correctPassword(password, ourSeller.password))) {
       return res.status(200).json(error("Invalid Password", res.statusCode));
     }
-    const layout = await SellerPOSLayout.findOne({
-      seller: ourSeller._id,
-    });
-    if (!layout) {
-      const category = [
-        {
-          category: "Fruits",
-          alias: "Fruits",
-        },
-        {
-          category: "Vegetables",
-          alias: "Vegetables",
-        },
-        {
-          category: "Herbs",
-          alias: "Herbs",
-        },
-        {
-          category: "Others",
-          alias: "Others",
-        },
-      ];
-      await SellerPOSLayout.create({
-        category: category,
-        seller: ourSeller._id,
-      });
-    }
+    // const layout = await SellerPOSLayout.findOne({
+    //   seller: ourSeller._id,
+    // });
+    // if (!layout) {
+    //   const category = [
+    //     {
+    //       category: "Fruits",
+    //       alias: "Fruits",
+    //     },
+    //     {
+    //       category: "Vegetables",
+    //       alias: "Vegetables",
+    //     },
+    //     {
+    //       category: "Herbs",
+    //       alias: "Herbs",
+    //     },
+    //     {
+    //       category: "Others",
+    //       alias: "Others",
+    //     },
+    //   ];
+    //   await SellerPOSLayout.create({
+    //     category: category,
+    //     seller: ourSeller._id,
+    //   });
+    // }
     const token = await ourSeller.generateAuthToken();
     res
       .header("x-auth-token", token)

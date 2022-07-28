@@ -427,19 +427,19 @@ exports.processTransaction = async (req, res, next) => {
               } else {
                 p.sold += product.quantity;
               }
-              p.sold_percentage = ((p.sold / p.received) * 100).toFixed(2);
-              p.total_sales = (p.sold * p.average_sales_price).toFixed(2);
-              p.inv_on_hand = (p.received - p.sold - p.void).toFixed(2);
-              p.gross_profit = (
+              p.sold_percentage = +((p.sold / p.received) * 100).toFixed(2);
+              p.total_sales = +(p.sold * p.average_sales_price).toFixed(2);
+              p.inv_on_hand = +(p.received - p.sold - p.void).toFixed(2);
+              p.gross_profit = +(
                 p.total_sales -
                 p.received * p.cost_per_unit
               ).toFixed(2);
-              p.gross_profit_percentage = (
+              p.gross_profit_percentage = +(
                 (p.gross_profit / p.total_sales) *
                 100
               ).toFixed(2);
-              sold = p.sold.toFixed(2);
-              voids = p.void.toFixed(2);
+              sold = +p.sold.toFixed(2);
+              voids = +p.void.toFixed(2);
             }
             return p;
           });
@@ -460,8 +460,8 @@ exports.processTransaction = async (req, res, next) => {
                 total_sold: +sold,
                 sold:
                   transaction.type === "CREDIT NOTE"
-                    ? (+inv.sold - +product.quantity).toFixed(2)
-                    : (+inv.sold + +product.quantity).toFixed(2),
+                    ? +(+inv.sold - +product.quantity).toFixed(2)
+                    : +(+inv.sold + +product.quantity).toFixed(2),
                 void: +voids,
               }
             );
@@ -702,14 +702,14 @@ exports.undoTransaction = async (req, res, next) => {
           } else {
             p.sold -= product.quantity;
           }
-          p.sold_percentage = ((p.sold / p.received) * 100).toFixed(2);
-          p.total_sales = (p.sold * p.average_sales_price).toFixed(2);
-          p.inv_on_hand = (p.received - p.sold - p.void).toFixed(2);
-          p.gross_profit = (
+          p.sold_percentage = +((p.sold / p.received) * 100).toFixed(2);
+          p.total_sales = +(p.sold * p.average_sales_price).toFixed(2);
+          p.inv_on_hand = +(p.received - p.sold - p.void).toFixed(2);
+          p.gross_profit = +(
             p.total_sales -
             p.received * p.cost_per_unit
           ).toFixed(2);
-          p.gross_profit_percentage = (
+          p.gross_profit_percentage = +(
             (p.gross_profit / p.total_sales) *
             100
           ).toFixed(2);
@@ -735,8 +735,8 @@ exports.undoTransaction = async (req, res, next) => {
             total_sold: +sold,
             sold:
               transaction.type === "CREDIT NOTE"
-                ? (+inv.sold + +product.quantity).toFixed(2)
-                : (+inv.sold - +product.quantity).toFixed(2),
+                ? +(+inv.sold + +product.quantity).toFixed(2)
+                : +(+inv.sold - +product.quantity).toFixed(2),
             void: +voids,
           }
         );

@@ -20,6 +20,7 @@ exports.signup = async (req, res, next) => {
       city,
       postal_code,
       country,
+      deviceId,
     } = req.body;
     console.log(req.body);
     if (!business_trading_name) {
@@ -89,6 +90,7 @@ exports.signup = async (req, res, next) => {
           city: city,
           postal_code: postal_code,
           country: country,
+          deviceId: deviceId,
         }
       );
       await ourBuyer.save();
@@ -153,7 +155,7 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, deviceId } = req.body;
   console.log(req.body);
   if (!email || !password) {
     return res
@@ -177,6 +179,7 @@ exports.login = async (req, res, next) => {
       return res.status(200).json(error("Invalid Password", res.statusCode));
     }
     const token = await ourBuyer.generateAuthToken();
+    if (deviceId) ourBuyer.deviceId = deviceId;
     res
       .header("x-auth-token-buyer", token)
       .header("access-control-expose-headers", "x-auth-token-buyer")

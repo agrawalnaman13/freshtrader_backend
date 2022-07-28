@@ -97,6 +97,10 @@ const BuyerSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    deviceId: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: {} },
   { collection: "buyer" }
