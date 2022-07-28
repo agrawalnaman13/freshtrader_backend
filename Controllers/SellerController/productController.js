@@ -764,3 +764,20 @@ exports.getInventoryCode = async (products) => {
   }
   return inventory_code;
 };
+
+exports.getProductGST = async (products) => {
+  let gst = 0;
+  for (const product of products) {
+    product.productId = await SellerProduct.findById(product.productId);
+    product.consignment = await Purchase.findById(product.consignment);
+    if (product.productId) {
+      if (product.productId.add_gst) {
+        const price = product.productId.price.filter(
+          (inv) => String(inv.supplier) === String(product.consignment.supplier)
+        );
+        if (price.length) gst += (price[0].price * 0.1).toFixed(2);
+      }
+    }
+  }
+  return gst;
+};

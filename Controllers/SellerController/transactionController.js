@@ -10,7 +10,7 @@ const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const sendMail = require("../../services/mail");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
-const { getInventoryCode } = require("./productController");
+const { getInventoryCode, getProductGST } = require("./productController");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { from, till, sortBy, filterBy } = req.body;
@@ -453,6 +453,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
         "days"
       );
       const inventory_code = await getInventoryCode(transaction.products);
+      const tax = await getProductGST(transaction.products);
       response.push({
         TransactionType: transaction.type,
         TransactionID_Or_InvoiceNumber: transaction.ref,
@@ -472,14 +473,17 @@ exports.downloadTransactionCSV = async (req, res, next) => {
         InventoryItemCode: inventory_code.join(", "),
         Description: transaction.delivery_note,
         Quantity: transaction.products.length,
-        UnitAmount: "",
-        Discount: "",
+        UnitAmount:
+          transaction.type === "CREDIT NOTE"
+            ? `-$${transaction.total}`
+            : `$${transaction.total}`,
+        Discount: "$0",
         GrossTotal:
           transaction.type === "CREDIT NOTE"
             ? `-$${transaction.total}`
             : `$${transaction.total}`,
         CardFee: "",
-        TotalTax: "",
+        TotalTax: `$${tax}`,
         NetTotal:
           transaction.type === "CREDIT NOTE"
             ? `-$${transaction.total}`
@@ -494,7 +498,7 @@ exports.downloadTransactionCSV = async (req, res, next) => {
             : transaction.type === "INVOICE"
             ? seller.invoice_account_code
             : seller.credit_note_account_code,
-        TaxType: "",
+        TaxType: tax ? "GST" : "",
         TransactionStatus: transaction.status,
         StaffName: transaction.salesman.username,
         CardBrand: "",
