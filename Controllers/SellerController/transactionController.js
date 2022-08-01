@@ -28,6 +28,8 @@ exports.getTransactions = async (req, res, next) => {
       },
       {
         $lookup: {
+          localField: "buyer",
+          foreignField: "_id",
           pipeline: [
             {
               $match: {
@@ -41,8 +43,6 @@ exports.getTransactions = async (req, res, next) => {
               },
             },
           ],
-          localField: "buyer",
-          foreignField: "_id",
           from: "buyers",
           as: "buyer",
         },
