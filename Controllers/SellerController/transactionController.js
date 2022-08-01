@@ -32,7 +32,7 @@ exports.getTransactions = async (req, res, next) => {
           foreignField: "_id",
           from: "buyers",
           as: "buyer",
-          pipeline: [{ $match: { buyer: { $exist: true } } }],
+          pipeline: [{ $match: { buyer: { $exists: true } } }],
         },
       },
       { $unwind: "$buyer" },
