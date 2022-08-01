@@ -28,7 +28,7 @@ exports.getTransactions = async (req, res, next) => {
       },
       {
         $lookup: {
-          pipeline: [{ $match: { buyer: { $exists: true } } }],
+          pipeline: [{ $match: { $expr: { $ne: ["$buyer", undefined] } } }],
           localField: "buyer",
           foreignField: "_id",
           from: "buyers",
