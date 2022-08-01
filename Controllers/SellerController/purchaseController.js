@@ -3,8 +3,13 @@ const Inventory = require("../../Models/SellerModels/inventorySchema");
 const Purchase = require("../../Models/SellerModels/purchaseSchema");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
+const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
-
+const pdf = require("html-pdf");
+const fs = require("fs");
+const path = require("path");
+const ejs = require("ejs");
+const sendMail = require("../../services/mail");
 exports.createConsignment = async (req, res, next) => {
   try {
     const {
@@ -479,6 +484,94 @@ exports.getConsignmentDetail = async (req, res, next) => {
           res.statusCode
         )
       );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.printConsignment = async (req, res, next) => {
+  try {
+    const { consignmentId, stationId, type } = req.body;
+    console.log(req.body);
+    if (!consignmentId) {
+      return res
+        .status(200)
+        .json(error("Please provide consignment Id", res.statusCode));
+    }
+    const consignment = await Purchase.findById(consignmentId);
+    if (!consignment) {
+      return res
+        .status(200)
+        .json(error("Invalid consignment Id", res.statusCode));
+    }
+    if (!stationId) {
+      return res
+        .status(200)
+        .json(error("Please provide station Id", res.statusCode));
+    }
+    const station = await SellerStation.findById(stationId);
+    if (!station) {
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
+    }
+    if (!station.a4_printer.email && !station.a4_printer.local) {
+      return res
+        .status(200)
+        .json(error("No A4 Printer added in selected station", res.statusCode));
+    }
+    if (!type) {
+      return res
+        .status(200)
+        .json(error("Please provide print type", res.statusCode));
+    }
+    for (const con of consignment.products) {
+      con.productId = await SellerProduct.findById(con.productId).populate([
+        "variety",
+        "type",
+        "units",
+      ]);
+    }
+    const dirPath = path.join(
+      __dirname.replace("SellerController", "templates"),
+      "/smcs_report.html"
+    );
+    const template = fs.readFileSync(dirPath, "utf8");
+    const data = consignment;
+    const html = ejs.render(template, { data: data });
+    const options = { format: "Letter" };
+    pdf
+      .create(html, options)
+      .toFile(
+        `./public/sellers/${req.seller._id}/smcs_report.pdf`,
+        function (err, res1) {
+          if (err) return console.log(err);
+          console.log(res1);
+        }
+      );
+    if (station.a4_printer.local) {
+      res.status(200).json(
+        success(
+          "success",
+          {
+            file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/smcs_report.pdf`,
+          },
+          res.statusCode
+        )
+      );
+    } else {
+      await sendMail(station.a4_printer.email, "Consignment", "");
+      res
+        .status(200)
+        .json(
+          success(
+            type === 1
+              ? "Consignment Info Printed Successfully"
+              : "Consignment Balance Printed Successfully",
+            {},
+            res.statusCode
+          )
+        );
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

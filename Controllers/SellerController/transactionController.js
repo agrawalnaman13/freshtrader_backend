@@ -11,6 +11,11 @@ const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const sendMail = require("../../services/mail");
 const Buyer = require("../../Models/BuyerModels/buyerSchema");
 const { getInventoryCode, getProductGST } = require("./productController");
+const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
+const pdf = require("html-pdf");
+const fs = require("fs");
+const path = require("path");
+const ejs = require("ejs");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { from, till, sortBy, filterBy } = req.body;
@@ -745,7 +750,7 @@ exports.emailAllTransactionsToBuyers = async (req, res, next) => {
 
 exports.printTransaction = async (req, res, next) => {
   try {
-    const { transactionId, type } = req.body;
+    const { transactionId, stationId } = req.body;
     console.log(req.body);
     if (!transactionId) {
       return res
@@ -758,12 +763,53 @@ exports.printTransaction = async (req, res, next) => {
         .status(200)
         .json(error("Invalid transaction id", res.statusCode));
     }
-    if (!type) {
+    if (!stationId) {
       return res
         .status(200)
-        .json(error("Print type is required", res.statusCode));
+        .json(error("Please provide station Id", res.statusCode));
     }
-    res.status(200).json(success("Print Successful", {}, res.statusCode));
+    const station = await SellerStation.findById(stationId);
+    if (!station) {
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
+    }
+    if (!station.a4_printer.email && !station.a4_printer.local) {
+      return res
+        .status(200)
+        .json(error("No A4 Printer added in selected station", res.statusCode));
+    }
+    const dirPath = path.join(
+      __dirname.replace("SellerController", "templates"),
+      "/smcs_report.html"
+    );
+    const template = fs.readFileSync(dirPath, "utf8");
+    const data = transaction;
+    const html = ejs.render(template, { data: data });
+    const options = { format: "Letter" };
+    pdf
+      .create(html, options)
+      .toFile(
+        `./public/sellers/${req.seller._id}/smcs_report.pdf`,
+        function (err, res1) {
+          if (err) return console.log(err);
+          console.log(res1);
+        }
+      );
+    if (station.a4_printer.local) {
+      res.status(200).json(
+        success(
+          "success",
+          {
+            file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/smcs_report.pdf`,
+          },
+          res.statusCode
+        )
+      );
+    } else {
+      await sendMail(station.a4_printer.email, "A4 Invoice", "");
+      res
+        .status(200)
+        .json(success("A4 Invoice Printed Successfully", {}, res.statusCode));
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
@@ -772,17 +818,59 @@ exports.printTransaction = async (req, res, next) => {
 
 exports.printAllTransaction = async (req, res, next) => {
   try {
-    const { transactionIds } = req.body;
+    const { transactionIds, stationId } = req.body;
     console.log(req.body);
     if (!transactionIds.length) {
       return res
         .status(200)
         .json(error("Transaction id is required", res.statusCode));
     }
+    if (!stationId) {
+      return res
+        .status(200)
+        .json(error("Please provide station Id", res.statusCode));
+    }
+    const station = await SellerStation.findById(stationId);
+    if (!station) {
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
+    }
+    if (!station.a4_printer.email && !station.a4_printer.local) {
+      return res
+        .status(200)
+        .json(error("No A4 Printer added in selected station", res.statusCode));
+    }
+    let files = [];
     for (const transactionId of transactionIds) {
       const transaction = await Transaction.findById(transactionId);
+      const dirPath = path.join(
+        __dirname.replace("SellerController", "templates"),
+        "/smcs_report.html"
+      );
+      const template = fs.readFileSync(dirPath, "utf8");
+      const data = transaction;
+      const html = ejs.render(template, { data: data });
+      const options = { format: "Letter" };
+      pdf
+        .create(html, options)
+        .toFile(
+          `./public/sellers/${req.seller._id}/transaction${transaction._id}.pdf`,
+          function (err, res1) {
+            if (err) return console.log(err);
+            console.log(res1);
+          }
+        );
+      files.push(
+        `${process.env.BASE_URL}/Sellers/${req.seller._id}/transaction${transaction._id}.pdf`
+      );
     }
-    res.status(200).json(success("Print Successful", {}, res.statusCode));
+    if (station.a4_printer.local) {
+      res.status(200).json(success("success", { files }, res.statusCode));
+    } else {
+      await sendMail(station.a4_printer.email, "A4 Invoice", "");
+      res
+        .status(200)
+        .json(success("A4 Invoice Printed Successfully", {}, res.statusCode));
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

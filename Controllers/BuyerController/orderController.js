@@ -410,11 +410,16 @@ exports.orderProduct = async (req, res, next) => {
     });
     buyer.order_count = (buyer.order_count ? buyer.order_count : 0) + 1;
     await buyer.save();
-    if (sellerData.notify_new_order) {
-      await sendNotification("New Order", buyer.business_trading_name, {
-        orderId: String(order._id),
-        type: "New Order",
-      });
+    if (sellerData.notify_new_order && sellerData.deviceId) {
+      await sendNotification(
+        "New Order",
+        buyer.business_trading_name,
+        {
+          orderId: String(order._id),
+          type: "New Order",
+        },
+        sellerData.deviceId
+      );
     }
     res
       .status(200)
@@ -568,11 +573,16 @@ exports.reorderProduct = async (req, res, next) => {
     });
     buyer.order_count = (buyer.order_count ? buyer.order_count : 0) + 1;
     await buyer.save();
-    if (order.seller.notify_new_order) {
-      await sendNotification("New Order", buyer.business_trading_name, {
-        orderId: String(newOrder._id),
-        type: "New Order",
-      });
+    if (order.seller.notify_new_order && order.seller.deviceId) {
+      await sendNotification(
+        "New Order",
+        buyer.business_trading_name,
+        {
+          orderId: String(newOrder._id),
+          type: "New Order",
+        },
+        order.seller.deviceId
+      );
     }
     res
       .status(200)
@@ -605,22 +615,28 @@ exports.changeOrderStatus = async (req, res, next) => {
     order.status = status;
     await order.save();
     if (status === "CANCELED" && prevStatus === "COUNTER") {
-      if (order.seller.notify_declined_offer) {
+      if (order.seller.notify_declined_offer && order.seller.deviceId) {
         await sendNotification(
           "Cancel Counter",
           order.buyer.business_trading_name,
           {
             orderId: String(order._id),
             type: "Cancel Counter",
-          }
+          },
+          order.seller.deviceId
         );
       }
     } else if (status === "CANCELED") {
-      if (order.seller.notify_cancel_order) {
-        await sendNotification("Cancel", order.buyer.business_trading_name, {
-          orderId: String(order._id),
-          type: "Cancel",
-        });
+      if (order.seller.notify_cancel_order && order.seller.deviceId) {
+        await sendNotification(
+          "Cancel",
+          order.buyer.business_trading_name,
+          {
+            orderId: String(order._id),
+            type: "Cancel",
+          },
+          order.seller.deviceId
+        );
       }
     }
     res

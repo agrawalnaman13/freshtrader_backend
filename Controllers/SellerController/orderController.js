@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 const Order = require("../../Models/BuyerModels/orderSchema");
 const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
+const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
 const { sendNotification } = require("./notificationController");
+const pdf = require("html-pdf");
+const fs = require("fs");
+const path = require("path");
+const ejs = require("ejs");
+const sendMail = require("../../services/mail");
 exports.getOrders = async (req, res, next) => {
   try {
     const { sortBy, status } = req.body;
@@ -86,18 +92,28 @@ exports.changeOrderStatus = async (req, res, next) => {
     order.status = status;
     await order.save();
     if (status === "CONFIRMED") {
-      if (order.buyer.notify_order_confirmation) {
-        await sendNotification("Confirm", order.seller.business_trading_name, {
-          orderId: String(order._id),
-          type: "Confirm",
-        });
+      if (order.buyer.notify_order_confirmation && order.buyer.deviceId) {
+        await sendNotification(
+          "Confirm",
+          order.seller.business_trading_name,
+          {
+            orderId: String(order._id),
+            type: "Confirm",
+          },
+          order.buyer.deviceId
+        );
       }
     } else if (status === "CANCELED") {
-      if (order.buyer.notify_order_cancelation) {
-        await sendNotification("Decline", order.seller.business_trading_name, {
-          orderId: String(order._id),
-          type: "Decline",
-        });
+      if (order.buyer.notify_order_cancelation && order.buyer.deviceId) {
+        await sendNotification(
+          "Decline",
+          order.seller.business_trading_name,
+          {
+            orderId: String(order._id),
+            type: "Decline",
+          },
+          order.buyer.deviceId
+        );
       }
     }
     res
@@ -150,11 +166,16 @@ exports.sendCounterOffer = async (req, res, next) => {
     order.payment = payment;
     order.status = "COUNTER";
     await order.save();
-    if (order.buyer.notify_counter_order) {
-      await sendNotification("Counter", order.seller.business_trading_name, {
-        orderId: String(order._id),
-        type: "Counter",
-      });
+    if (order.buyer.notify_counter_order && order.buyer.deviceId) {
+      await sendNotification(
+        "Counter",
+        order.seller.business_trading_name,
+        {
+          orderId: String(order._id),
+          type: "Counter",
+        },
+        order.buyer.deviceId
+      );
     }
     res
       .status(200)
@@ -266,6 +287,77 @@ exports.getOrderCount = async (req, res, next) => {
           res.statusCode
         )
       );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.printOrder = async (req, res, next) => {
+  try {
+    const { orderId, stationId } = req.body;
+    console.log(req.body);
+    if (!orderId) {
+      return res
+        .status(200)
+        .json(error("Please provide order Id", res.statusCode));
+    }
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(200).json(error("Invalid order Id", res.statusCode));
+    }
+    if (!stationId) {
+      return res
+        .status(200)
+        .json(error("Please provide station Id", res.statusCode));
+    }
+    const station = await SellerStation.findById(stationId);
+    if (!station) {
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
+    }
+    if (!station.a4_printer.email && !station.a4_printer.local) {
+      return res
+        .status(200)
+        .json(error("No A4 Printer added in selected station", res.statusCode));
+    }
+    for (const product of order.product) {
+      product.product = await SellerProduct.findById(product.productId)
+        .populate(["variety", "type", "units"])
+        .select(["category", "variety", "type", "units"]);
+    }
+    const dirPath = path.join(
+      __dirname.replace("SellerController", "templates"),
+      "/smcs_report.html"
+    );
+    const template = fs.readFileSync(dirPath, "utf8");
+    const data = order;
+    const html = ejs.render(template, { data: data });
+    const options = { format: "Letter" };
+    pdf
+      .create(html, options)
+      .toFile(
+        `./public/sellers/${req.seller._id}/smcs_report.pdf`,
+        function (err, res1) {
+          if (err) return console.log(err);
+          console.log(res1);
+        }
+      );
+    if (station.a4_printer.local) {
+      res.status(200).json(
+        success(
+          "success",
+          {
+            file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/smcs_report.pdf`,
+          },
+          res.statusCode
+        )
+      );
+    } else {
+      await sendMail(station.a4_printer.email, "Order Detail", "");
+      res
+        .status(200)
+        .json(success("order Detail Printed Successfully", {}, res.statusCode));
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

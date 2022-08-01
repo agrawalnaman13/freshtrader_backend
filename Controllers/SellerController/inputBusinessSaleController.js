@@ -8,7 +8,6 @@ const SellerProduct = require("../../Models/SellerModels/sellerProductSchema");
 const Transaction = require("../../Models/SellerModels/transactionSchema");
 const SellerSalesman = require("../../Models/SellerModels/sellerSalesmanSchema");
 const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
-const printer = require("pdf-to-printer");
 const { checkABN } = require("./authController");
 const SellerPallets = require("../../Models/SellerModels/sellerPalletsSchema");
 const Order = require("../../Models/BuyerModels/orderSchema");
@@ -21,6 +20,7 @@ const ejs = require("ejs");
 const moment = require("moment");
 const { getProductInventory } = require("./inventoryController");
 const SellerStaff = require("../../Models/SellerModels/staffSchema");
+const sendMail = require("../../services/mail");
 
 exports.getBusinesses = async (req, res, next) => {
   try {
@@ -58,13 +58,6 @@ exports.getBusinesses = async (req, res, next) => {
         },
       },
     ]);
-    // const dirPath = path.join(
-    //   __dirname.replace("SellerController", "templates"),
-    //   "/smcs_report.pdf"
-    // );
-    // await printer.print(dirPath, {
-    //   printer: "thermal",
-    // });
     res
       .status(200)
       .json(success("Buyers Fetched Successfully", { buyers }, res.statusCode));
@@ -276,6 +269,7 @@ exports.processTransaction = async (req, res, next) => {
       make_non_smcs,
       cash_transaction_without_payment,
       email,
+      print_a4,
       prev_trans,
       transactionId,
     } = req.body;
@@ -303,6 +297,15 @@ exports.processTransaction = async (req, res, next) => {
     // const station_data = await SellerStation.findById(station);
     // if (!station_data) {
     //   return res.status(200).json(error("Invalid station id", res.statusCode));
+    // }
+    // if (print_a4) {
+    //   if (!station_data.a4_printer.email && !station_data.a4_printer.local) {
+    //     return res
+    //       .status(200)
+    //       .json(
+    //         error("No A4 Printer added in selected station", res.statusCode)
+    //       );
+    //   }
     // }
     if (!type) {
       return res
@@ -606,7 +609,7 @@ exports.processTransaction = async (req, res, next) => {
           pdf
             .create(html, options)
             .toFile(
-              `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
+              `./public/sellers/${req.seller._id}/invoice.pdf`,
               function (err, res1) {
                 if (err) return console.log(err);
               }
@@ -626,7 +629,7 @@ exports.processTransaction = async (req, res, next) => {
           pdf
             .create(html, options)
             .toFile(
-              `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
+              `./public/sellers/${req.seller._id}/delivery_docket.pdf`,
               function (err, res1) {
                 if (err) return console.log(err);
               }
@@ -643,11 +646,44 @@ exports.processTransaction = async (req, res, next) => {
           pdf
             .create(html, options)
             .toFile(
-              `./public/sellers/${req.seller._id}/transaction${Date.now()}.pdf`,
+              `./public/sellers/${req.seller._id}/credit_note.pdf`,
               function (err, res1) {
                 if (err) return console.log(err);
               }
             );
+        }
+        if (type === "INVOICE" && print_a4) {
+          const dirPath = path.join(
+            __dirname.replace("SellerController", "templates"),
+            "/credit_note.html"
+          );
+          const template = fs.readFileSync(dirPath, "utf8");
+          var html = ejs.render(template, { data: data });
+          var options = { format: "Letter" };
+          pdf
+            .create(html, options)
+            .toFile(
+              `./public/sellers/${req.seller._id}/a4_invoice.pdf`,
+              function (err, res1) {
+                if (err) return console.log(err);
+              }
+            );
+          if (station_data.a4_printer.local) {
+            return res
+              .status(200)
+              .json(
+                success(
+                  "success",
+                  {
+                    transaction,
+                    file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/a4_invoice.pdf`,
+                  },
+                  res.statusCode
+                )
+              );
+          } else {
+            await sendMail(station_data.a4_printer.email, "A4 Invoice", "");
+          }
         }
       }
     }

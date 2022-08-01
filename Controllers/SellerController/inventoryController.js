@@ -8,6 +8,7 @@ const path = require("path");
 const ejs = require("ejs");
 const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 const Wholeseller = require("../../Models/SellerModels/wholesellerSchema");
+const sendMail = require("../../services/mail");
 exports.getInventory = async (req, res) => {
   try {
     const { search, active_consignment } = req.body;
@@ -393,14 +394,29 @@ exports.undoInventory = async (req, res) => {
 
 exports.printInventory = async (req, res) => {
   try {
-    const { search, station } = req.body;
+    const { stationId, search, active_consignment, type } = req.body;
+    if (!stationId) {
+      return res
+        .status(200)
+        .json(error("Please provide station Id", res.statusCode));
+    }
+    const station = await SellerStation.findById(stationId);
     if (!station) {
-      return res.status(200).json(error("Station is required", res.statusCode));
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
     }
-    const station_data = await SellerStation.findById(station);
-    if (!station_data) {
-      return res.status(200).json(error("Invalid station id", res.statusCode));
+    if (!station.a4_printer.email && !station.a4_printer.local) {
+      return res
+        .status(200)
+        .json(error("No A4 Printer added in selected station", res.statusCode));
     }
+    if (!type) {
+      return res.status(200).json(error("Please provide type", res.statusCode));
+    }
+    const seller = await Wholeseller.findById(req.seller._id);
+    let category = [];
+    if (seller.market === "Sydney Produce and Growers Market")
+      category = ["Fruits", "Herbs", "Vegetables", "Others"];
+    else category = ["Flowers", "Foliage"];
     const inventories = await Inventory.aggregate([
       {
         $match: {
@@ -445,6 +461,7 @@ exports.printInventory = async (req, res) => {
       { $unwind: "$productId.type" },
       {
         $match: {
+          "productId.variety.product": { $in: category },
           $and: [
             search
               ? {
@@ -467,37 +484,97 @@ exports.printInventory = async (req, res) => {
           ],
         },
       },
+      { $sort: { "productId.variety.product": 1 } },
     ]);
+    let list = [];
     for (const inventory of inventories) {
       if (inventory.consignment)
         inventory.consignment = await Purchase.findById(inventory.consignment)
           .populate("supplier")
-          .select(["supplier", "consign"]);
-      inventory.ready_to_sell = inventory.carry_over + inventory.purchase;
+          .select(["supplier", "consign", "status"]);
       inventory.remaining =
-        inventory.ready_to_sell - inventory.sold - inventory.void;
+        inventory.purchase - inventory.sold - inventory.void;
+      inventory.total_sold = inventory.total_sold ? inventory.total_sold : 0;
+      if (active_consignment) {
+        const consignment = await Purchase.aggregate([
+          {
+            $match: {
+              seller: mongoose.Types.ObjectId(req.seller._id),
+              status: "ACTIVE",
+            },
+          },
+          { $unwind: "$products" },
+          {
+            $match: {
+              "products.productId": {
+                $eq: mongoose.Types.ObjectId(inventory.productId._id),
+              },
+            },
+          },
+        ]);
+        if (consignment.length) list.push(inventory);
+      } else list.push(inventory);
     }
-    const dirPath = path.join(
-      __dirname.replace("SellerController", "templates"),
-      "/smcs_report.html"
-    );
+    let dirPath;
+    if (type === 1) {
+      dirPath = path.join(
+        __dirname.replace("SellerController", "templates"),
+        "/smcs_report.html"
+      );
+    } else {
+      dirPath = path.join(
+        __dirname.replace("SellerController", "templates"),
+        "/smcs_report.html"
+      );
+    }
     const template = fs.readFileSync(dirPath, "utf8");
-    var data = {
+    const data = {
       list: inventories,
     };
-    var html = ejs.render(template, { data: data });
-    var options = { format: "Letter" };
+    const html = ejs.render(template, { data: data });
+    const options = { format: "Letter" };
     pdf
       .create(html, options)
       .toFile(
-        `./public/sellers/${req.seller._id}/inventory.pdf`,
+        type === 1
+          ? `./public/sellers/${req.seller._id}/running_balance.pdf`
+          : `./public/sellers/${req.seller._id}/stock_sheet.pdf`,
         function (err, res1) {
           if (err) return console.log(err);
           console.log(res1);
-          res.download(res1.filename);
         }
       );
-    res.status(200).json(success("Printed Successfully", {}, res.statusCode));
+    if (station.a4_printer.local) {
+      res.status(200).json(
+        success(
+          "success",
+          {
+            file:
+              type === 1
+                ? `${process.env.BASE_URL}/Sellers/${req.seller._id}/running_balance.pdf`
+                : `${process.env.BASE_URL}/Sellers/${req.seller._id}/stock_sheet.pdf`,
+          },
+          res.statusCode
+        )
+      );
+    } else {
+      await sendMail(
+        station.a4_printer.email,
+        type === 1 ? "Running Balance" : "Stock Sheet",
+        ""
+      );
+      res
+        .status(200)
+        .json(
+          success(
+            type === 1
+              ? "Running Balance Printed Successfully"
+              : "Stock Sheet Printed Successfully",
+            {},
+            res.statusCode
+          )
+        );
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

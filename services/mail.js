@@ -6,8 +6,9 @@ const sendMail = async (to, subject, body) => {
     host: config.get("mailserverhost"),
     port: 587,
     secure: false,
-    console: true,
-    ignoreTLS: false,
+    // console: true,
+    // ignoreTLS: false,
+    requireTLS: true,
     auth: {
       user: config.get("mailserverid"),
       pass: config.get("mailserverpassword"),

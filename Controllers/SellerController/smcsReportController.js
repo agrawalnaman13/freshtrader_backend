@@ -7,6 +7,7 @@ const path = require("path");
 const ejs = require("ejs");
 const sendMail = require("../../services/mail");
 const SMCSReport = require("../../Models/SellerModels/smcsReportSchema");
+const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
 exports.getSMCSReport = async (req, res, next) => {
   try {
     const { week, year, download } = req.body;
@@ -33,29 +34,14 @@ exports.getSMCSReport = async (req, res, next) => {
           total: 1,
           is_smcs: 1,
           createdAt: 1,
-          year: {
-            $year: "$createdAt",
-          },
-          month: {
-            $month: "$createdAt",
-          },
-          day: {
-            $dayOfMonth: "$createdAt",
-          },
         },
       },
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
           is_smcs: true,
-          $and: [
-            { year: { $gte: new Date(firstDay).getFullYear() } },
-            { month: { $gte: new Date(firstDay).getMonth() + 1 } },
-            { day: { $gte: new Date(firstDay).getDate() } },
-            { year: { $lte: new Date(lastDay).getFullYear() } },
-            { month: { $lte: new Date(lastDay).getMonth() + 1 } },
-            { day: { $lte: new Date(lastDay).getDate() } },
-          ],
+          createdAt: { $gte: new Date(firstDay) },
+          createdAt: { $lte: new Date(lastDay) },
         },
       },
       {
@@ -85,7 +71,7 @@ exports.getSMCSReport = async (req, res, next) => {
         total: transaction.total,
       });
     }
-    const total = transactions.reduce(function (a, b) {
+    const total = report.reduce(function (a, b) {
       return a + b.total;
     }, 0);
     const smcs_code = report.reduce(function (a, b) {
@@ -106,14 +92,14 @@ exports.getSMCSReport = async (req, res, next) => {
         "/smcs_report.html"
       );
       const template = fs.readFileSync(dirPath, "utf8");
-      var data = {
+      const data = {
         css: `${process.env.BASE_URL}/css/style.css`,
         list: report,
         total: total,
         smcs_code: smcs_code,
       };
-      var html = ejs.render(template, { data: data });
-      var options = { format: "Letter" };
+      const html = ejs.render(template, { data: data });
+      const options = { format: "Letter" };
       pdf
         .create(html, options)
         .toFile(
@@ -173,13 +159,37 @@ exports.emailSMCS = async (req, res, next) => {
         .status(200)
         .json(error("SMCS is already notified", res.statusCode));
     }
-    const newTransactionIds = transactionIds.map((id) => {
-      return mongoose.Types.ObjectId(id);
-    });
+    let firstDay, lastDay;
+    console.log(week && year);
+    if (week && year) {
+      const d = new Date("Jan 01, " + year + " 01:00:00");
+      const w = d.getTime() + 604800000 * (week - 1);
+      firstDay = new Date(w);
+      lastDay = new Date(w + 518400000);
+    } else {
+      const curr = new Date();
+      const first = curr.getDate() - curr.getDay();
+      const last = first + 6;
+      firstDay = new Date(curr.setDate(first)).toUTCString();
+      lastDay = new Date(curr.setDate(last)).toUTCString();
+    }
+    console.log(firstDay, lastDay);
     const transactions = await Transaction.aggregate([
       {
+        $project: {
+          seller: 1,
+          buyer: 1,
+          total: 1,
+          is_smcs: 1,
+          createdAt: 1,
+        },
+      },
+      {
         $match: {
-          _id: { $in: newTransactionIds },
+          seller: mongoose.Types.ObjectId(req.seller._id),
+          is_smcs: true,
+          createdAt: { $gte: new Date(firstDay) },
+          createdAt: { $lte: new Date(lastDay) },
         },
       },
       {
@@ -191,19 +201,41 @@ exports.emailSMCS = async (req, res, next) => {
         },
       },
       { $unwind: "$buyer" },
+      {
+        $group: {
+          _id: {
+            buyer: "$buyer",
+          },
+          total: { $sum: "$total" },
+        },
+      },
     ]);
+    let report = [];
+    for (const transaction of transactions) {
+      report.push({
+        buyer: transaction._id.buyer,
+        total: transaction.total,
+      });
+    }
+    const total = report.reduce(function (a, b) {
+      return a + b.total;
+    }, 0);
+    const smcs_code = report.reduce(function (a, b) {
+      return a + +b.buyer.smcs_code;
+    }, 0);
     const dirPath = path.join(
       __dirname.replace("SellerController", "templates"),
       "/smcs_report.html"
     );
     const template = fs.readFileSync(dirPath, "utf8");
-    var data = {
+    const data = {
       css: `${process.env.BASE_URL}/css/style.css`,
-      logo: `${process.env.BASE_URL}/logo.png`,
-      list: transactions,
+      list: report,
+      total: total,
+      smcs_code: smcs_code,
     };
-    var html = ejs.render(template, { data: data });
-    var options = { format: "Letter" };
+    const html = ejs.render(template, { data: data });
+    const options = { format: "Letter" };
     pdf
       .create(html, options)
       .toFile(
@@ -228,6 +260,138 @@ exports.emailSMCS = async (req, res, next) => {
     res
       .status(200)
       .json(success("Email Sent Successfully", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.printSMCSReport = async (req, res, next) => {
+  try {
+    const { week, year, stationId } = req.body;
+    console.log(req.body);
+    if (!week) {
+      return res.status(200).json(error("Please provide week", res.statusCode));
+    }
+    if (!year) {
+      return res.status(200).json(error("Please provide year", res.statusCode));
+    }
+    if (!stationId) {
+      return res
+        .status(200)
+        .json(error("Please provide station Id", res.statusCode));
+    }
+    const station = await SellerStation.findById(stationId);
+    if (!station) {
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
+    }
+    if (!station.a4_printer.email && !station.a4_printer.local) {
+      return res
+        .status(200)
+        .json(error("No A4 Printer added in selected station", res.statusCode));
+    }
+    let firstDay, lastDay;
+    console.log(week && year);
+    if (week && year) {
+      const d = new Date("Jan 01, " + year + " 01:00:00");
+      const w = d.getTime() + 604800000 * (week - 1);
+      firstDay = new Date(w);
+      lastDay = new Date(w + 518400000);
+    } else {
+      const curr = new Date();
+      const first = curr.getDate() - curr.getDay();
+      const last = first + 6;
+      firstDay = new Date(curr.setDate(first)).toUTCString();
+      lastDay = new Date(curr.setDate(last)).toUTCString();
+    }
+    console.log(firstDay, lastDay);
+    const transactions = await Transaction.aggregate([
+      {
+        $project: {
+          seller: 1,
+          buyer: 1,
+          total: 1,
+          is_smcs: 1,
+          createdAt: 1,
+        },
+      },
+      {
+        $match: {
+          seller: mongoose.Types.ObjectId(req.seller._id),
+          is_smcs: true,
+          createdAt: { $gte: new Date(firstDay) },
+          createdAt: { $lte: new Date(lastDay) },
+        },
+      },
+      {
+        $lookup: {
+          localField: "buyer",
+          foreignField: "_id",
+          from: "buyers",
+          as: "buyer",
+        },
+      },
+      { $unwind: "$buyer" },
+      {
+        $group: {
+          _id: {
+            buyer: "$buyer",
+          },
+          total: { $sum: "$total" },
+        },
+      },
+    ]);
+    let report = [];
+    for (const transaction of transactions) {
+      report.push({
+        buyer: transaction._id.buyer,
+        total: transaction.total,
+      });
+    }
+    const total = report.reduce(function (a, b) {
+      return a + b.total;
+    }, 0);
+    const smcs_code = report.reduce(function (a, b) {
+      return a + +b.buyer.smcs_code;
+    }, 0);
+    const dirPath = path.join(
+      __dirname.replace("SellerController", "templates"),
+      "/smcs_report.html"
+    );
+    const template = fs.readFileSync(dirPath, "utf8");
+    const data = {
+      css: `${process.env.BASE_URL}/css/style.css`,
+      list: report,
+      total: total,
+      smcs_code: smcs_code,
+    };
+    const html = ejs.render(template, { data: data });
+    const options = { format: "Letter" };
+    pdf
+      .create(html, options)
+      .toFile(
+        `./public/sellers/${req.seller._id}/smcs_report.pdf`,
+        function (err, res1) {
+          if (err) return console.log(err);
+          console.log(res1);
+        }
+      );
+    if (station.a4_printer.local) {
+      res.status(200).json(
+        success(
+          "success",
+          {
+            file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/smcs_report.pdf`,
+          },
+          res.statusCode
+        )
+      );
+    } else {
+      await sendMail(station.a4_printer.email, "A4 Invoice", "");
+      res
+        .status(200)
+        .json(success("A4 Invoice Printed Successfully", {}, res.statusCode));
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));

@@ -19,12 +19,16 @@ const SellerStationSchema = new mongoose.Schema(
       },
     },
     thermal_printer: {
-      type: Array,
-      default: [{}],
+      type: Object,
+      default: {},
     },
     card_reader: {
-      type: Array,
-      default: [{}],
+      type: Object,
+      default: {
+        name: "",
+        access_token: "",
+        deviceId: "",
+      },
     },
   },
   { timestamps: {} },

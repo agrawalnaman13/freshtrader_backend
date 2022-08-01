@@ -53,6 +53,7 @@ const {
   processOrder,
   getOrderCount,
   getOrderNotification,
+  printOrder,
 } = require("../Controllers/SellerController/orderController");
 const {
   getPallets,
@@ -99,6 +100,7 @@ const {
   getConsignments,
   deleteConsignment,
   getConsignmentDetail,
+  printConsignment,
 } = require("../Controllers/SellerController/purchaseController");
 const {
   addSalesman,
@@ -108,6 +110,7 @@ const {
 const {
   getSMCSReport,
   emailSMCS,
+  printSMCSReport,
 } = require("../Controllers/SellerController/smcsReportController");
 const {
   addStaff,
@@ -243,6 +246,7 @@ router.get(
   tokenAuthorisation,
   getConsignmentDetail
 );
+router.post("/printConsignment", tokenAuthorisation, printConsignment);
 router.post("/getInventory", tokenAuthorisation, getInventory);
 router.post("/updateOverselling", tokenAuthorisation, updateOverselling);
 router.get("/resetInventory", tokenAuthorisation, resetInventory);
@@ -285,6 +289,7 @@ router.post(
   tokenAuthorisation,
   changeOrderNotification
 );
+router.post("/printOrder", tokenAuthorisation, printOrder);
 router.post("/searchBuyers", tokenAuthorisation, searchBuyers);
 router.post("/getTransactions", tokenAuthorisation, getTransactions);
 router.post("/updateTransactions", tokenAuthorisation, updateTransactions);
@@ -330,6 +335,7 @@ router.post(
 router.post("/receivePayment", tokenAuthorisation, receivePayment);
 router.post("/getSMCSReport", tokenAuthorisation, getSMCSReport);
 router.post("/emailSMCS", tokenAuthorisation, emailSMCS);
+router.post("/printSMCSReport", tokenAuthorisation, printSMCSReport);
 router.post("/getEndOfDayReport", tokenAuthorisation, getEndOfDayReport);
 router.post("/addStaff", tokenAuthorisation, addStaff);
 router.post("/getStaff", tokenAuthorisation, getStaff);
