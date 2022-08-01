@@ -22,26 +22,20 @@ exports.getTransactions = async (req, res, next) => {
     console.log(req.body);
     const transactions = await Transaction.aggregate([
       {
-        $project: {
-          seller: 1,
-          buyer: 1,
-          products: 1,
-          ref: 1,
-          type: 1,
-          total: 1,
-          is_smcs: 1,
-          salesman: 1,
-          station: 1,
-          is_emailed: 1,
-          status: 1,
-          createdAt: 1,
-        },
-      },
-      {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
         },
       },
+      {
+        $lookup: {
+          localField: "buyer",
+          foreignField: "_id",
+          from: "buyers",
+          as: "buyer",
+          pipeline: [{ $match: { buyer: { $exist: true } } }],
+        },
+      },
+      { $unwind: "$buyer" },
       {
         $lookup: {
           localField: "salesman",

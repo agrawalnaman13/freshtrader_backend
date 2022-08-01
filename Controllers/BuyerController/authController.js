@@ -16,10 +16,6 @@ exports.signup = async (req, res, next) => {
       password,
       is_smcs,
       market,
-      address_line1,
-      city,
-      postal_code,
-      country,
       deviceId,
     } = req.body;
     console.log(req.body);
@@ -86,10 +82,6 @@ exports.signup = async (req, res, next) => {
           phone_number: phone_number,
           is_smcs: is_smcs,
           market: market,
-          address_line1: address_line1,
-          city: city,
-          postal_code: postal_code,
-          country: country,
           deviceId: deviceId,
         }
       );
@@ -388,7 +380,15 @@ exports.changePassword = async (req, res, next) => {
 
 exports.updateProfile = async (req, res, next) => {
   try {
-    const { business_trading_name, phone_number, is_smcs, market } = req.body;
+    const {
+      business_trading_name,
+      phone_number,
+      is_smcs,
+      address_line1,
+      city,
+      postal_code,
+      country,
+    } = req.body;
     console.log(req.body);
     if (!business_trading_name) {
       return res
@@ -405,24 +405,15 @@ exports.updateProfile = async (req, res, next) => {
         .status(200)
         .json(error("Is this business part of SMCS?", res.statusCode));
     }
-    if (!market) {
-      return res
-        .status(200)
-        .json(error("Please provide your market", res.statusCode));
-    }
-    if (
-      !["Sydney Produce and Growers Market", "Sydney Flower Market"].includes(
-        market
-      )
-    ) {
-      return res.status(200).json(error("Invalid market", res.statusCode));
-    }
 
     const ourBuyer = await Buyer.findByIdAndUpdate(req.buyer._id, {
       business_trading_name: business_trading_name,
       phone_number: phone_number,
       is_smcs: is_smcs,
-      market: market,
+      address_line1: address_line1,
+      city: city,
+      postal_code: postal_code,
+      country: country,
     });
 
     res

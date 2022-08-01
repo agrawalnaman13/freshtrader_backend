@@ -71,21 +71,6 @@ exports.getCustomerTransactions = async (req, res, next) => {
     }
     const transactions = await Transaction.aggregate([
       {
-        $project: {
-          seller: 1,
-          buyer: 1,
-          total: 1,
-          salesman: 1,
-          is_smcs: 1,
-          payment_received: 1,
-          status: 1,
-          ref: 1,
-          type: 1,
-          smcs_notified: 1,
-          createdAt: 1,
-        },
-      },
-      {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
           buyer: mongoose.Types.ObjectId(buyerId),
