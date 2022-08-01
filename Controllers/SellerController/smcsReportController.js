@@ -8,6 +8,7 @@ const ejs = require("ejs");
 const sendMail = require("../../services/mail");
 const SMCSReport = require("../../Models/SellerModels/smcsReportSchema");
 const SellerStation = require("../../Models/SellerModels/sellerStationSchema");
+const Activity = require("../../Models/SellerModels/activitySchema");
 exports.getSMCSReport = async (req, res, next) => {
   try {
     const { week, year, download } = req.body;
@@ -137,7 +138,7 @@ exports.getSMCSReport = async (req, res, next) => {
 
 exports.emailSMCS = async (req, res, next) => {
   try {
-    const { week, year, transactionIds } = req.body;
+    const { week, year, transactionIds, staff } = req.body;
     if (!week) {
       return res.status(200).json(error("Please provide week", res.statusCode));
     }
@@ -253,10 +254,30 @@ exports.emailSMCS = async (req, res, next) => {
       emailed_on: new Date(Date.now()),
     });
     for (const transaction of transactionIds) {
-      await Transaction.findByIdAndUpdate(transaction, {
-        smcs_notified: true,
-      });
+      const updatedTransaction = await Transaction.findByIdAndUpdate(
+        transaction,
+        {
+          smcs_notified: true,
+        }
+      );
+      let query = {
+        seller: req.seller._id,
+        event: "Transaction Edit",
+        info: [
+          `${updatedTransaction.type} #${updatedTransaction.ref} Edited`,
+          `SMCS Notified`,
+        ],
+      };
+      if (staff) query.account = staff;
+      await Activity.create(query);
     }
+    let query = {
+      seller: req.seller._id,
+      event: "SMCS Sent",
+      info: ["SMCS Notified"],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(success("Email Sent Successfully", {}, res.statusCode));

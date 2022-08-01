@@ -16,6 +16,7 @@ const pdf = require("html-pdf");
 const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
+const Activity = require("../../Models/SellerModels/activitySchema");
 exports.getTransactions = async (req, res, next) => {
   try {
     const { from, till, sortBy, filterBy } = req.body;
@@ -119,7 +120,7 @@ exports.getTransactions = async (req, res, next) => {
 
 exports.updateTransactions = async (req, res, next) => {
   try {
-    const { transactionId, products, total } = req.body;
+    const { transactionId, products, total, staff } = req.body;
     console.log(req.body);
     if (!transactionId) {
       return res
@@ -138,9 +139,35 @@ exports.updateTransactions = async (req, res, next) => {
     if (!total) {
       return res.status(200).json(error("Total is required", res.statusCode));
     }
+    const prevProducts = transaction.products;
     transaction.products = products;
     transaction.total = total;
     await transaction.save();
+    let info = [`${transaction.type} #${transaction.ref} Edited`];
+    for (var i = 0; i < prevProducts.length; i++) {
+      const product = await SellerProduct.findById(prevProducts[i]).populate(
+        "type"
+      );
+      if (
+        String(prevProducts[i].consignment) !==
+        String(transaction.products[i].consignment)
+      ) {
+        info.push(`Supplier Edited for ${product.type.type}`);
+      }
+      if (prevProducts[i].total !== transaction.products[i].total) {
+        info.push(
+          `Total Edited to ${transaction.products[i].total} for ${product.type.type}`
+        );
+      }
+    }
+    let query = {
+      seller: req.seller._id,
+      event: "Transaction Edit",
+      info: info,
+      salesman: transaction.salesman,
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -195,7 +222,7 @@ exports.getTransactionDetail = async (req, res, next) => {
 
 exports.changeTransactionStatus = async (req, res, next) => {
   try {
-    const { transactionId, status } = req.body;
+    const { transactionId, status, staff } = req.body;
     console.log(req.body);
     if (!transactionId) {
       return res
@@ -219,6 +246,16 @@ exports.changeTransactionStatus = async (req, res, next) => {
       transaction.payment_received = transaction.total;
     }
     await transaction.save();
+    let query = {
+      seller: req.seller._id,
+      event: "Transaction Edit",
+      info: [
+        `${transaction.type} #${transaction.ref} Edited`,
+        `Status Changed to ${status}`,
+      ],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -236,7 +273,7 @@ exports.changeTransactionStatus = async (req, res, next) => {
 
 exports.changeAllTransactionStatus = async (req, res, next) => {
   try {
-    const { transactionIds, status } = req.body;
+    const { transactionIds, status, staff } = req.body;
     console.log(req.body);
     if (!transactionIds.length) {
       return res
@@ -259,6 +296,16 @@ exports.changeAllTransactionStatus = async (req, res, next) => {
               ? transaction.total
               : transaction.payment_received,
         });
+        let query = {
+          seller: req.seller._id,
+          event: "Transaction Edit",
+          info: [
+            `${transaction.type} #${transaction.ref} Edited`,
+            `Status Changed to ${status}`,
+          ],
+        };
+        if (staff) query.account = staff;
+        await Activity.create(query);
       }
     }
     res
@@ -274,7 +321,7 @@ exports.changeAllTransactionStatus = async (req, res, next) => {
 
 exports.deleteTransaction = async (req, res, next) => {
   try {
-    const { transactionId, type } = req.body;
+    const { transactionId, type, staff } = req.body;
     console.log(req.body);
     if (!transactionId) {
       return res
@@ -377,15 +424,16 @@ exports.deleteTransaction = async (req, res, next) => {
       }
     }
     await Transaction.findByIdAndDelete(transactionId);
+    let query = {
+      seller: req.seller._id,
+      event: "Transaction Edit",
+      info: [`${transaction.type} #${transaction.ref} Deleted`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
-      .json(
-        success(
-          "Transaction deleted Successfully",
-          { transaction },
-          res.statusCode
-        )
-      );
+      .json(success("Transaction deleted Successfully", {}, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("error", res.statusCode));
@@ -687,7 +735,14 @@ exports.checkOverdueTransactions = async () => {
 
 exports.emailTransactionToBuyer = async (req, res, next) => {
   try {
-    const transaction = await Transaction.findById(req.params.id);
+    const { transactionId, staff } = req.body;
+    console.log(req.body);
+    if (!transactionId) {
+      return res
+        .status(200)
+        .json(error("Transaction id is required", res.statusCode));
+    }
+    const transaction = await Transaction.findById(transactionId);
     if (!transaction) {
       return res
         .status(200)
@@ -696,6 +751,16 @@ exports.emailTransactionToBuyer = async (req, res, next) => {
     transaction.is_emailed = true;
     await transaction.save();
     // await sendMail(transaction.buyer.email, "Freshtraders", "");
+    let query = {
+      seller: req.seller._id,
+      event: "Transaction Edit",
+      info: [
+        `${transaction.type} #${transaction.ref} Edited`,
+        `Invoice Emailed to Buyer`,
+      ],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(success("Email Sent Successfully", {}, res.statusCode));
@@ -707,7 +772,7 @@ exports.emailTransactionToBuyer = async (req, res, next) => {
 
 exports.emailAllTransactionsToBuyers = async (req, res, next) => {
   try {
-    const { transactionIds } = req.body;
+    const { transactionIds, staff } = req.body;
     console.log(req.body);
     if (!transactionIds.length) {
       return res
@@ -721,6 +786,16 @@ exports.emailAllTransactionsToBuyers = async (req, res, next) => {
           is_emailed: true,
         });
         await sendMail(transaction.buyer.email, "Freshtraders", "");
+        let query = {
+          seller: req.seller._id,
+          event: "Transaction Edit",
+          info: [
+            `${transaction.type} #${transaction.ref} Edited`,
+            `Invoice Emailed to Buyer`,
+          ],
+        };
+        if (staff) query.account = staff;
+        await Activity.create(query);
       }
     }
     res

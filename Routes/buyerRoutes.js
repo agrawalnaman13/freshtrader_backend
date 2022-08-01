@@ -49,6 +49,11 @@ const {
   sendNotification,
 } = require("../Controllers/SellerController/notificationController");
 const {
+  replySupport,
+  createSupport,
+  getSupportDetail,
+} = require("../Controllers/SellerController/supportController");
+const {
   updateTransactions,
   getTransactionDetail,
 } = require("../Controllers/SellerController/transactionController");
@@ -111,7 +116,10 @@ router.get(
 router.post("/buyPlan", tokenAuthorisationBuyer, buyPlan);
 router.get("/getPlans", tokenAuthorisationBuyer, getPlans);
 router.get("/getMyPlan", tokenAuthorisationBuyer, getMyPlan);
+router.post("/createSupport", tokenAuthorisationBuyer, createSupport);
 router.get("/getSupport", tokenAuthorisationBuyer, getSupport);
+router.get("/getSupportDetail/:id", tokenAuthorisationBuyer, getSupportDetail);
+router.post("/replySupport", tokenAuthorisationBuyer, replySupport);
 router.get("/getBalance", tokenAuthorisationBuyer, getBalance);
 router.post("/payment", tokenAuthorisationBuyer, payment);
 router.get("/sendNotification", tokenAuthorisationBuyer, sendNotification);

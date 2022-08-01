@@ -10,6 +10,7 @@ const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
 const sendMail = require("../../services/mail");
+const Activity = require("../../Models/SellerModels/activitySchema");
 exports.createConsignment = async (req, res, next) => {
   try {
     const {
@@ -25,6 +26,7 @@ exports.createConsignment = async (req, res, next) => {
       documents_received,
       purchase,
       products,
+      staff,
     } = req.body;
     console.log(req.body);
     const consignment = await Purchase.create({
@@ -97,6 +99,13 @@ exports.createConsignment = async (req, res, next) => {
         );
       }
     }
+    let query = {
+      seller: req.seller._id,
+      event: "Consignment Created",
+      info: [`#${consignment.consign} Created`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -114,7 +123,7 @@ exports.createConsignment = async (req, res, next) => {
 
 exports.addProductInConsignment = async (req, res, next) => {
   try {
-    const { products, consignmentId } = req.body;
+    const { products, consignmentId, staff } = req.body;
     console.log(req.body);
     if (!products.length) {
       return res
@@ -134,6 +143,13 @@ exports.addProductInConsignment = async (req, res, next) => {
     }
     consignment.products = products;
     await consignment.save();
+    let query = {
+      seller: req.seller._id,
+      event: "Consignment Edit",
+      info: [`#${consignment.consign} Edited`, "New Product Added"],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -151,7 +167,7 @@ exports.addProductInConsignment = async (req, res, next) => {
 
 exports.removeProductFromConsignment = async (req, res, next) => {
   try {
-    const { productId, consignmentId } = req.body;
+    const { productId, consignmentId, staff } = req.body;
     console.log(req.body);
     if (!productId) {
       return res
@@ -179,6 +195,13 @@ exports.removeProductFromConsignment = async (req, res, next) => {
       (pr) => String(pr.productId) !== String(productId)
     );
     await consignment.save();
+    let query = {
+      seller: req.seller._id,
+      event: "Consignment Edit",
+      info: [`#${consignment.consign} Edited`, "A Product is Removed"],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -196,7 +219,7 @@ exports.removeProductFromConsignment = async (req, res, next) => {
 
 exports.changeConsignmentStatus = async (req, res, next) => {
   try {
-    const { consignmentId, status, completion_date } = req.body;
+    const { consignmentId, status, completion_date, staff } = req.body;
     console.log(req.body);
     if (!status) {
       return res
@@ -284,6 +307,13 @@ exports.changeConsignmentStatus = async (req, res, next) => {
       }
     }
     await consignment.save();
+    let query = {
+      seller: req.seller._id,
+      event: "Consignment Edit",
+      info: [`#${consignment.consign} Edited`, `Status Changed to ${status}`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(

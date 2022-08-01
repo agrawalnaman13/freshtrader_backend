@@ -3,6 +3,7 @@ const validator = require("validator");
 const { success, error } = require("../../service_response/adminApiResponse");
 const SellerPOSLayout = require("../../Models/SellerModels/posLayoutSchema");
 const SellerStaff = require("../../Models/SellerModels/staffSchema");
+const Activity = require("../../Models/SellerModels/activitySchema");
 exports.login = async (req, res, next) => {
   const { email, password, deviceId } = req.body;
   console.log(req.body);
@@ -115,6 +116,7 @@ exports.updateProfile = async (req, res, next) => {
       market,
       stall_location,
       smcs_code,
+      staff,
     } = req.body;
     console.log(req.body);
     if (!business_trading_name) {
@@ -177,6 +179,13 @@ exports.updateProfile = async (req, res, next) => {
         smcs_code: smcs_code,
       }
     );
+    let query = {
+      seller: req.seller._id,
+      event: "Account Edit",
+      info: [`Profile Edited`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -193,7 +202,7 @@ exports.updateProfile = async (req, res, next) => {
 };
 
 exports.updateSellerPassword = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, staff } = req.body;
   console.log(req.body);
   if (!email) {
     return res.status(200).json(error("Please provide email", res.statusCode));
@@ -212,6 +221,13 @@ exports.updateSellerPassword = async (req, res, next) => {
     }
     ourSeller.password = password;
     await ourSeller.save();
+    let query = {
+      seller: req.seller._id,
+      event: "Account Edit",
+      info: [`Password Edited`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -240,6 +256,7 @@ exports.updateAccountInformation = async (req, res, next) => {
       cash_account_code,
       card_account_code,
       credit_note_account_code,
+      staff,
     } = req.body;
     console.log(req.body);
     if (!account_name) {
@@ -281,7 +298,13 @@ exports.updateAccountInformation = async (req, res, next) => {
         credit_note_account_code: credit_note_account_code,
       }
     );
-
+    let query = {
+      seller: req.seller._id,
+      event: "Account Edit",
+      info: [`Account Information Edited`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -299,7 +322,7 @@ exports.updateAccountInformation = async (req, res, next) => {
 
 exports.updateOrderSetting = async (req, res, next) => {
   try {
-    const { public_ordering, publish_prices } = req.body;
+    const { public_ordering, publish_prices, staff } = req.body;
     console.log(req.body);
     if (public_ordering === "" || public_ordering === undefined) {
       return res
@@ -318,7 +341,13 @@ exports.updateOrderSetting = async (req, res, next) => {
         publish_prices,
       }
     );
-
+    let query = {
+      seller: req.seller._id,
+      event: "Account Edit",
+      info: [`Order Setting Edited`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(
@@ -335,7 +364,7 @@ exports.updateOrderSetting = async (req, res, next) => {
 };
 
 exports.updateSellerDocuments = async (req, res, next) => {
-  const { include_food_saftey_logo, receipt, a4 } = req.body;
+  const { include_food_saftey_logo, receipt, a4, staff } = req.body;
   console.log(req.body);
   try {
     let query = {
@@ -357,7 +386,13 @@ exports.updateSellerDocuments = async (req, res, next) => {
       { _id: req.seller._id },
       query
     );
-
+    query = {
+      seller: req.seller._id,
+      event: "Account Edit",
+      info: [`Receipt & Invoice Settings Edited`],
+    };
+    if (staff) query.account = staff;
+    await Activity.create(query);
     res
       .status(200)
       .json(

@@ -21,6 +21,7 @@ const moment = require("moment");
 const { getProductInventory } = require("./inventoryController");
 const SellerStaff = require("../../Models/SellerModels/staffSchema");
 const sendMail = require("../../services/mail");
+const Activity = require("../../Models/SellerModels/activitySchema");
 
 exports.getBusinesses = async (req, res, next) => {
   try {
@@ -272,6 +273,7 @@ exports.processTransaction = async (req, res, next) => {
       print_a4,
       prev_trans,
       transactionId,
+      staff,
     } = req.body;
     console.log(req.body);
     // if (!buyer) {
@@ -411,6 +413,14 @@ exports.processTransaction = async (req, res, next) => {
       const ref = String(transaction._id).slice(18, 24);
       transaction.ref = ref;
       await transaction.save();
+      let query = {
+        seller: req.seller._id,
+        event: "Transaction Processed",
+        info: [`${type} #${ref} Processed`],
+        salesman: salesman,
+      };
+      if (staff) query.account = staff;
+      await Activity.create(query);
       if (type !== "DRAFT INVOICE") {
         for (const product of products) {
           const consignment = await Purchase.findById(product.consignment);
@@ -669,18 +679,16 @@ exports.processTransaction = async (req, res, next) => {
               }
             );
           if (station_data.a4_printer.local) {
-            return res
-              .status(200)
-              .json(
-                success(
-                  "success",
-                  {
-                    transaction,
-                    file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/a4_invoice.pdf`,
-                  },
-                  res.statusCode
-                )
-              );
+            return res.status(200).json(
+              success(
+                "success",
+                {
+                  transaction,
+                  file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/a4_invoice.pdf`,
+                },
+                res.statusCode
+              )
+            );
           } else {
             await sendMail(station_data.a4_printer.email, "A4 Invoice", "");
           }

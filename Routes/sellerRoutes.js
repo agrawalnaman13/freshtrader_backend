@@ -304,8 +304,8 @@ router.post(
   changeTransactionStatus
 );
 router.post("/deleteTransaction", tokenAuthorisation, deleteTransaction);
-router.get(
-  "/emailTransactionToBuyer/:id",
+router.post(
+  "/emailTransactionToBuyer",
   tokenAuthorisation,
   emailTransactionToBuyer
 );
