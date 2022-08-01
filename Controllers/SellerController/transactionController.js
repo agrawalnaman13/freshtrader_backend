@@ -24,27 +24,6 @@ exports.getTransactions = async (req, res, next) => {
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
-          pipeline: [
-            {
-              $match: {
-                $and: [
-                  { $ne: ["$buyer", undefined] },
-                  { $ne: ["$buyer", null] },
-                  { $ne: ["$buyer", ""] },
-                ],
-              },
-            },
-            {
-              $lookup: {
-                localField: "buyer",
-                foreignField: "_id",
-
-                from: "buyers",
-                as: "buyer",
-              },
-            },
-            { $unwind: "$buyer" },
-          ],
         },
       },
       {
@@ -92,19 +71,19 @@ exports.getTransactions = async (req, res, next) => {
             : { createdAt: -1 },
       },
     ]);
-    // for (const transaction of transactions) {
-    //   if (transaction.buyer)
-    //     transaction.buyer = await Buyer.findById(transaction.buyer);
-    //   else transaction.buyer = {};
-    //   for (const product of transaction.products) {
-    //     product.productId = await SellerProduct.findById(product.productId)
-    //       .populate(["variety", "type", "units"])
-    //       .select(["variety", "type", "units"]);
-    //     product.consignment = await Purchase.findById(product.consignment)
-    //       .populate("supplier")
-    //       .select(["supplier", "consign"]);
-    //   }
-    // }
+    for (const transaction of transactions) {
+      if (transaction.buyer)
+        transaction.buyer = await Buyer.findById(transaction.buyer);
+      else transaction.buyer = {};
+      for (const product of transaction.products) {
+        product.productId = await SellerProduct.findById(product.productId)
+          .populate(["variety", "type", "units"])
+          .select(["variety", "type", "units"]);
+        product.consignment = await Purchase.findById(product.consignment)
+          .populate("supplier")
+          .select(["supplier", "consign"]);
+      }
+    }
     if (sortBy === 5) {
       transactions.sort((a, b) =>
         a.buyer.business_trading_name > b.buyer.business_trading_name
