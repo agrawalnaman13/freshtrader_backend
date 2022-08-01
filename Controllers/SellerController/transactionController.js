@@ -35,17 +35,17 @@ exports.getTransactions = async (req, res, next) => {
                   ],
                 },
               },
-              {
-                $lookup: {
-                  localField: "buyer",
-                  foreignField: "_id",
-                  
-                  from: "buyers",
-                  as: "buyer",
-                },
-              },
-              { $unwind: "$buyer" },
             },
+            {
+              $lookup: {
+                localField: "buyer",
+                foreignField: "_id",
+
+                from: "buyers",
+                as: "buyer",
+              },
+            },
+            { $unwind: "$buyer" },
           ],
         },
       },
