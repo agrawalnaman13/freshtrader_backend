@@ -24,12 +24,6 @@ exports.getTransactions = async (req, res, next) => {
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
-        },
-      },
-      {
-        $lookup: {
-          localField: "buyer",
-          foreignField: "_id",
           pipeline: [
             {
               $match: {
@@ -41,13 +35,20 @@ exports.getTransactions = async (req, res, next) => {
                   ],
                 },
               },
+              {
+                $lookup: {
+                  localField: "buyer",
+                  foreignField: "_id",
+                  
+                  from: "buyers",
+                  as: "buyer",
+                },
+              },
+              { $unwind: "$buyer" },
             },
           ],
-          from: "buyers",
-          as: "buyer",
         },
       },
-      { $unwind: "$buyer" },
       {
         $lookup: {
           localField: "salesman",
