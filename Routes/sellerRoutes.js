@@ -4,6 +4,9 @@ const {
   searchBuyers,
 } = require("../Controllers/BuyerController/authController");
 const {
+  getActivityLog,
+} = require("../Controllers/SellerController/activityController");
+const {
   login,
   updateProfile,
   updateAccountInformation,
@@ -346,5 +349,6 @@ router.post("/replySupport", tokenAuthorisation, replySupport);
 router.get("/changeSupportStatus/:id", tokenAuthorisation, changeSupportStatus);
 router.get("/getSupport", tokenAuthorisation, getSupport);
 router.get("/getSupportDetail/:id", tokenAuthorisation, getSupportDetail);
+router.post("/getActivityLog", tokenAuthorisation, getActivityLog);
 router.post("/process-payment", payment);
 module.exports = router;
