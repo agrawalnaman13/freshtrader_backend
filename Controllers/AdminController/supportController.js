@@ -42,8 +42,9 @@ exports.getSupportDetail = async (req, res, next) => {
     if (!support) {
       return res.status(200).json(error("Invalid ticket id", res.statusCode));
     }
-    support.seller = await Wholeseller.findOne({ email: support.email });
-    support.buyer = await Buyer.findOne({ email: support.email });
+    support.user = await Wholeseller.findOne({ email: support.email });
+    if (!support.user)
+      support.user = await Buyer.findOne({ email: support.email });
     res
       .status(200)
       .json(
