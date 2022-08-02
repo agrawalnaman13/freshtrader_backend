@@ -13,6 +13,13 @@ exports.getActivityLog = async (req, res, next) => {
           $and: [
             from ? { createdAt: { $gte: new Date(from) } } : {},
             till ? { createdAt: { $lte: new Date(till) } } : {},
+            filterBy === 1 ? { event: "Transaction Edit" } : {},
+            filterBy === 2 ? { event: "Account Edit" } : {},
+            filterBy === 3 ? { event: "Customer File Edit" } : {},
+            filterBy === 4 ? { event: "Transaction Processed" } : {},
+            filterBy === 5 ? { event: "Consignment Created" } : {},
+            filterBy === 6 ? { event: "Consignment Edit" } : {},
+            filterBy === 7 ? { event: "SMCS Sent" } : {},
             search
               ? {
                   $or: [
@@ -34,7 +41,14 @@ exports.getActivityLog = async (req, res, next) => {
           ],
         },
       },
-      { $sort: { createdAt: -1 } },
+      {
+        $sort:
+          sortBy === 1
+            ? { createdAt: -1 }
+            : sortBy === 2
+            ? { createdAt: 1 }
+            : { createdAt: -1 },
+      },
     ]);
 
     for (const activity of activities) {
@@ -45,6 +59,22 @@ exports.getActivityLog = async (req, res, next) => {
         activity.salesman = await SellerStaff.findById(activity.salesman);
       else activity.salesman = {};
     }
+    if (sortBy === 3)
+      activities.sort((a, b) =>
+        a.salesman.username > b.salesman.username
+          ? 1
+          : b.salesman.username > a.salesman.username
+          ? -1
+          : 0
+      );
+    if (sortBy === 4)
+      activities.sort((a, b) =>
+        a.account.username > b.account.username
+          ? 1
+          : b.account.username > a.account.username
+          ? -1
+          : 0
+      );
 
     res
       .status(200)

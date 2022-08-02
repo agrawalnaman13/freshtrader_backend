@@ -76,7 +76,7 @@ exports.addNewBusiness = async (req, res, next) => {
       email,
       abn,
       entity_name,
-      address,
+      address_line1,
       is_smcs,
       market_seller,
       smcs_code,
@@ -110,7 +110,7 @@ exports.addNewBusiness = async (req, res, next) => {
         .status(200)
         .json(error("Please provide entity name", res.statusCode));
     }
-    if (!address) {
+    if (!address_line1) {
       return res
         .status(200)
         .json(error("Please provide address", res.statusCode));
@@ -144,7 +144,7 @@ exports.addNewBusiness = async (req, res, next) => {
       business_trading_name: business_trading_name,
       abn: abn,
       entity_name: entity_name,
-      address: address,
+      address_line1: address_line1,
       email: email,
       phone_number: phone_number,
       is_smcs: is_smcs,

@@ -29,7 +29,11 @@ const BuyerSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    address: {
+    address_line1: {
+      type: String,
+      required: false,
+    },
+    address_line2: {
       type: String,
       required: false,
     },
