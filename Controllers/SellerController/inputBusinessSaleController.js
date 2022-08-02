@@ -413,7 +413,7 @@ exports.processTransaction = async (req, res, next) => {
       const ref = String(transaction._id).slice(18, 24);
       transaction.ref = ref;
       await transaction.save();
-      let query = {
+      query = {
         seller: req.seller._id,
         event: "Transaction Processed",
         info: [`${type} #${ref} Processed`],
