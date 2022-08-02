@@ -504,9 +504,11 @@ exports.downloadTransactionCSV = async (req, res, next) => {
         POPostalCode: transaction.buyer.postal_code,
         POCountry: transaction.buyer.country,
         Time: moment(transaction.createdAt).format("hh:mm A"),
-        Date: moment(transaction.createdAt).format("LL"),
+        Date: moment(transaction.createdAt).format("dd/mm/yyyy"),
         DueDate:
-          transaction.status !== "PAID" ? moment(due_date).format("LL") : "",
+          transaction.status !== "PAID"
+            ? moment(due_date).format("dd/mm/yyyy")
+            : "",
         InventoryItemCode: inventory_code.join(", "),
         Description: transaction.delivery_note,
         Quantity: transaction.products.length,

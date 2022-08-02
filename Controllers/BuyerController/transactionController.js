@@ -113,13 +113,19 @@ exports.downloadTransactionCSV = async (req, res, next) => {
       return res
         .status(200)
         .json(
-          error("Please purchase Subscription plan to reorder", res.statusCode)
+          error(
+            "Please purchase Subscription plan to download transaction",
+            res.statusCode
+          )
         );
     } else if (buyer.plan.plan_name === "Free") {
       return res
         .status(200)
         .json(
-          error("Please purchase Subscription plan to reorder", res.statusCode)
+          error(
+            "Please purchase Subscription plan to download transaction",
+            res.statusCode
+          )
         );
     }
     if (!transactionIds.length) {
