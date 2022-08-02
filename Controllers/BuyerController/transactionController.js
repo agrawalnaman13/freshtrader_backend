@@ -108,7 +108,7 @@ exports.getTransactions = async (req, res, next) => {
 exports.downloadTransactionCSV = async (req, res, next) => {
   try {
     const { transactionIds, report_type, type } = req.body;
-    const buyer = await Buyer.findById(req.params.id).populate("plan");
+    const buyer = await Buyer.findById(req.buyer._id).populate("plan");
     if (!buyer.plan) {
       return res
         .status(200)
