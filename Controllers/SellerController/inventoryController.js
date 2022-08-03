@@ -29,9 +29,8 @@ exports.getInventory = async (req, res) => {
         },
         { $unwind: "$products" },
       ]);
-      console.log(consignment);
-      productIds = consignment.map(({ productId }) => {
-        return productId;
+      productIds = consignment.map(({ products }) => {
+        return products.productId;
       });
     }
 
