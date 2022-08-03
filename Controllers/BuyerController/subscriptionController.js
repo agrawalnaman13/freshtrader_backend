@@ -119,8 +119,8 @@ exports.payment = async (req, res, next) => {
         },
       ],
       mode: "payment",
-      success_url: `http://localhost:3000/buyer/success/${planId}`,
-      cancel_url: `http://localhost:3000/buyer/cancel`,
+      success_url: `http://ec2-3-86-26-193.compute-1.amazonaws.com/buyer/success/${planId}`,
+      cancel_url: `http://ec2-3-86-26-193.compute-1.amazonaws.com/buyer/cancel`,
     });
     console.log(session.url);
     res
