@@ -57,6 +57,7 @@ const {
   getOrderCount,
   getOrderNotification,
   printOrder,
+  printOrderList,
 } = require("../Controllers/SellerController/orderController");
 const {
   getPallets,
@@ -293,6 +294,7 @@ router.post(
   changeOrderNotification
 );
 router.post("/printOrder", tokenAuthorisation, printOrder);
+router.post("/printOrderList", tokenAuthorisation, printOrderList);
 router.post("/searchBuyers", tokenAuthorisation, searchBuyers);
 router.post("/getTransactions", tokenAuthorisation, getTransactions);
 router.post("/updateTransactions", tokenAuthorisation, updateTransactions);

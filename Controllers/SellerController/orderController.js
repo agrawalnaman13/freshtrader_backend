@@ -356,7 +356,73 @@ exports.printOrder = async (req, res, next) => {
       await sendMail(station.a4_printer.email, "Order Detail", "");
       res
         .status(200)
-        .json(success("order Detail Printed Successfully", {}, res.statusCode));
+        .json(success("Order Detail Printed Successfully", {}, res.statusCode));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("error", res.statusCode));
+  }
+};
+
+exports.printOrderList = async (req, res, next) => {
+  try {
+    const { orderIds, stationId } = req.body;
+    console.log(req.body);
+    if (!orderIds.length) {
+      return res
+        .status(200)
+        .json(error("Please provide order Id", res.statusCode));
+    }
+
+    const orders = await Order.find({ _id: { $in: orderIds } }).populate(
+      "buyer"
+    );
+    if (!stationId) {
+      return res
+        .status(200)
+        .json(error("Please provide station Id", res.statusCode));
+    }
+    const station = await SellerStation.findById(stationId);
+    if (!station) {
+      return res.status(200).json(error("Invalid station Id", res.statusCode));
+    }
+    if (!station.a4_printer.email && !station.a4_printer.local) {
+      return res
+        .status(200)
+        .json(error("No A4 Printer added in selected station", res.statusCode));
+    }
+    const dirPath = path.join(
+      __dirname.replace("SellerController", "templates"),
+      "/smcs_report.html"
+    );
+    const template = fs.readFileSync(dirPath, "utf8");
+    const data = orders;
+    const html = ejs.render(template, { data: data });
+    const options = { format: "Letter" };
+    pdf
+      .create(html, options)
+      .toFile(
+        `./public/sellers/${req.seller._id}/order_list.pdf`,
+        function (err, res1) {
+          if (err) return console.log(err);
+          console.log(res1);
+        }
+      );
+    if (station.a4_printer.local) {
+      res.status(200).json(
+        success(
+          "success",
+          {
+            file: `${process.env.BASE_URL}/Sellers/${req.seller._id}/order_list.pdf`,
+          },
+          res.statusCode
+        )
+      );
+    } else {
+      await sendMail(station.a4_printer.email, "Confirmed Orders", "");
+      res
+        .status(200)
+        .json(success("Orders Printed Successfully", {}, res.statusCode));
     }
   } catch (err) {
     console.log(err);

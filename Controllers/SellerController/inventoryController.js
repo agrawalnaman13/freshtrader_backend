@@ -18,10 +18,27 @@ exports.getInventory = async (req, res) => {
     if (seller.market === "Sydney Produce and Growers Market")
       category = ["Fruits", "Herbs", "Vegetables", "Others"];
     else category = ["Flowers", "Foliage"];
+    let productIds = [];
+    if (active_consignment) {
+      const consignment = await Purchase.aggregate([
+        {
+          $match: {
+            seller: mongoose.Types.ObjectId(req.seller._id),
+            status: "ACTIVE",
+          },
+        },
+        { $unwind: "$products" },
+      ]);
+      productIds = consignment.map(({ productId }) => {
+        return productId;
+      });
+    }
+
     const inventories = await Inventory.aggregate([
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
+          $and: [active_consignment ? { productId: { $in: productIds } } : {}],
         },
       },
       {
@@ -96,32 +113,13 @@ exports.getInventory = async (req, res) => {
       inventory.remaining =
         inventory.purchase - inventory.sold - inventory.void;
       inventory.total_sold = inventory.total_sold ? inventory.total_sold : 0;
-      if (active_consignment) {
-        const consignment = await Purchase.aggregate([
-          {
-            $match: {
-              seller: mongoose.Types.ObjectId(req.seller._id),
-              status: "ACTIVE",
-            },
-          },
-          { $unwind: "$products" },
-          {
-            $match: {
-              "products.productId": {
-                $eq: mongoose.Types.ObjectId(inventory.productId._id),
-              },
-            },
-          },
-        ]);
-        if (consignment.length) list.push(inventory);
-      } else list.push(inventory);
     }
     res
       .status(200)
       .json(
         success(
           "Inventory fetched Successfully",
-          { inventories: list },
+          { inventories },
           res.statusCode
         )
       );
@@ -417,10 +415,27 @@ exports.printInventory = async (req, res) => {
     if (seller.market === "Sydney Produce and Growers Market")
       category = ["Fruits", "Herbs", "Vegetables", "Others"];
     else category = ["Flowers", "Foliage"];
+    let productIds = [];
+    if (active_consignment) {
+      const consignment = await Purchase.aggregate([
+        {
+          $match: {
+            seller: mongoose.Types.ObjectId(req.seller._id),
+            status: "ACTIVE",
+          },
+        },
+        { $unwind: "$products" },
+      ]);
+      productIds = consignment.map(({ productId }) => {
+        return productId;
+      });
+    }
+
     const inventories = await Inventory.aggregate([
       {
         $match: {
           seller: mongoose.Types.ObjectId(req.seller._id),
+          $and: [active_consignment ? { productId: { $in: productIds } } : {}],
         },
       },
       {
@@ -486,7 +501,6 @@ exports.printInventory = async (req, res) => {
       },
       { $sort: { "productId.variety.product": 1 } },
     ]);
-    let list = [];
     for (const inventory of inventories) {
       if (inventory.consignment)
         inventory.consignment = await Purchase.findById(inventory.consignment)
@@ -495,25 +509,6 @@ exports.printInventory = async (req, res) => {
       inventory.remaining =
         inventory.purchase - inventory.sold - inventory.void;
       inventory.total_sold = inventory.total_sold ? inventory.total_sold : 0;
-      if (active_consignment) {
-        const consignment = await Purchase.aggregate([
-          {
-            $match: {
-              seller: mongoose.Types.ObjectId(req.seller._id),
-              status: "ACTIVE",
-            },
-          },
-          { $unwind: "$products" },
-          {
-            $match: {
-              "products.productId": {
-                $eq: mongoose.Types.ObjectId(inventory.productId._id),
-              },
-            },
-          },
-        ]);
-        if (consignment.length) list.push(inventory);
-      } else list.push(inventory);
     }
     let dirPath;
     if (type === 1) {
