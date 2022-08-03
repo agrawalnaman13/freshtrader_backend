@@ -625,7 +625,7 @@ exports.getCategoryList = async (req, res, next) => {
 
 exports.getMyVarietyList = async (req, res, next) => {
   try {
-    const { category } = req.body;
+    const { category, active_consignment } = req.body;
     if (!category) {
       return res
         .status(200)
@@ -634,7 +634,23 @@ exports.getMyVarietyList = async (req, res, next) => {
     // if (!["Fruits", "Herbs", "Vegetables", "Others"].includes(category)) {
     //   return res.status(200).json(error("Invalid Category", res.statusCode));
     // }
+    let productIds = [];
+    if (active_consignment) {
+      const consignment = await Purchase.aggregate([
+        {
+          $match: {
+            seller: mongoose.Types.ObjectId(req.seller._id),
+            status: "ACTIVE",
+          },
+        },
+        { $unwind: "$products" },
+      ]);
+      productIds = consignment.map(({ products }) => {
+        return String(products.productId);
+      });
+    }
     const varieties = await SellerProduct.find({
+      $and: [active_consignment ? { _id: { $in: productIds } } : {}],
       seller: req.seller._id,
       category: category,
       status: true,
@@ -657,7 +673,7 @@ exports.getMyVarietyList = async (req, res, next) => {
 
 exports.getMyProductList = async (req, res, next) => {
   try {
-    const { variety } = req.body;
+    const { variety, active_consignment } = req.body;
     if (!variety) {
       return res.status(200).json(error("Variety is required", res.statusCode));
     }
@@ -667,7 +683,23 @@ exports.getMyProductList = async (req, res, next) => {
         .status(200)
         .json(error("Invalid product variety", res.statusCode));
     }
+    let productIds = [];
+    if (active_consignment) {
+      const consignment = await Purchase.aggregate([
+        {
+          $match: {
+            seller: mongoose.Types.ObjectId(req.seller._id),
+            status: "ACTIVE",
+          },
+        },
+        { $unwind: "$products" },
+      ]);
+      productIds = consignment.map(({ products }) => {
+        return String(products.productId);
+      });
+    }
     const types = await SellerProduct.find({
+      $and: [active_consignment ? { _id: { $in: productIds } } : {}],
       seller: req.seller._id,
       variety: variety,
       status: true,
