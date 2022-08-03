@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 const Activity = require("../../Models/SellerModels/activitySchema");
 const SellerStaff = require("../../Models/SellerModels/staffSchema");
 const { success, error } = require("../../service_response/adminApiResponse");
-
+const moment = require("moment");
+const { parse } = require("json2csv");
 exports.getActivityLog = async (req, res, next) => {
   try {
-    const { from, till, sortBy, filterBy, search } = req.body;
+    const { from, till, sortBy, filterBy, search, report_type } = req.body;
     const activities = await Activity.aggregate([
       {
         $match: {
@@ -75,7 +76,24 @@ exports.getActivityLog = async (req, res, next) => {
           ? -1
           : 0
       );
-
+    if (report_type) {
+      const fields = ["DETECTION_TIME", "ACCOUNT", "SALESMEN", "EVENT", "INFO"];
+      let response = [];
+      for (const activity of activities) {
+        response.push({
+          DETECTION_TIME: moment(activity.createdAt).format(
+            "DD-MM-YYYY hh:mm A"
+          ),
+          ACCOUNT: activity.account.username,
+          SALESMEN: activity.salesman.username,
+          EVENT: activity.event,
+          INFO: activity.info.join(", "),
+        });
+      }
+      const opts = { fields };
+      const csv = parse(response, opts);
+      return res.status(200).send(csv);
+    }
     res
       .status(200)
       .json(
